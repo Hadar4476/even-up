@@ -1,10 +1,12 @@
 import { NextFunction, Response } from "express";
 import { CommonRequest } from "../types";
 
-import Group from "../models/group";
-import AppError from "../error";
-import Expense from "../models/expense";
 import { getGroupSummary } from "../services/balance-calculator";
+
+import Group from "../models/group";
+import Expense from "../models/expense";
+
+import AppError from "../error";
 
 // Updated getGroups to include balance information
 const getGroups = async (
@@ -22,33 +24,24 @@ const getGroups = async (
       .populate("expenses");
 
     // Add balance information for each group
-    const groupsWithBalances = await Promise.all(
-      groups.map(async (group) => {
-        const summary = await getGroupSummary(group._id.toString());
-        return {
-          ...group.toObject(),
-          financialSummary: summary,
-        };
-      })
-    );
+    const groupsWithBalances = groups.length
+      ? await Promise.all(
+          groups.map(async (group) => {
+            if (!group) {
+              throw new AppError("Resource not found", 404);
+            }
+
+            const summary = await getGroupSummary(group);
+
+            return {
+              ...group.toObject(),
+              financialSummary: summary,
+            };
+          })
+        )
+      : [];
 
     res.status(200).json({ groups: groupsWithBalances });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// New endpoint to get detailed group balances
-const getGroupBalances = async (
-  req: CommonRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  const { groupId } = req.params;
-
-  try {
-    const summary = await getGroupSummary(groupId);
-    res.status(200).json(summary);
   } catch (error) {
     next(error);
   }
@@ -60,42 +53,35 @@ const settleUp = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { groupId } = req.params;
-  const { settlements } = req.body; // Array of { from, to, amount }
-
-  try {
-    // Verify the group exists and user has access
-    const group = await Group.findById(groupId);
-
-    if (!group) {
-      throw new AppError("Group not found", 404);
-    }
-
-    if (!group.users.includes(req.user?.id)) {
-      throw new AppError("Access denied", 403);
-    }
-
-    // Create settlement expenses (negative amounts for the payer)
-    const settlementExpenses = settlements.map((settlement: any) => ({
-      description: `Settlement: ${settlement.from} pays ${settlement.to}`,
-      amount: -settlement.amount, // Negative because it's a payment, not an expense
-      userId: settlement.from,
-      groupId: groupId,
-    }));
-
-    await Expense.insertMany(settlementExpenses);
-
-    // Get updated balances
-    const updatedSummary = await getGroupSummary(groupId);
-
-    res.status(200).json({
-      success: true,
-      message: "Settlements recorded successfully",
-      summary: updatedSummary,
-    });
-  } catch (error) {
-    next(error);
-  }
+  // const { groupId } = req.params;
+  // const { settlements } = req.body; // Array of { from, to, amount }
+  // try {
+  //   // Verify the group exists and user has access
+  //   const group = await Group.findById(groupId);
+  //   if (!group) {
+  //     throw new AppError("Group not found", 404);
+  //   }
+  //   if (!group.users.includes(req.user?.id)) {
+  //     throw new AppError("Access denied", 403);
+  //   }
+  //   // Create settlement expenses (negative amounts for the payer)
+  //   const settlementExpenses = settlements.map((settlement: any) => ({
+  //     description: `Settlement: ${settlement.from} pays ${settlement.to}`,
+  //     amount: -settlement.amount, // Negative because it's a payment, not an expense
+  //     userId: settlement.from,
+  //     groupId: groupId,
+  //   }));
+  //   await Expense.insertMany(settlementExpenses);
+  //   // Get updated balances
+  //   const updatedSummary = await getGroupSummary(groupId);
+  //   res.status(200).json({
+  //     success: true,
+  //     message: "Settlements recorded successfully",
+  //     summary: updatedSummary,
+  //   });
+  // } catch (error) {
+  //   next(error);
+  // }
 };
 
 // const getGroups = async (

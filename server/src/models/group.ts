@@ -1,14 +1,6 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-interface IGroup extends Document {
-  title: string;
-  description: string;
-  img?: string;
-  users: Schema.Types.ObjectId[];
-  expenses: Schema.Types.ObjectId[];
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { IGroup } from "../types/group";
 
 const groupSchema: Schema = new Schema(
   {

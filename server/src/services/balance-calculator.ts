@@ -1,5 +1,6 @@
 import Expense from "../models/expense";
-import Group from "../models/group";
+
+import { IGroup } from "../types/group";
 
 interface UserBalance {
   userId: string;
@@ -17,18 +18,12 @@ interface DebtSettlement {
  * Calculate net balances for all users in a group
  */
 export const calculateGroupBalances = async (
-  groupId: string
+  group: IGroup
 ): Promise<UserBalance[]> => {
-  // Get group with users and expenses
-  const group = await Group.findById(groupId)
-    .populate("users", "name")
-    .populate("expenses");
-
-  if (!group) {
-    throw new Error("Group not found");
-  }
-
-  const expenses = await Expense.find({ groupId }).populate("userId", "name");
+  const expenses = await Expense.find({ groupId: group._id }).populate(
+    "userId",
+    "name"
+  );
 
   // Initialize balances for all users
   const userBalances: Map<string, UserBalance> = new Map();
@@ -52,16 +47,17 @@ export const calculateGroupBalances = async (
   expenses.forEach((expense) => {
     const userId = expense.userId.toString();
     const userBalance = userBalances.get(userId);
+
     if (userBalance) {
       userBalance.balance += expense.amount;
     }
   });
 
   // Subtract what each person should have paid
-  userBalances.forEach((balance) => {
-    balance.balance -= perPersonShare;
+  userBalances.forEach(({ balance }) => {
+    balance -= perPersonShare;
     // Round to 2 decimal places to avoid floating point issues
-    balance.balance = Math.round(balance.balance * 100) / 100;
+    balance = Math.round(balance * 100) / 100;
   });
 
   return Array.from(userBalances.values());
@@ -77,11 +73,13 @@ export const calculateSettlements = (
   const creditors = balances
     .filter((b) => b.balance > 0)
     .sort((a, b) => b.balance - a.balance);
+
   const debtors = balances
     .filter((b) => b.balance < 0)
     .sort((a, b) => a.balance - b.balance);
 
   const settlements: DebtSettlement[] = [];
+
   let i = 0,
     j = 0;
 
@@ -113,12 +111,12 @@ export const calculateSettlements = (
 /**
  * Get comprehensive group financial summary
  */
-export const getGroupSummary = async (groupId: string) => {
-  const balances = await calculateGroupBalances(groupId);
+export const getGroupSummary = async (group: IGroup) => {
+  const balances = await calculateGroupBalances(group);
   const settlements = calculateSettlements([...balances]); // Pass copy since calculateSettlements modifies the array
 
   const totalExpenses = await Expense.aggregate([
-    { $match: { groupId } },
+    { $match: { groupId: group._id } },
     { $group: { _id: null, total: { $sum: "$amount" } } },
   ]);
 
