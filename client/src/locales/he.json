@@ -1,0 +1,62 @@
+{
+  "languages": {
+    "en": "English",
+    "he": "עברית"
+  },
+  "common": {
+    "open": "פתח",
+    "show": "הצג",
+    "close": "סגור"
+  },
+  "system": {
+    "toggle_theme": "שנה מצב",
+    "logout": "התנתק"
+  },
+  "showcase": {
+    "button": {
+      "title": "כפתור",
+      "contained": "מלא",
+      "outlined": "מתואר",
+      "text": "טקסט",
+      "disabled": "לא נגיש",
+      "small": "קטן",
+      "medium": "בינוני",
+      "large": "גדול"
+    },
+    "typography": {
+      "title": "טיפוגרפיה",
+      "text_sample": "טקסט בגודל של {{size}} פיקסלים",
+      "regular": "רגיל",
+      "medium": "בינוני",
+      "semi_bold": "הדגש חלקי",
+      "bold": "הדגש מלא",
+      "extra_bold": "הדגש עז"
+    },
+    "modal": {
+      "title": "מודאל"
+    },
+    "drawer": {
+      "title": "תפריט צד"
+    },
+    "toast": {
+      "title": "הודעה",
+      "info": "מידע",
+      "warning": "אזהרה",
+      "success": "הצלחה",
+      "error": "שגיאה",
+      "message_sample": "זוהי הודעה מסוג {{type}}"
+    },
+    "grid": {
+      "title": "גריד"
+    },
+    "pagination": {
+      "title": "עימוד"
+    },
+    "load_more": {
+      "title": "טען עוד"
+    },
+    "text_field": {
+      "title": "שדה טקסט"
+    }
+  }
+}

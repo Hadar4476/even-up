@@ -1,0 +1,62 @@
+{
+  "languages": {
+    "en": "English",
+    "he": "עברית"
+  },
+  "common": {
+    "open": "Open",
+    "show": "Show",
+    "close": "Close"
+  },
+  "system": {
+    "toggle_theme": "Toggle theme",
+    "logout": "Log Out"
+  },
+  "showcase": {
+    "button": {
+      "title": "Button",
+      "contained": "Contained",
+      "outlined": "Outlined",
+      "text": "Text",
+      "disabled": "Disabled",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large"
+    },
+    "typography": {
+      "title": "Typography",
+      "text_sample": "Text size of {{size}}px",
+      "regular": "Regular",
+      "medium": "Medium",
+      "semi_bold": "Semi-Bold",
+      "bold": "Bold",
+      "extra_bold": "Extra Bold"
+    },
+    "modal": {
+      "title": "Modal"
+    },
+    "drawer": {
+      "title": "Drawer"
+    },
+    "toast": {
+      "title": "Toast",
+      "info": "Info",
+      "warning": "Warning",
+      "success": "Success",
+      "error": "Error",
+      "message_sample": "This is toast of type: {{type}}"
+    },
+    "grid": {
+      "title": "Grid"
+    },
+    "pagination": {
+      "title": "Pagination"
+    },
+    "load_more": {
+      "title": "Load More"
+    },
+    "text_field": {
+      "title": "Text Field"
+    }
+  }
+}
