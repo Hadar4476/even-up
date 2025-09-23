@@ -30,11 +30,9 @@ const sendInvitation = async (
       to,
     });
 
-    const savedInvitation = await newInvitation.save();
+    const invitation = await newInvitation.save();
 
-    res.status(200).json({
-      invitation: savedInvitation,
-    });
+    res.status(200).json(invitation);
   } catch (error) {
     next(error);
   }

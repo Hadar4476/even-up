@@ -4,11 +4,11 @@ import { CommonRequest } from "../types";
 import { getGroupSummary } from "../services/balance-calculator";
 
 import Group from "../models/group";
+import GroupInvitation from "../models/group-invitation";
 import Expense from "../models/expense";
 
 import AppError from "../error";
 
-// Updated getGroups to include balance information
 const getGroups = async (
   req: CommonRequest,
   res: Response,
@@ -47,62 +47,44 @@ const getGroups = async (
   }
 };
 
-// Updated settleUp function
 const settleUp = async (
   req: CommonRequest,
   res: Response,
   next: NextFunction
 ) => {
-  // const { groupId } = req.params;
-  // const { settlements } = req.body; // Array of { from, to, amount }
-  // try {
-  //   // Verify the group exists and user has access
-  //   const group = await Group.findById(groupId);
-  //   if (!group) {
-  //     throw new AppError("Group not found", 404);
-  //   }
-  //   if (!group.users.includes(req.user?.id)) {
-  //     throw new AppError("Access denied", 403);
-  //   }
-  //   // Create settlement expenses (negative amounts for the payer)
-  //   const settlementExpenses = settlements.map((settlement: any) => ({
-  //     description: `Settlement: ${settlement.from} pays ${settlement.to}`,
-  //     amount: -settlement.amount, // Negative because it's a payment, not an expense
-  //     userId: settlement.from,
-  //     groupId: groupId,
-  //   }));
-  //   await Expense.insertMany(settlementExpenses);
-  //   // Get updated balances
-  //   const updatedSummary = await getGroupSummary(groupId);
-  //   res.status(200).json({
-  //     success: true,
-  //     message: "Settlements recorded successfully",
-  //     summary: updatedSummary,
-  //   });
-  // } catch (error) {
-  //   next(error);
-  // }
+  const { groupId } = req.params;
+  const { settlements } = req.body; // Array of { from, to, amount }
+
+  try {
+    // Verify the group exists and user has access
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      throw new AppError("Group not found", 404);
+    }
+
+    // Create settlement expenses (negative amounts for the payer)
+    const settlementExpenses = settlements.map((settlement: any) => ({
+      description: `Settlement: ${settlement.from} pays ${settlement.to}`,
+      amount: -settlement.amount, // Negative because it's a payment, not an expense
+      userId: settlement.from,
+      groupId: groupId,
+    }));
+
+    await Expense.insertMany(settlementExpenses);
+
+    // Get updated balances
+    const updatedSummary = await getGroupSummary(group);
+
+    res.status(200).json({
+      success: true,
+      message: "Settlements recorded successfully",
+      summary: updatedSummary,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
-
-// const getGroups = async (
-//   req: CommonRequest,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   const userId = req.user?.id;
-
-//   try {
-//     const groups = await Group.find({
-//       users: { $in: [userId] },
-//     })
-//       .populate("users", "name")
-//       .populate("expenses");
-
-//     res.status(200).json({ groups });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 const createGroup = async (
   req: CommonRequest,
@@ -165,6 +147,7 @@ const deleteGroup = async (
     }
 
     await Expense.deleteMany({ groupId });
+    await GroupInvitation.deleteMany({ groupId });
 
     await Group.findByIdAndDelete(groupId);
 
@@ -176,12 +159,6 @@ const deleteGroup = async (
     next(error);
   }
 };
-
-// const settleUp = async (
-//   req: CommonRequest,
-//   res: Response,
-//   next: NextFunction
-// ) => {};
 
 export default {
   getGroups,

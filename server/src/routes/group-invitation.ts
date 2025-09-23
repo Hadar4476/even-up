@@ -12,7 +12,7 @@ import groupInvitationController from "../controllers/group-invitation";
 const router = express.Router();
 
 router.post(
-  "/send",
+  "/send/:groupId",
   checkAuthentication,
   sentInvitationValidation,
   validate,
