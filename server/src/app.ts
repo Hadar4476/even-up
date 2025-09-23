@@ -16,6 +16,7 @@ import requestLogger from "./logs/request-logger";
 import userRoutes from "./routes/user";
 import authRoutes from "./routes/auth";
 import groupRoutes from "./routes/group";
+import groupInvitationRoutes from "./routes/group-invitation";
 import expenseRoutes from "./routes/expense";
 
 import errorHandler from "./middleware/error";
@@ -41,6 +42,7 @@ const MAIN_ROUTE = "/api";
 app.use(`${MAIN_ROUTE}/user`, userRoutes);
 app.use(`${MAIN_ROUTE}/auth`, authRoutes);
 app.use(`${MAIN_ROUTE}/group`, groupRoutes);
+app.use(`${MAIN_ROUTE}/group-invitation`, groupInvitationRoutes);
 app.use(`${MAIN_ROUTE}/expense`, expenseRoutes);
 
 app.use(errorHandler);

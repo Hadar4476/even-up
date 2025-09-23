@@ -123,31 +123,6 @@ const createGroup = async (
   }
 };
 
-const inviteToGroup = async (
-  req: CommonRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  const { groupId } = req.params;
-  const { invitedUserId } = req.body;
-
-  try {
-    const group = await Group.findById(groupId);
-
-    if (!group) {
-      throw new AppError("Resource not found", 404);
-    }
-
-    group.users = [...group.users, invitedUserId];
-
-    const updatedGroup = await group.save();
-
-    res.status(200).json(updatedGroup);
-  } catch (error) {
-    next(error);
-  }
-};
-
 const updateGroup = async (
   req: CommonRequest,
   res: Response,
@@ -211,7 +186,6 @@ const deleteGroup = async (
 export default {
   getGroups,
   createGroup,
-  inviteToGroup,
   updateGroup,
   deleteGroup,
   settleUp,

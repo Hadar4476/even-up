@@ -1,13 +1,6 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-interface IExpense extends Document {
-  description: string;
-  amount: number;
-  userId: Schema.Types.ObjectId;
-  groupId: Schema.Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { IExpense } from "../types/expense";
 
 const expenseSchema: Schema = new Schema(
   {

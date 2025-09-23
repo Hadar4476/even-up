@@ -13,7 +13,7 @@ import expenseController from "../controllers/expense";
 const router = express.Router();
 
 router.post(
-  "/add",
+  "/",
   checkAuthentication,
   addExpenseValidation,
   validate,

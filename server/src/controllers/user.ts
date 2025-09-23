@@ -10,7 +10,7 @@ const getUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userId } = req.params;
+  const userId = req.user?.id;
 
   try {
     const user = await User.findById(userId).select("-password");

@@ -18,6 +18,4 @@ const isDescription = () =>
 
 export const groupValidation = [isTitle(), isDescription(), body("img").trim()];
 
-export const inviteToGroupValidation = [
-  body("invitedUserId").trim().not().isEmpty(),
-];
+export const inviteToGroupValidation = [body("userId").trim().not().isEmpty()];

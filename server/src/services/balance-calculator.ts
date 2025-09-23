@@ -20,6 +20,7 @@ interface DebtSettlement {
 export const calculateGroupBalances = async (
   group: IGroup
 ): Promise<UserBalance[]> => {
+  // Fetching all expenses of a group by id:
   const expenses = await Expense.find({ groupId: group._id }).populate(
     "userId",
     "name"

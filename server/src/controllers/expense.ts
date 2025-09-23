@@ -15,9 +15,19 @@ const addExpense = async (
   const userId = req.user?.id;
 
   try {
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      throw new AppError("Resource not found", 404);
+    }
+
     const newExpense = new Expense({ description, amount, userId, groupId });
 
     const savedExpense = await newExpense.save();
+
+    group.expenses = [...group.expenses, savedExpense.id];
+
+    await group.save();
 
     res.status(200).json(savedExpense);
   } catch (error) {
