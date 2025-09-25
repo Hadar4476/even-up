@@ -32,6 +32,25 @@ const Register = () => {
           helperText={formik.touched.name && formik.errors.name}
         />
         <TextField
+          label="Phone Number"
+          name="phoneNumber"
+          variant="outlined"
+          fullWidth
+          placeholder="+12125551234"
+          type="tel"
+          value={formik.values.phoneNumber}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
+          }
+          helperText={
+            formik.touched.phoneNumber && formik.errors.phoneNumber
+              ? formik.errors.phoneNumber
+              : "Format: +1XXXXXXXXXX"
+          }
+        />
+        <TextField
           label="Email"
           name="email"
           type="email"

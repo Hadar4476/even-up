@@ -1,7 +1,6 @@
 import apiClient from "@/api-client";
 
 import {
-  IUser,
   IRegisterRequest,
   ILoginRequest,
   ILoginResponse,

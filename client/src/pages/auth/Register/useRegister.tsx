@@ -7,6 +7,7 @@ import { register } from "@/services/auth";
 
 interface RegisterFormValues {
   name: string;
+  phoneNumber: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -22,6 +23,13 @@ export const useRegister = () => {
 
   const validationSchema = Yup.object({
     name: Yup.string().trim().required("Name is required"),
+    phoneNumber: Yup.string()
+      .trim()
+      .required("Phone number is required")
+      .matches(
+        /^\+1[2-9]\d{2}[2-9]\d{2}\d{4}$/,
+        "Phone number must be a valid US number in format +1XXXXXXXXXX"
+      ),
     email: Yup.string()
       .email("Invalid email address")
       .trim()
@@ -40,6 +48,7 @@ export const useRegister = () => {
 
   const initialValues: RegisterFormValues = {
     name: "",
+    phoneNumber: "",
     email: "",
     password: "",
     confirmPassword: "",

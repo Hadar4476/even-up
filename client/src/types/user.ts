@@ -2,6 +2,7 @@ import { IDocument } from "./common";
 
 export interface IUser extends IDocument {
   name: string;
+  phoneNumber: string;
   email: string;
 }
 

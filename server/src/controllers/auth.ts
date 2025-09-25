@@ -62,7 +62,7 @@ const register = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, phoneNumber } = req.body;
 
   try {
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -77,6 +77,7 @@ const register = async (
       email,
       name,
       password: hashedPassword,
+      phoneNumber,
     });
 
     const result = await user.save();

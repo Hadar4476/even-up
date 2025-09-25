@@ -1,6 +1,6 @@
 const commonUtils = {
-  sleep: (ms: number) => {
-    return new Promise((r) => setTimeout(r, ms));
+  sleep: (seconds: number) => {
+    return new Promise((r) => setTimeout(r, seconds * 1000));
   },
   calcPercentage: (actual: number, total: number) => {
     const percent = (100 * actual) / total;
