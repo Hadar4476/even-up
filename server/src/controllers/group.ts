@@ -47,45 +47,6 @@ const getGroups = async (
   }
 };
 
-const settleUp = async (
-  req: CommonRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  const { groupId } = req.params;
-  const { settlements } = req.body; // Array of { from, to, amount }
-
-  try {
-    // Verify the group exists and user has access
-    const group = await Group.findById(groupId);
-
-    if (!group) {
-      throw new AppError("Group not found", 404);
-    }
-
-    // Create settlement expenses (negative amounts for the payer)
-    const settlementExpenses = settlements.map((settlement: any) => ({
-      description: `Settlement: ${settlement.from} pays ${settlement.to}`,
-      amount: -settlement.amount, // Negative because it's a payment, not an expense
-      userId: settlement.from,
-      groupId: groupId,
-    }));
-
-    await Expense.insertMany(settlementExpenses);
-
-    // Get updated balances
-    const updatedSummary = await getGroupSummary(group);
-
-    res.status(200).json({
-      success: true,
-      message: "Settlements recorded successfully",
-      summary: updatedSummary,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 const createGroup = async (
   req: CommonRequest,
   res: Response,
@@ -154,6 +115,45 @@ const deleteGroup = async (
     res.status(200).json({
       success: true,
       message: "Group deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const settleUp = async (
+  req: CommonRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { groupId } = req.params;
+  const { settlements } = req.body; // Array of { from, to, amount }
+
+  try {
+    // Verify the group exists and user has access
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      throw new AppError("Group not found", 404);
+    }
+
+    // Create settlement expenses (negative amounts for the payer)
+    const settlementExpenses = settlements.map((settlement: any) => ({
+      description: `Settlement: ${settlement.from} pays ${settlement.to}`,
+      amount: -settlement.amount, // Negative because it's a payment, not an expense
+      userId: settlement.from,
+      groupId: groupId,
+    }));
+
+    await Expense.insertMany(settlementExpenses);
+
+    // Get updated balances
+    const updatedSummary = await getGroupSummary(group);
+
+    res.status(200).json({
+      success: true,
+      message: "Settlements recorded successfully",
+      summary: updatedSummary,
     });
   } catch (error) {
     next(error);

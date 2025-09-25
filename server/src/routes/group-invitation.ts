@@ -11,6 +11,8 @@ import groupInvitationController from "../controllers/group-invitation";
 
 const router = express.Router();
 
+router.get("/", checkAuthentication, groupInvitationController.getInvitations);
+
 router.post(
   "/send/:groupId",
   checkAuthentication,

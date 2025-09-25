@@ -7,6 +7,27 @@ import { GroupInvitationStatus } from "../types/group-invitation";
 
 import AppError from "../error";
 
+const getInvitations = async (
+  req: CommonRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+
+  try {
+    const invitations = await GroupInvitation.find({
+      to: userId,
+      status: GroupInvitationStatus.PENDING,
+    })
+      .populate("groupId", "title")
+      .populate("from", "name");
+
+    res.status(200).json({ invitations });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const sendInvitation = async (
   req: CommonRequest,
   res: Response,
@@ -17,10 +38,30 @@ const sendInvitation = async (
   const { to } = req.body;
 
   try {
+    // Checking if invitation is already established
+    const existingInvitation = await GroupInvitation.findOne({
+      groupId,
+      $or: [
+        { from, to },
+        { from: to, to: from },
+      ],
+      status: GroupInvitationStatus.PENDING,
+    });
+
+    if (existingInvitation) {
+      throw new AppError("Invitation already exists", 409);
+    }
+
     const group = await Group.findById(groupId);
 
     if (!group) {
       throw new AppError("Resource not found", 404);
+    }
+
+    const isUserInGroup = group.users.includes(to);
+
+    if (isUserInGroup) {
+      throw new AppError("User is already in group", 409);
     }
 
     const newInvitation = new GroupInvitation({
@@ -56,14 +97,18 @@ const updateInvitationStatus = async (
     let responseData = null;
 
     if (status === GroupInvitationStatus.ACCEPTED) {
-      const group = await Group.findById(groupInvitation.groupId);
+      // Use $addToSet to prevent duplicates and handle race conditions
+      const group = await Group.findByIdAndUpdate(
+        groupInvitation.groupId,
+        { $addToSet: { users: groupInvitation.to } },
+        { new: true }
+      );
 
       if (!group) {
-        throw new AppError("Resource not found", 404);
+        throw new AppError("Group not found", 404);
       }
 
-      group.users = [...group.users, groupInvitation.to];
-      responseData = await group.save();
+      responseData = group;
     }
 
     await GroupInvitation.findByIdAndDelete(invitationId);
@@ -74,6 +119,7 @@ const updateInvitationStatus = async (
 };
 
 export default {
+  getInvitations,
   sendInvitation,
   updateInvitationStatus,
 };
