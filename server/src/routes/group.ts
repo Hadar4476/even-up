@@ -9,7 +9,9 @@ import groupController from "../controllers/group";
 
 const router = express.Router();
 
-router.get("/", checkAuthentication, groupController.getGroups);
+router.get("/getAll", checkAuthentication, groupController.getAllGroups);
+
+router.get("/:groupId", checkAuthentication, groupController.getGroup);
 
 router.post(
   "/",
@@ -20,17 +22,13 @@ router.post(
 );
 
 router.put(
-  "/update/:groupId",
+  "/:groupId",
   checkAuthentication,
   groupValidation,
   validate,
   groupController.updateGroup
 );
 
-router.delete(
-  "/delete/:groupId",
-  checkAuthentication,
-  groupController.deleteGroup
-);
+router.delete("/:groupId", checkAuthentication, groupController.deleteGroup);
 
 export default router;

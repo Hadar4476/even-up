@@ -21,7 +21,7 @@ router.post(
   groupInvitationController.sendInvitation
 );
 
-router.post(
+router.put(
   "/update/:invitationId",
   checkAuthentication,
   updatedInvitationValidation,

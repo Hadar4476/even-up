@@ -21,7 +21,7 @@ router.post(
 );
 
 router.put(
-  "/update/:expenseId",
+  "/:expenseId",
   checkAuthentication,
   updateExpenseValidation,
   validate,
@@ -29,7 +29,7 @@ router.put(
 );
 
 router.delete(
-  "/delete/:expenseId",
+  "/:expenseId",
   checkAuthentication,
   expenseController.deleteExpense
 );

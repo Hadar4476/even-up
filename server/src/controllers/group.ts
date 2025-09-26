@@ -8,8 +8,40 @@ import GroupInvitation from "../models/group-invitation";
 import Expense from "../models/expense";
 
 import AppError from "../error";
+import mongoose from "mongoose";
 
-const getGroups = async (
+const getGroup = async (
+  req: CommonRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { groupId } = req.params;
+  const userId = req.user?.id;
+
+  try {
+    const group = await Group.findOne({
+      _id: groupId,
+      users: userId, // Verify user is in the users array
+    })
+      .populate("users", "name")
+      .populate("expenses");
+
+    if (!group) {
+      throw new AppError("Resource not found", 404);
+    }
+
+    const summary = await getGroupSummary(group);
+
+    res.status(200).json({
+      ...group.toObject(),
+      summary,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getAllGroups = async (
   req: CommonRequest,
   res: Response,
   next: NextFunction
@@ -20,28 +52,10 @@ const getGroups = async (
     const groups = await Group.find({
       users: { $in: [userId] },
     })
-      .populate("users", "name")
-      .populate("expenses");
+      .select("-expenses")
+      .populate("users", "name");
 
-    // Add balance information for each group
-    const groupsWithBalances = groups.length
-      ? await Promise.all(
-          groups.map(async (group) => {
-            if (!group) {
-              throw new AppError("Resource not found", 404);
-            }
-
-            const summary = await getGroupSummary(group);
-
-            return {
-              ...group.toObject(),
-              financialSummary: summary,
-            };
-          })
-        )
-      : [];
-
-    res.status(200).json({ groups: groupsWithBalances });
+    res.status(200).json({ groups });
   } catch (error) {
     next(error);
   }
@@ -161,7 +175,8 @@ const settleUp = async (
 };
 
 export default {
-  getGroups,
+  getGroup,
+  getAllGroups,
   createGroup,
   updateGroup,
   deleteGroup,
