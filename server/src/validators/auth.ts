@@ -10,8 +10,12 @@ export const registerValidation = [
     .trim()
     .notEmpty()
     .withMessage("Phone number is required")
-    .matches(/^\+1[2-9]\d{2}[2-9]\d{2}\d{4}$/)
-    .withMessage("Phone number must be a valid US number (+1XXXXXXXXXX)"),
+    .matches(/^\+[1-9]\d{1,14}$/)
+    .withMessage(
+      "Phone number must be in international format (+[country code][number])"
+    )
+    .isLength({ min: 8, max: 16 })
+    .withMessage("Phone number must be between 8-16 characters"),
   isEmail(),
   isPassword(),
 ];

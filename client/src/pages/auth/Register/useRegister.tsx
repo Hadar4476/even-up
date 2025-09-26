@@ -24,12 +24,14 @@ export const useRegister = () => {
   const validationSchema = Yup.object({
     name: Yup.string().trim().required("Name is required"),
     phoneNumber: Yup.string()
-      .trim()
       .required("Phone number is required")
+      .trim()
       .matches(
-        /^\+1[2-9]\d{2}[2-9]\d{2}\d{4}$/,
-        "Phone number must be a valid US number in format +1XXXXXXXXXX"
-      ),
+        /^\+[1-9]\d{1,14}$/,
+        "Phone number must be in international format (+[country code][number])"
+      )
+      .min(8, "Phone number must be at least 8 characters")
+      .max(16, "Phone number must be at most 16 characters"),
     email: Yup.string()
       .email("Invalid email address")
       .trim()
