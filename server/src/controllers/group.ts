@@ -8,7 +8,6 @@ import GroupInvitation from "../models/group-invitation";
 import Expense from "../models/expense";
 
 import AppError from "../error";
-import mongoose from "mongoose";
 
 const getGroup = async (
   req: CommonRequest,
