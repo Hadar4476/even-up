@@ -3,7 +3,10 @@ import express from "express";
 import { validate } from "../middleware/validate";
 
 import checkAuthentication from "../middleware/auth";
-import { groupValidation } from "../validators/group";
+import {
+  createGroupValidation,
+  updateGroupValidation,
+} from "../validators/group";
 
 import groupController from "../controllers/group";
 
@@ -16,7 +19,7 @@ router.get("/:groupId", checkAuthentication, groupController.getGroup);
 router.post(
   "/",
   checkAuthentication,
-  groupValidation,
+  createGroupValidation,
   validate,
   groupController.createGroup
 );
@@ -24,7 +27,7 @@ router.post(
 router.put(
   "/:groupId",
   checkAuthentication,
-  groupValidation,
+  updateGroupValidation,
   validate,
   groupController.updateGroup
 );

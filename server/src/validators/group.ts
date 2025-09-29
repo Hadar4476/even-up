@@ -1,21 +1,37 @@
 import { body } from "express-validator";
 
-const isTitle = () =>
+export const createGroupValidation = [
   body("title")
     .trim()
-    .not()
-    .isEmpty()
+    .notEmpty()
+    .withMessage("Title is required")
     .isLength({ max: 100 })
-    .withMessage("Title must be between 1 and 100 characters");
-
-const isDescription = () =>
+    .withMessage("Title must be between 1 and 100 characters"),
   body("description")
     .trim()
-    .not()
-    .isEmpty()
+    .notEmpty()
+    .withMessage("Description is required")
     .isLength({ max: 1000 })
-    .withMessage("Description must be between 1 and 100 characters");
+    .withMessage("Description must be between 1 and 100 characters"),
+  body("img").optional().trim(),
+];
 
-export const groupValidation = [isTitle(), isDescription(), body("img").trim()];
+export const updateGroupValidation = [
+  body("title")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("Title cannot be empty if provided")
+    .isLength({ max: 100 })
+    .withMessage("Title must be between 1 and 100 characters"),
+  body("description")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("Description cannot be empty if provided")
+    .isLength({ max: 1000 })
+    .withMessage("Description must be between 1 and 100 characters"),
+  body("img").optional().trim(),
+];
 
-export const inviteToGroupValidation = [body("userId").trim().not().isEmpty()];
+export const inviteToGroupValidation = [body("userId").trim().notEmpty()];

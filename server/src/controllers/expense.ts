@@ -1,21 +1,27 @@
 import { NextFunction, Response } from "express";
+
 import { CommonRequest } from "../types";
+import { IGroupPopulated } from "../types/group";
 
 import Expense from "../models/expense";
 import Group from "../models/group";
 
 import AppError from "../error";
+import { calculateSettlements } from "../services/expenseCalculator";
 
 const addExpense = async (
   req: CommonRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const { groupId, description, amount } = req.body;
   const userId = req.user?.id;
+  const { groupId, description, amount } = req.body;
 
   try {
-    const group = await Group.findById(groupId);
+    const group = await Group.findOne({
+      _id: groupId,
+      users: userId, // Verify user is in the users array
+    });
 
     if (!group) {
       throw new AppError("Resource not found", 404);
@@ -29,7 +35,27 @@ const addExpense = async (
 
     await group.save();
 
-    res.status(200).json(savedExpense);
+    // Fetch updated group with populated data to calculate settlements
+    const updatedGroup = (await Group.findById(groupId)
+      .populate("users", "name")
+      .populate("expenses")) as IGroupPopulated | null;
+
+    if (!updatedGroup) {
+      throw new AppError("Failed to fetch updated group", 500);
+    }
+
+    const settlement = calculateSettlements(
+      updatedGroup.users,
+      updatedGroup.expenses
+    );
+
+    res.status(200).json({
+      success: true,
+      data: {
+        expense: savedExpense,
+        settlement,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -40,6 +66,7 @@ const updateExpense = async (
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.user?.id;
   const { expenseId } = req.params;
   const { description, amount } = req.body;
 
@@ -50,12 +77,41 @@ const updateExpense = async (
       throw new AppError("Resource not found", 404);
     }
 
-    expense.description = description;
-    expense.amount = amount;
+    const group = await Group.findOne({
+      _id: expense.groupId,
+      users: userId, // Verify user is in the users array
+    });
+
+    if (!group) {
+      throw new AppError("Resource not found", 404);
+    }
+
+    expense.description = description ?? expense.description;
+    expense.amount = amount ?? expense.amount;
 
     const updatedExpense = await expense.save();
 
-    res.status(200).json(updatedExpense);
+    // Fetch updated group with populated data to calculate settlements
+    const updatedGroup = (await Group.findById(expense.groupId)
+      .populate("users", "name")
+      .populate("expenses")) as IGroupPopulated | null;
+
+    if (!updatedGroup) {
+      throw new AppError("Failed to fetch updated group", 500);
+    }
+
+    const settlement = calculateSettlements(
+      updatedGroup.users,
+      updatedGroup.expenses
+    );
+
+    res.status(200).json({
+      success: true,
+      data: {
+        expense: updatedExpense,
+        settlement,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -66,6 +122,7 @@ const deleteExpense = async (
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.user?.id;
   const { expenseId } = req.params;
 
   try {
@@ -75,15 +132,42 @@ const deleteExpense = async (
       throw new AppError("Resource not found", 404);
     }
 
+    const group = await Group.findOne({
+      _id: expense.groupId,
+      users: userId, // Verify user is in the users array
+    });
+
+    if (!group) {
+      throw new AppError("Resource not found", 404);
+    }
+
     await Expense.findByIdAndDelete(expenseId);
 
     await Group.findByIdAndUpdate(expense.groupId, {
       $pull: { expenses: expenseId },
     });
 
-    res
-      .status(200)
-      .json({ success: true, message: "Expense deleted successfully" });
+    // Fetch updated group with populated data to calculate settlements
+    const updatedGroup = (await Group.findById(expense.groupId)
+      .populate("users", "name")
+      .populate("expenses")) as IGroupPopulated | null;
+
+    if (!updatedGroup) {
+      throw new AppError("Failed to fetch updated group", 500);
+    }
+
+    const settlement = calculateSettlements(
+      updatedGroup.users,
+      updatedGroup.expenses
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Expense deleted successfully",
+      data: {
+        settlement,
+      },
+    });
   } catch (error) {
     next(error);
   }

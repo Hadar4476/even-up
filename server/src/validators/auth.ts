@@ -5,7 +5,7 @@ import { isEmail, isPassword } from "./common";
 export const loginValidation = [isEmail(), isPassword()];
 
 export const registerValidation = [
-  body("name").trim().not().isEmpty(),
+  body("name").trim().notEmpty(),
   body("phoneNumber")
     .trim()
     .notEmpty()
