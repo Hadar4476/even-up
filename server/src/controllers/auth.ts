@@ -50,7 +50,9 @@ const login = async (req: CommonRequest, res: Response, next: NextFunction) => {
       // Remove the password field from the copied object
       delete mappedUser.password;
 
-      res.status(200).json({ token, user: mappedUser });
+      res
+        .status(200)
+        .json({ success: true, data: { token, user: mappedUser } });
     }
   } catch (err) {
     next(err);
@@ -83,9 +85,7 @@ const register = async (
     const result = await user.save();
 
     if (result) {
-      res
-        .status(201)
-        .json({ message: "User created successfully", userId: result._id });
+      res.status(201).json({ success: true, data: { userId: result._id } });
     }
   } catch (err) {
     next(err);

@@ -22,7 +22,7 @@ const getInvitations = async (
       .populate("groupId", "title")
       .populate("from", "name");
 
-    res.status(200).json({ invitations });
+    res.status(200).json({ success: true, data: { invitations } });
   } catch (error) {
     next(error);
   }
@@ -73,7 +73,7 @@ const sendInvitation = async (
 
     const invitation = await newInvitation.save();
 
-    res.status(200).json(invitation);
+    res.status(200).json({ success: true, data: { invitation } });
   } catch (error) {
     next(error);
   }
@@ -94,7 +94,7 @@ const updateInvitationStatus = async (
       throw new AppError("Resource not found", 404);
     }
 
-    let responseData = null;
+    let data = null;
 
     if (status === GroupInvitationStatus.ACCEPTED) {
       // Use $addToSet to prevent duplicates and handle race conditions
@@ -108,11 +108,12 @@ const updateInvitationStatus = async (
         throw new AppError("Group not found", 404);
       }
 
-      responseData = group;
+      data = group;
     }
 
     await GroupInvitation.findByIdAndDelete(invitationId);
-    res.status(200).json({ responseData });
+
+    res.status(200).json({ success: true, data });
   } catch (error) {
     next(error);
   }

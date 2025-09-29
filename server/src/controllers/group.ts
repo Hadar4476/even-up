@@ -36,8 +36,11 @@ const getGroup = async (
 
     // Return the group data with settlement information
     res.status(200).json({
-      group,
-      settlement,
+      success: true,
+      data: {
+        group,
+        settlement,
+      },
     });
   } catch (error) {
     next(error);
@@ -58,7 +61,7 @@ const getAllGroups = async (
       .select("-expenses")
       .populate("users", "name");
 
-    res.status(200).json({ groups });
+    res.status(200).json({ success: true, data: { groups } });
   } catch (error) {
     next(error);
   }
@@ -77,7 +80,7 @@ const createGroup = async (
 
     const savedGroup = await newGroup.save();
 
-    res.status(200).json(savedGroup);
+    res.status(200).json({ success: true, data: { group: savedGroup } });
   } catch (error) {
     next(error);
   }

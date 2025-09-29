@@ -24,7 +24,7 @@ const errorHandler = (
   });
 
   res.status(statusCode).json({
-    status: "error",
+    status: false,
     statusCode,
     message,
   });

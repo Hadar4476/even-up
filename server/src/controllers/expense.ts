@@ -163,7 +163,6 @@ const deleteExpense = async (
 
     res.status(200).json({
       success: true,
-      message: "Expense deleted successfully",
       data: {
         settlement,
       },
