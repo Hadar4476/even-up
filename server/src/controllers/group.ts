@@ -1,5 +1,4 @@
 import { NextFunction, Response } from "express";
-import { Document } from "mongoose";
 
 import { CommonRequest } from "../types";
 import { IGroupPopulated } from "../types/group";
