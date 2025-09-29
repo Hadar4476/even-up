@@ -1,13 +1,27 @@
 import { NextFunction, Response } from "express";
-import { CommonRequest } from "../types";
+import { Document } from "mongoose";
 
-import { getGroupSummary } from "../services/balance-calculator";
+import { CommonRequest } from "../types";
+import { IUser } from "../types/user";
+import { IExpense } from "../types/expense";
+
+import { calculateSettlements } from "../services/expenseCalculator";
 
 import Group from "../models/group";
 import GroupInvitation from "../models/group-invitation";
 import Expense from "../models/expense";
 
 import AppError from "../error";
+
+interface IGroupPopulated extends Document {
+  title: string;
+  description: string;
+  img?: string;
+  users: IUser[];
+  expenses: IExpense[];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const getGroup = async (
   req: CommonRequest,
@@ -18,22 +32,52 @@ const getGroup = async (
   const userId = req.user?.id;
 
   try {
-    const group = await Group.findOne({
+    const group = (await Group.findOne({
       _id: groupId,
       users: userId, // Verify user is in the users array
     })
-      .populate("users", "name")
-      .populate("expenses");
+      .populate("users", "name email") // You can add more fields if needed
+      .populate("expenses")) as IGroupPopulated | null;
 
     if (!group) {
       throw new AppError("Resource not found", 404);
     }
 
-    const summary = await getGroupSummary(group);
+    // Calculate who owes whom
+    const settlementData = calculateSettlements(group.users, group.expenses);
 
+    // Return the group data with settlement information
     res.status(200).json({
-      ...group.toObject(),
-      summary,
+      success: true,
+      data: {
+        group: {
+          _id: group._id,
+          title: group.title,
+          description: group.description,
+          img: group.img,
+          users: group.users.map((user) => ({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+          })),
+          expenses: group.expenses.map((expense) => ({
+            _id: expense._id,
+            description: expense.description,
+            amount: expense.amount,
+            userId: expense.userId,
+            createdAt: expense.createdAt,
+            updatedAt: expense.updatedAt,
+          })),
+          createdAt: group.createdAt,
+          updatedAt: group.updatedAt,
+        },
+        settlement: {
+          totalExpenses: settlementData.totalExpenses,
+          perPersonShare: settlementData.perPersonShare,
+          balances: settlementData.balances,
+          settlements: settlementData.settlements,
+        },
+      },
     });
   } catch (error) {
     next(error);
@@ -161,13 +205,13 @@ const settleUp = async (
     await Expense.insertMany(settlementExpenses);
 
     // Get updated balances
-    const updatedSummary = await getGroupSummary(group);
+    // const updatedSummary = await calculateSettlements(group);
 
-    res.status(200).json({
-      success: true,
-      message: "Settlements recorded successfully",
-      summary: updatedSummary,
-    });
+    // res.status(200).json({
+    //   success: true,
+    //   message: "Settlements recorded successfully",
+    //   summary: updatedSummary,
+    // });
   } catch (error) {
     next(error);
   }
