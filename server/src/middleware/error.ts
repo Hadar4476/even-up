@@ -12,10 +12,12 @@ const errorHandler = (
 ) => {
   let statusCode = 500;
   let message = "Internal Server Error";
+  let details = null;
 
   if (err instanceof AppError) {
     statusCode = err.statusCode;
     message = err.message;
+    details = err.details;
   }
 
   logger.error({
@@ -24,9 +26,10 @@ const errorHandler = (
   });
 
   res.status(statusCode).json({
-    status: false,
+    success: false,
     statusCode,
     message,
+    details,
   });
 };
 

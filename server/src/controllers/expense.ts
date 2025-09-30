@@ -163,9 +163,7 @@ const deleteExpense = async (
 
     res.status(200).json({
       success: true,
-      data: {
-        settlement,
-      },
+      data: settlement,
     });
   } catch (error) {
     next(error);

@@ -19,7 +19,7 @@ const getUser = async (
       throw new AppError("Validation failed", 401);
     }
 
-    res.status(200).json({ success: true, data: { user } });
+    res.status(200).json({ success: true, data: user });
   } catch (err) {
     next(err);
   }

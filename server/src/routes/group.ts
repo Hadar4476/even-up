@@ -24,6 +24,8 @@ router.post(
   groupController.createGroup
 );
 
+router.post("/:groupId/settle", checkAuthentication, groupController.settleUp);
+
 router.put(
   "/:groupId",
   checkAuthentication,

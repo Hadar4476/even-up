@@ -22,7 +22,7 @@ const getInvitations = async (
       .populate("groupId", "title")
       .populate("from", "name");
 
-    res.status(200).json({ success: true, data: { invitations } });
+    res.status(200).json({ success: true, data: invitations });
   } catch (error) {
     next(error);
   }
@@ -73,7 +73,7 @@ const sendInvitation = async (
 
     const invitation = await newInvitation.save();
 
-    res.status(200).json({ success: true, data: { invitation } });
+    res.status(200).json({ success: true, data: invitation });
   } catch (error) {
     next(error);
   }

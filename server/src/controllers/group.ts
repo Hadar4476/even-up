@@ -61,7 +61,39 @@ const getAllGroups = async (
       .select("-expenses")
       .populate("users", "name");
 
-    res.status(200).json({ success: true, data: { groups } });
+    res.status(200).json({ success: true, data: groups });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const settleUp = async (
+  req: CommonRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+  const { groupId } = req.params;
+
+  try {
+    const group = await Group.findOne({
+      _id: groupId,
+      users: userId,
+    });
+
+    if (!group) {
+      throw new AppError("Resource not found", 404);
+    }
+
+    await Expense.deleteMany({ groupId });
+
+    await Group.findByIdAndUpdate(groupId, {
+      $set: { expenses: [] },
+    });
+
+    res
+      .status(200)
+      .json({ success: true, message: "Group has been settled up" });
   } catch (error) {
     next(error);
   }
@@ -80,7 +112,7 @@ const createGroup = async (
 
     const savedGroup = await newGroup.save();
 
-    res.status(200).json({ success: true, data: { group: savedGroup } });
+    res.status(200).json({ success: true, data: savedGroup });
   } catch (error) {
     next(error);
   }
@@ -154,6 +186,7 @@ const deleteGroup = async (
 export default {
   getGroup,
   getAllGroups,
+  settleUp,
   createGroup,
   updateGroup,
   deleteGroup,
