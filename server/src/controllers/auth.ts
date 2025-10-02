@@ -75,6 +75,12 @@ const register = async (
       throw new AppError("Email is already taken", 409);
     }
 
+    const isPhoneNumberTaken = await User.findOne({ phoneNumber });
+
+    if (isPhoneNumberTaken) {
+      throw new AppError("Phone number is already taken", 409);
+    }
+
     const user = new User({
       email,
       name,
@@ -85,7 +91,7 @@ const register = async (
     const result = await user.save();
 
     if (result) {
-      res.status(201).json({ success: true, data: { userId: result._id } });
+      res.status(201).json({ success: true, data: result._id });
     }
   } catch (err) {
     next(err);

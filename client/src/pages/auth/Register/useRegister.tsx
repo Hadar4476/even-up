@@ -1,9 +1,13 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
-// import { useRegisterApi } from "@/api/useAuth";
-import { useNavigate } from "react-router-dom";
+
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/context/ToastContext";
+
 import { register } from "@/services/auth";
+
+import { IToast } from "@/types";
 
 interface RegisterFormValues {
   name: string;
@@ -16,7 +20,7 @@ interface RegisterFormValues {
 export const useRegister = () => {
   const navigate = useNavigate();
 
-  // const { mutate, isPending, error } = useRegisterApi();
+  const { showToast } = useToast();
 
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState("");
@@ -71,25 +75,18 @@ export const useRegister = () => {
           navigate("/login");
         }
       } catch (error: any) {
-        setError(() => error.response.data.message);
+        const toast: Omit<IToast, "id"> = {
+          type: "error",
+          message: error.message,
+          duration: 5000,
+        };
+
+        showToast(toast);
+        setError(error.message);
       } finally {
         setIsPending(false);
       }
     },
-    // onSubmit: (values) => {
-    //   mutate(values, {
-    //     onSuccess: (data) => {
-    //       const userId = data;
-
-    //       console.log("Register successful:", userId);
-
-    //       navigate("/login");
-    //     },
-    //     onError: (error) => {
-    //       console.error("Register failed:", error);
-    //     },
-    //   });
-    // },
   });
 
   return {

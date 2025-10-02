@@ -11,6 +11,7 @@ const initLogs = async () => {
       size: 1024 * 1024, // ~1MB
       max: 10, // Max 10 documents
     });
+
     console.log("Created capped collection: logs");
   }
 };

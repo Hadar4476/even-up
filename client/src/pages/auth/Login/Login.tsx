@@ -1,10 +1,10 @@
-import { Button, TextField, Typography, Stack, Alert } from "@mui/material";
+import { Button, TextField, Typography, Stack } from "@mui/material";
 
 import { useLogin } from "./useLogin";
 import { Link } from "react-router-dom";
 
 const Login = () => {
-  const { formik, isPending, error } = useLogin();
+  const { formik, isPending } = useLogin();
 
   return (
     <Stack className="items-center gap-3">
@@ -18,8 +18,6 @@ const Login = () => {
         className="w-full flex flex-col gap-4"
         onSubmit={formik.handleSubmit}
       >
-        {error && <Alert severity="error">{error}</Alert>}
-
         <TextField
           label="Email"
           name="email"
@@ -48,13 +46,12 @@ const Login = () => {
 
         <Button
           variant="contained"
-          color="primary"
+          size="large"
           fullWidth
           type="submit"
           disabled={isPending}
         >
-          {/* {isPending ? "Logging in..." : "Login"} */}
-          Sign In
+          Confirm
         </Button>
 
         <Stack className="w-full !flex-row items-center justify-center gap-2">

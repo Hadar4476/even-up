@@ -1,11 +1,16 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
-// import { useLoginApi } from "@/api/useAuth";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useToast } from "@/context/ToastContext";
+
 import { authActions } from "@/store/reducers/auth";
-import { useState } from "react";
+
 import { login } from "@/services/auth";
+
+import { IToast } from "@/types";
 
 // Define the shape of your form fields
 interface LoginFormValues {
@@ -17,6 +22,8 @@ interface LoginFormValues {
 export const useLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { showToast } = useToast();
 
   // const { mutate, isPending, error } = useLoginApi();
   const [isPending, setIsPending] = useState(false);
@@ -54,7 +61,6 @@ export const useLogin = () => {
 
         const { token, user } = response;
 
-        console.log("Login successful:", response);
         localStorage.setItem("token", token);
         localStorage.setItem("userId", user._id);
 
@@ -77,7 +83,14 @@ export const useLogin = () => {
         );
         navigate("/");
       } catch (error: any) {
-        setError(() => error.response.data.message);
+        const toast: Omit<IToast, "id"> = {
+          type: "error",
+          message: error.message,
+          duration: 5000,
+        };
+
+        showToast(toast);
+        setError(error.message);
       } finally {
         setIsPending(false);
       }

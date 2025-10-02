@@ -1,10 +1,10 @@
-import { Button, TextField, Typography, Stack, Alert } from "@mui/material";
+import { Button, TextField, Typography, Stack } from "@mui/material";
 
 import { useRegister } from "./useRegister";
 import { Link } from "react-router-dom";
 
 const Register = () => {
-  const { formik, isPending, error } = useRegister();
+  const { formik, isPending } = useRegister();
 
   return (
     <Stack className="items-center gap-3">
@@ -18,8 +18,6 @@ const Register = () => {
         className="w-full flex flex-col gap-4"
         onSubmit={formik.handleSubmit}
       >
-        {error && <Alert severity="error">{error}</Alert>}
-
         <TextField
           label="Name"
           name="name"
@@ -95,12 +93,12 @@ const Register = () => {
 
         <Button
           variant="contained"
+          size="large"
           fullWidth
           type="submit"
           disabled={isPending}
         >
-          {/* {isPending ? "Registering in progress..." : "CREATE ACCOUNT"} */}
-          CREATE ACCOUNT
+          Confirm
         </Button>
 
         <Stack className="w-full !flex-row items-center justify-center gap-2">

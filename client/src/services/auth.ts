@@ -1,10 +1,10 @@
-import apiClient from "@/api-client";
+import { api } from "./ApiService";
 
 import {
   IRegisterRequest,
   ILoginRequest,
   ILoginResponse,
-  IRegisterResponse,
+  IUser,
 } from "@/types";
 
 const route = "/auth";
@@ -12,21 +12,11 @@ const route = "/auth";
 export const login = async (
   userData: ILoginRequest
 ): Promise<ILoginResponse> => {
-  const response = await apiClient.post<ILoginResponse>(
-    `${route}/login`,
-    userData
-  );
-
-  return response.data;
+  return api.post<ILoginResponse>(`${route}/login`, userData);
 };
 
 export const register = async (
   userData: IRegisterRequest
-): Promise<IRegisterResponse> => {
-  const response = await apiClient.post<IRegisterResponse>(
-    `${route}/register`,
-    userData
-  );
-
-  return response.data;
+): Promise<IUser["_id"]> => {
+  return api.post<IUser["_id"]>(`${route}/register`, userData);
 };

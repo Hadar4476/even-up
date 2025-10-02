@@ -34,7 +34,6 @@ const PostEditor = ({ id }: PostEditorProps) => {
     // Trigger the mutation
     await mutateAsync(postData, {
       onSuccess: (data: IPost) => {
-        console.log("Post created successfully:", data);
         setPostData({ title: "", content: "" }); // Reset form
       },
     });

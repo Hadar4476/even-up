@@ -58,7 +58,7 @@ const AppToast = ({
     >
       <Box sx={{ minWidth: "300px" }}>
         <Alert severity={type}>{message}</Alert>
-        <LinearProgress variant="determinate" value={progress} />
+        <LinearProgress color={type} variant="determinate" value={progress} />
       </Box>
     </Snackbar>
   );
