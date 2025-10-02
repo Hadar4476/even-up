@@ -54,7 +54,7 @@ const useCheckAuth = () => {
     }
 
     try {
-      const user = await fetchUser(userId);
+      const user = await fetchUser();
 
       dispatch(
         authActions.setLoggedInUser({

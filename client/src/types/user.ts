@@ -1,4 +1,4 @@
-import { IDocument } from "./common";
+import { IDocument } from "./";
 
 export interface IUser extends IDocument {
   name: string;

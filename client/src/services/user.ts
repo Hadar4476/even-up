@@ -1,11 +1,9 @@
-import apiClient from "@/api-client";
+import { api } from "./ApiService";
 
 import { IUser } from "@/types";
 
 const route = "/user";
 
-export const fetchUser = async (userId: IUser["_id"]): Promise<IUser> => {
-  const response = await apiClient.get<IUser>(`${route}`);
-
-  return response.data;
+export const fetchUser = async (): Promise<IUser> => {
+  return api.get<IUser>(`${route}`);
 };

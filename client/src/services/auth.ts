@@ -1,10 +1,10 @@
 import { api } from "./ApiService";
 
 import {
-  IRegisterRequest,
   ILoginRequest,
   ILoginResponse,
   IUser,
+  IRegisterFormData,
 } from "@/types";
 
 const route = "/auth";
@@ -16,7 +16,7 @@ export const login = async (
 };
 
 export const register = async (
-  userData: IRegisterRequest
+  userData: Omit<IRegisterFormData, "confirmPassword">
 ): Promise<IUser["_id"]> => {
   return api.post<IUser["_id"]>(`${route}/register`, userData);
 };

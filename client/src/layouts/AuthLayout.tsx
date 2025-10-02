@@ -5,13 +5,13 @@ const AuthLayout = () => {
   return (
     <main
       className="min-h-screen w-full flex flex-col justify-center items-center"
-      style={{
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      }}
+      // style={{
+      //   background: "linear-gradient(135deg, #daf8e3 0%, #97ebdb 100%)",
+      // }}
     >
       <Container className="!max-w-xl">
         <Paper
-          className="p-8 !rounded-lg"
+          className="p-8 !rounded-xl"
           elevation={8}
           sx={{
             backdropFilter: "blur(10px)",

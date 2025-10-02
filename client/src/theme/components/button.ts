@@ -21,7 +21,7 @@ export const MuiButton: {
         size === "small" ? "32px" : size === "medium" ? "40px" : "48px";
       const width = ownerState.fullWidth ? "100%" : "fit-content";
 
-      const remSize = size === "small" ? 0.8 : size === "medium" ? 1 : 1.25;
+      const remSize = size === "small" ? 0.8 : size === "medium" ? 1 : 1.15;
       const fontSize = `${remSize}rem`;
 
       return {

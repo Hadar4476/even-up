@@ -7,15 +7,7 @@ import { useToast } from "@/context/ToastContext";
 
 import { register } from "@/services/auth";
 
-import { IToast } from "@/types";
-
-interface RegisterFormValues {
-  name: string;
-  phoneNumber: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import { IRegisterFormData, IToast } from "@/types";
 
 export const useRegister = () => {
   const navigate = useNavigate();
@@ -50,9 +42,12 @@ export const useRegister = () => {
       )
       .trim()
       .required("Password is required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password")], "Passwords must match")
+      .required("Please confirm your password"),
   });
 
-  const initialValues: RegisterFormValues = {
+  const initialValues: IRegisterFormData = {
     name: "",
     phoneNumber: "",
     email: "",
