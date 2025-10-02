@@ -1,5 +1,6 @@
-import { IGroupInvitation } from "@/types/group-invitation";
 import { api } from "./ApiService";
+
+import { IGroupInvitation } from "@/types/group-invitation";
 import {
   SendInvitationRequest,
   UpdateInvitationStatusRequest,

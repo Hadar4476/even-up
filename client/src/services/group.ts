@@ -16,7 +16,7 @@ export const getAllGroups = async (): Promise<IGroup[]> => {
 export const getGroup = async (
   groupId: IGroup["_id"]
 ): Promise<IGroupWithSettlement> => {
-  return api.get<Promise<{ group: IGroup; settlement: SettlementResult }>>(
+  return api.get<{ group: IGroup; settlement: SettlementResult }>(
     `${route}/${groupId}`
   );
 };
@@ -24,5 +24,18 @@ export const getGroup = async (
 export const createGroup = async (
   groupData: IGroupFormData
 ): Promise<IGroupWithSettlement> => {
-  return api.post<Promise<IGroupWithSettlement>>(`${route}`, groupData);
+  return api.post<IGroupWithSettlement>(`${route}`, groupData);
+};
+
+export const updateGroup = async ({
+  groupId,
+  ...groupData
+}: {
+  groupId: IGroup["_id"];
+} & IGroupFormData): Promise<IGroupWithSettlement> => {
+  return api.put<IGroupWithSettlement>(`${route}/${groupId}`, groupData);
+};
+
+export const deleteGroup = async (groupId: IGroup["_id"]) => {
+  return api.delete(`${route}/${groupId}`);
 };

@@ -6,7 +6,6 @@ export enum ROUTE_NAMES {
   LOGIN = "login",
   REGISTER = "register",
   DASHBOARD = "dashboard",
-  POSTS = "posts",
   SHOWCASE = "showcase",
   NOT_FOUND = "not-found",
 }
