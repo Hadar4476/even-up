@@ -130,8 +130,10 @@ const updateGroup = async (
   try {
     const group = await Group.findOne({
       _id: groupId,
-      users: userId,
-    });
+      users: userId, // Verify user is in the users array
+    })
+      .populate("users", "name email")
+      .populate("expenses");
 
     if (!group) {
       throw new AppError("Resource not found", 404);

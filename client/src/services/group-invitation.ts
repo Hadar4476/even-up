@@ -1,3 +1,4 @@
+import { IGroup } from "@/types";
 import { api } from "./ApiService";
 
 import { IGroupInvitation } from "@/types/group-invitation";
@@ -22,6 +23,6 @@ export const sendInvitation = async ({
 export const updateInvitationStatus = async ({
   invitationId,
   status,
-}: UpdateInvitationStatusRequest) => {
-  return api.put(`${route}/update/${invitationId}`, { status });
+}: UpdateInvitationStatusRequest): Promise<IGroup | null> => {
+  return api.put<IGroup | null>(`${route}/update/${invitationId}`, { status });
 };

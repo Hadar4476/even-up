@@ -1,4 +1,5 @@
 import {
+  GroupInvitationStatus,
   IGroup,
   IGroupFormData,
   IGroupInvitation,
@@ -22,8 +23,8 @@ const groups = createSlice({
     selectGroup: (state, action: PayloadAction<IGroupWithSettlement>) => {
       state.selectedGroup = action.payload;
     },
-    updateGroup: (state, action: PayloadAction<IGroupWithSettlement>) => {
-      const { group } = action.payload;
+    updateGroup: (state, action: PayloadAction<IGroup>) => {
+      const group = action.payload;
 
       if (state.selectedGroup) {
         state.selectedGroup = {
@@ -34,6 +35,16 @@ const groups = createSlice({
         const groupIndex = state.groups.findIndex(
           (g) => g._id === state.selectedGroup?.group._id
         );
+
+        if (groupIndex >= 0) {
+          state.groups[groupIndex] = {
+            ...state.groups[groupIndex],
+            title: group.title,
+            description: group.description,
+            img: group.img,
+            updatedAt: group.updatedAt,
+          };
+        }
       }
     },
     deleteGroup: (state, action: PayloadAction<IGroup["_id"]>) => {
@@ -66,12 +77,41 @@ const groups = createSlice({
     addGroupInvitation: (state, action: PayloadAction<IGroupInvitation>) => {
       state.groupInvitations.push(action.payload);
     },
-    deleteGroupInvitation: (
+    updateGroupInvitation: (
       state,
-      action: PayloadAction<IGroupInvitation["_id"]>
+      action: PayloadAction<{
+        groupInvitationId: IGroupInvitation["_id"];
+        group: IGroup;
+        status: IGroupInvitation["status"];
+      }>
     ) => {
+      const { groupInvitationId, group, status } = action.payload;
+
+      if (status === GroupInvitationStatus.ACCEPTED) {
+        if (state.selectedGroup) {
+          const isSelectedGroup = state.selectedGroup.group._id === group._id;
+
+          if (isSelectedGroup) {
+            state.selectedGroup = {
+              ...state.selectedGroup,
+              group,
+            };
+          }
+        }
+
+        const groupIndex = state.groups.findIndex((g) => g._id === group._id);
+
+        if (groupIndex >= 0) {
+          state.groups[groupIndex] = {
+            ...state.groups[groupIndex],
+            users: group.users,
+            updatedAt: group.updatedAt,
+          };
+        }
+      }
+
       state.groupInvitations = state.groupInvitations.filter(
-        (i) => i._id !== action.payload
+        (i) => i._id !== groupInvitationId
       );
     },
   },

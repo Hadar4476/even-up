@@ -98,11 +98,13 @@ const updateInvitationStatus = async (
 
     if (status === GroupInvitationStatus.ACCEPTED) {
       // Use $addToSet to prevent duplicates and handle race conditions
-      const group = await Group.findByIdAndUpdate(
-        groupInvitation.groupId,
+      const group = await Group.findOneAndUpdate(
+        { _id: groupInvitation.groupId },
         { $addToSet: { users: groupInvitation.to } },
         { new: true }
-      );
+      )
+        .populate("users", "name email")
+        .populate("expenses");
 
       if (!group) {
         throw new AppError("Group not found", 404);
