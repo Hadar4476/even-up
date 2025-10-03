@@ -3,7 +3,6 @@ import {
   IExpense,
   IExpenseWithSettlement,
   IGroup,
-  IGroupFormData,
   IGroupInvitation,
   IGroupState,
   IGroupWithSettlement,
