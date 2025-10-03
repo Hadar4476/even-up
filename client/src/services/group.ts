@@ -4,7 +4,7 @@ import {
   IGroup,
   IGroupFormData,
   IGroupWithSettlement,
-  SettlementResult,
+  ISettlementResult,
 } from "@/types/group";
 
 const route = "/group";
@@ -16,7 +16,7 @@ export const getAllGroups = async (): Promise<IGroup[]> => {
 export const getGroup = async (
   groupId: IGroup["_id"]
 ): Promise<IGroupWithSettlement> => {
-  return api.get<{ group: IGroup; settlement: SettlementResult }>(
+  return api.get<{ group: IGroup; settlementResult: ISettlementResult }>(
     `${route}/${groupId}`
   );
 };

@@ -1,11 +1,14 @@
 import {
   GroupInvitationStatus,
+  IExpense,
+  IExpenseWithSettlement,
   IGroup,
   IGroupFormData,
   IGroupInvitation,
   IGroupState,
   IGroupWithSettlement,
   IRootState,
+  ISettlementResult,
 } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -113,6 +116,59 @@ const groups = createSlice({
       state.groupInvitations = state.groupInvitations.filter(
         (i) => i._id !== groupInvitationId
       );
+    },
+    // EXPENSES
+    addExpense: (state, action: PayloadAction<IExpenseWithSettlement>) => {
+      const { expense, settlementResult } = action.payload;
+
+      if (state.selectedGroup) {
+        state.selectedGroup.group.expenses?.push(expense);
+        state.selectedGroup.settlementResult = { ...settlementResult };
+      }
+    },
+    updateExpense: (state, action: PayloadAction<IExpenseWithSettlement>) => {
+      const { expense, settlementResult } = action.payload;
+
+      if (state.selectedGroup && state.selectedGroup.group.expenses) {
+        const expenseIndex = state.selectedGroup.group.expenses.findIndex(
+          (e) => e._id === expense._id
+        );
+
+        if (Number.isInteger(expenseIndex) && expenseIndex >= 0) {
+          state.selectedGroup.group.expenses[expenseIndex] = {
+            ...state.selectedGroup.group.expenses[expenseIndex],
+            description: expense.description,
+            amount: expense.amount,
+            updatedAt: expense.updatedAt,
+          };
+        }
+
+        state.selectedGroup.settlementResult = { ...settlementResult };
+      }
+    },
+    deleteExpense: (
+      state,
+      action: PayloadAction<{
+        expenseId: IExpense["_id"];
+        settlementResult: ISettlementResult;
+      }>
+    ) => {
+      const { expenseId, settlementResult } = action.payload;
+
+      if (state.selectedGroup && state.selectedGroup.group.expenses) {
+        const expenseIndex = state.selectedGroup.group.expenses.findIndex(
+          (e) => e._id === expenseId
+        );
+
+        if (Number.isInteger(expenseIndex) && expenseIndex >= 0) {
+          state.selectedGroup.group.expenses =
+            state.selectedGroup.group.expenses.filter(
+              (e) => e._id !== expenseId
+            );
+        }
+
+        state.selectedGroup.settlementResult = { ...settlementResult };
+      }
     },
   },
 });

@@ -24,16 +24,16 @@ export interface IGroupFormData {
 
 export interface IGroupWithSettlement {
   group: IGroup;
-  settlement: SettlementResult;
+  settlementResult: ISettlementResult;
 }
 
-interface Balance {
+interface IBalance {
   userId: IUser["_id"];
   userName: IUser["name"];
   balance: number;
 }
 
-interface Settlement {
+interface ISettlement {
   from: IUser["_id"];
   fromName: IUser["name"];
   to: IUser["_id"];
@@ -41,9 +41,9 @@ interface Settlement {
   amount: number;
 }
 
-export interface SettlementResult {
-  balances: Balance[];
-  settlements: Settlement[];
+export interface ISettlementResult {
+  balances: IBalance[];
+  settlements: ISettlement[];
   totalExpenses: number;
   perPersonShare: number;
 }

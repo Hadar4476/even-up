@@ -44,7 +44,7 @@ const addExpense = async (
       throw new AppError("Failed to fetch updated group", 500);
     }
 
-    const settlement = calculateSettlements(
+    const settlementResult = calculateSettlements(
       updatedGroup.users,
       updatedGroup.expenses
     );
@@ -53,7 +53,7 @@ const addExpense = async (
       success: true,
       data: {
         expense: savedExpense,
-        settlement,
+        settlementResult,
       },
     });
   } catch (error) {
@@ -100,7 +100,7 @@ const updateExpense = async (
       throw new AppError("Failed to fetch updated group", 500);
     }
 
-    const settlement = calculateSettlements(
+    const settlementResult = calculateSettlements(
       updatedGroup.users,
       updatedGroup.expenses
     );
@@ -109,7 +109,7 @@ const updateExpense = async (
       success: true,
       data: {
         expense: updatedExpense,
-        settlement,
+        settlementResult,
       },
     });
   } catch (error) {
@@ -156,14 +156,14 @@ const deleteExpense = async (
       throw new AppError("Failed to fetch updated group", 500);
     }
 
-    const settlement = calculateSettlements(
+    const settlementResult = calculateSettlements(
       updatedGroup.users,
       updatedGroup.expenses
     );
 
     res.status(200).json({
       success: true,
-      data: settlement,
+      data: settlementResult,
     });
   } catch (error) {
     next(error);

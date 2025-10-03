@@ -1,4 +1,4 @@
-import { IDocument, IGroup, IUser, SettlementResult } from "./";
+import { IDocument, IGroup, IUser, ISettlementResult } from "./";
 
 export interface IExpense extends IDocument {
   description: string;
@@ -17,5 +17,5 @@ export interface IExpenseFormData {
 
 export interface IExpenseWithSettlement {
   expense: IExpense;
-  settlement: SettlementResult;
+  settlementResult: ISettlementResult;
 }

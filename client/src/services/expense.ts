@@ -4,7 +4,7 @@ import {
   IExpense,
   IExpenseFormData,
   IExpenseWithSettlement,
-  SettlementResult,
+  ISettlementResult,
 } from "@/types";
 
 const route = "/expense";
@@ -26,6 +26,6 @@ export const updateExpense = async ({
 
 export const deleteExpense = async (
   expenseId: IExpense["_id"]
-): Promise<SettlementResult> => {
-  return api.delete<SettlementResult>(`${route}/${expenseId}`);
+): Promise<ISettlementResult> => {
+  return api.delete<ISettlementResult>(`${route}/${expenseId}`);
 };

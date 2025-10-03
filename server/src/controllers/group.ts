@@ -32,14 +32,14 @@ const getGroup = async (
     }
 
     // Calculate who owes whom
-    const settlement = calculateSettlements(group.users, group.expenses);
+    const settlementResult = calculateSettlements(group.users, group.expenses);
 
     // Return the group data with settlement information
     res.status(200).json({
       success: true,
       data: {
         group,
-        settlement,
+        settlementResult,
       },
     });
   } catch (error) {
