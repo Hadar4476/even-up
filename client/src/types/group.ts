@@ -10,8 +10,8 @@ export interface IGroup extends IDocument {
   title: string;
   description: string;
   img?: string;
-  users?: Omit<IUser, "password phoneNumber">[];
-  expenses?: IExpense[];
+  users?: Omit<IUser, "password phoneNumber">[] | null;
+  expenses?: IExpense[] | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,7 +24,7 @@ export interface IGroupFormData {
 
 export interface IGroupWithSettlement {
   group: IGroup;
-  settlementResult: ISettlementResult;
+  settlementResult?: ISettlementResult | null;
 }
 
 interface IBalance {

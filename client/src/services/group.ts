@@ -21,6 +21,10 @@ export const getGroup = async (
   );
 };
 
+export const settleUp = async (groupId: IGroup["img"]) => {
+  return api.post(`${route}/settle/${groupId}`);
+};
+
 export const createGroup = async (
   groupData: IGroupFormData
 ): Promise<IGroupWithSettlement> => {

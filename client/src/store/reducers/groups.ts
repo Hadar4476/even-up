@@ -170,6 +170,12 @@ const groups = createSlice({
         state.selectedGroup.settlementResult = { ...settlementResult };
       }
     },
+    // SETTLE UP
+    settleUp: (state) => {
+      if (state.selectedGroup) {
+        state.selectedGroup.settlementResult = null;
+      }
+    },
   },
 });
 
