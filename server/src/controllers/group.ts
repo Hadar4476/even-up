@@ -59,7 +59,7 @@ const getAllGroups = async (
       users: { $in: [userId] },
     })
       .select("-expenses")
-      .populate("users", "name");
+      .populate("users", "name email");
 
     res.status(200).json({ success: true, data: groups });
   } catch (error) {
@@ -141,11 +141,9 @@ const updateGroup = async (
     group.description = description ?? group.description;
     group.img = img ?? group.img;
 
-    await group.save();
+    const updatedGroup = await group.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Group updated successfully" });
+    res.status(200).json({ success: true, data: updatedGroup });
   } catch (error) {
     next(error);
   }

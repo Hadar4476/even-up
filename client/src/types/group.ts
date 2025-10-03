@@ -1,4 +1,10 @@
-import { IDocument, IUser, IExpense } from "./";
+import { IDocument, IUser, IExpense, IGroupInvitation } from "./";
+
+export interface IGroupState {
+  selectedGroup: IGroupWithSettlement | null;
+  groups: Omit<IGroup, "expenses">[];
+  groupInvitations: IGroupInvitation[];
+}
 
 export interface IGroup extends IDocument {
   title: string;

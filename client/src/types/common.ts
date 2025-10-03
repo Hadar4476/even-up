@@ -1,5 +1,5 @@
 import { icons } from "@/theme";
-import { IAuthState } from "./";
+import { IAuthState, IGroupState } from "./";
 
 export enum ROUTE_NAMES {
   HOME = "/",
@@ -19,8 +19,9 @@ export interface ISystemState {
 }
 
 export interface IRootState {
-  auth: IAuthState;
   system: ISystemState;
+  auth: IAuthState;
+  groups: IGroupState;
 }
 
 export interface ISelectOption {

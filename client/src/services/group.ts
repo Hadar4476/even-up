@@ -32,8 +32,8 @@ export const updateGroup = async ({
   ...groupData
 }: {
   groupId: IGroup["_id"];
-} & IGroupFormData): Promise<IGroupWithSettlement> => {
-  return api.put<IGroupWithSettlement>(`${route}/${groupId}`, groupData);
+} & IGroupFormData): Promise<IGroup> => {
+  return api.put<IGroup>(`${route}/${groupId}`, groupData);
 };
 
 export const deleteGroup = async (groupId: IGroup["_id"]) => {
