@@ -1,8 +1,8 @@
 import express from "express";
 
-import { validate } from "../middleware/validate";
-
 import checkAuthentication from "../middleware/auth";
+
+import { validate } from "../middleware/validate";
 import {
   addExpenseValidation,
   updateExpenseValidation,

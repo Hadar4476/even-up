@@ -19,7 +19,7 @@ export interface IGroup extends IDocument {
 export interface IGroupFormData {
   title: string;
   description: string;
-  img?: string;
+  img?: File | null;
 }
 
 export interface IGroupWithSettlement {

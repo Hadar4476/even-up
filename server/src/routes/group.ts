@@ -1,8 +1,10 @@
 import express from "express";
 
-import { validate } from "../middleware/validate";
-
 import checkAuthentication from "../middleware/auth";
+
+import { upload } from "../utils/fileUpload";
+
+import { validate } from "../middleware/validate";
 import {
   createGroupValidation,
   updateGroupValidation,
@@ -19,6 +21,7 @@ router.get("/:groupId", checkAuthentication, groupController.getGroup);
 router.post(
   "/",
   checkAuthentication,
+  upload.single("img"),
   createGroupValidation,
   validate,
   groupController.createGroup

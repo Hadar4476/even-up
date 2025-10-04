@@ -5,6 +5,8 @@ import { IGroupPopulated } from "../types/group";
 
 import { calculateSettlements } from "../services/expenseCalculator";
 
+import { deleteFile } from "../utils/fileUpload";
+
 import Group from "../models/group";
 import GroupInvitation from "../models/group-invitation";
 import Expense from "../models/expense";
@@ -104,16 +106,18 @@ const createGroup = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userId = req.user?.id;
-  const { title, description, img } = req.body;
-
   try {
+    const userId = req.user?.id;
+    const { title, description } = req.body;
+    const img = req.file ? req.file.filename : "";
+
     const newGroup = new Group({ title, description, img, users: [userId] });
 
     const savedGroup = await newGroup.save();
 
     res.status(200).json({ success: true, data: savedGroup });
   } catch (error) {
+    if (req.file) deleteFile(req.file.filename);
     next(error);
   }
 };

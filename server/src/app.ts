@@ -1,15 +1,8 @@
-// WHAT TO DO IF YOU GET: Error: listen EADDRINUSE: address already in use :::3000
-
-// IN TERMINAL
-// run "netstat -aon | findstr :3000"
-// run "taskkill /PID <PID_HERE> /F"
-
-// OR
-// go to task manager and see if there are duplicates for the "node.exe" program and end them.
-
+import http from "http";
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import mongoose from "mongoose";
 
 import requestLogger from "./logs/request-logger";
 
@@ -22,10 +15,6 @@ import expenseRoutes from "./routes/expense";
 import errorHandler from "./middleware/error";
 
 import config from "./config";
-
-import mongoose from "mongoose";
-
-import http from "http";
 
 import initLogs from "./utils/initLogs";
 
@@ -51,7 +40,7 @@ const server = http.createServer(app);
 
 mongoose
   .connect(config.MONGO_URI)
-  .then(async (result) => {
+  .then(async () => {
     await initLogs();
 
     if (require.main === module) {
