@@ -1,5 +1,6 @@
 import { Response, NextFunction } from "express";
 import { CommonRequest } from "../types";
+import multer from "multer";
 
 import AppError from "../error";
 import logger from "../logs/logger";
@@ -14,7 +15,10 @@ const errorHandler = (
   let message = "Internal Server Error";
   let details = null;
 
-  if (err instanceof AppError) {
+  if (err instanceof multer.MulterError) {
+    statusCode = 400;
+    message = err.message;
+  } else if (err instanceof AppError) {
     statusCode = err.statusCode;
     message = err.message;
     details = err.details;

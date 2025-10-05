@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import { Request } from "express";
+import AppError from "../error";
 
 // Ensure upload directory exists
 const uploadDir = path.join(__dirname, "../../uploads");
@@ -37,7 +38,12 @@ const fileFilter = (
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb(new Error("Only image files are allowed (jpeg, jpg, png, gif, webp)"));
+    cb(
+      new AppError(
+        "Only image files are allowed (jpeg, jpg, png, gif, webp)",
+        400
+      )
+    );
   }
 };
 
