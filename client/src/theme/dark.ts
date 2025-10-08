@@ -51,13 +51,13 @@ export const darkTheme = createTheme({
     },
     button: {
       contained: {
-        backgroundColor: "#FCFCFA",
-        color: "#00c2c7",
+        backgroundColor: "#00c2c7",
+        color: "#FCFCFA",
       },
       outlined: {
         backgroundColor: "#FCFCFA",
-        color: "#00c2c7",
-        borderColor: "#00c2c7",
+        color: "#04c3cb",
+        borderColor: "#04c3cb",
       },
       text: {
         backgroundColor: "transparent",

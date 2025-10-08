@@ -15,13 +15,12 @@ const errorHandler = (
   let message = "Internal Server Error";
   let details = null;
 
-  if (err instanceof multer.MulterError) {
-    statusCode = 400;
+  const isMulterError = err instanceof multer.MulterError;
+
+  if (err instanceof AppError || isMulterError) {
+    statusCode = isMulterError ? 400 : err.statusCode;
     message = err.message;
-  } else if (err instanceof AppError) {
-    statusCode = err.statusCode;
-    message = err.message;
-    details = err.details;
+    details = !isMulterError && err.details;
   }
 
   logger.error({
