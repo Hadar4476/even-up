@@ -1,14 +1,20 @@
 const colors = {
-  teal: {
-    regular: "#00c2c7",
-    light: "#26CBD0",
-    dark: "#00A5A9",
-    disabled: "#00C2C780",
+  brand: {
+    light: {
+      default: "#009FA3",
+      hover: "#008B8F",
+      disabled: "#009FA366",
+    },
+    dark: {
+      default: "#26CBCF",
+      hover: "#40D1D5",
+      disabled: "#00C2C766",
+    },
   },
   black: {
     regular: "#121212",
     light1: "#212121",
-    light2: "#21212133",
+    light2: "#212121E0",
     disabled: "#21212180",
   },
   white: {

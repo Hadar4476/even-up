@@ -9,40 +9,54 @@ export const lightTheme = createTheme({
   palette: {
     mode: "light",
     background: {
-      default: "#FAFAFA",
+      default: colors.white.regular,
     },
     text: {
-      primary: "#262422",
-      secondary: "#736E6B",
-      highlight: "#00c2c7",
-      disabled: "#999591",
+      primary: colors.black.light1,
+      secondary: colors.black.light2,
+      disabled: colors.black.disabled,
+      brand: colors.brand.light.default,
+      hover: colors.brand.light.hover,
+    },
+    primary: {
+      main: colors.brand.light.default,
+      dark: colors.brand.light.hover,
     },
     button: {
       contained: {
-        backgroundColor: "#00c2c7",
-        color: "#FCFCFA",
+        backgroundColor: colors.brand.light.default,
+        color: colors.white.regular,
         hover: {
-          backgroundColor: "#00c2c7",
-          color: "#FCFCFA",
+          backgroundColor: colors.brand.light.hover,
+        },
+        disabled: {
+          backgroundColor: colors.brand.light.disabled,
+          color: colors.black.disabled,
         },
       },
       outlined: {
-        backgroundColor: "#FCFCFA",
-        color: "#00c2c7",
-        borderColor: "#00c2c7",
+        backgroundColor: "transparent",
+        color: colors.brand.light.default,
+        borderColor: colors.brand.light.default,
         hover: {
-          backgroundColor: "#FCFCFA",
-          color: "#00c2c7",
-          borderColor: "#00c2c7",
+          backgroundColor: colors.brand.light.default,
+          color: colors.white.regular,
+          borderColor: colors.brand.light.default,
+        },
+        disabled: {
+          borderColor: colors.brand.light.disabled,
+          color: colors.brand.light.disabled,
         },
       },
       text: {
-        backgroundColor: "transparent",
-        color: "#262422",
-      },
-      disabled: {
-        backgroundColor: "#BFBCB8",
-        color: "#736E6B",
+        color: colors.black.light1,
+        hover: {
+          backgroundColor: "#009FA314",
+          color: colors.brand.light.hover,
+        },
+        disabled: {
+          color: colors.black.disabled,
+        },
       },
     },
     app_bar: {

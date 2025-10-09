@@ -9,11 +9,11 @@ export const MuiButton: {
   defaultProps: {
     variant: "contained",
     size: defaultSize,
+    disableElevation: true,
   },
   styleOverrides: {
     root: ({ theme, ownerState }) => {
-      const { contained, outlined, text, disabled } =
-        theme.palette.button ?? {};
+      const { contained, outlined, text } = theme.palette.button ?? {};
 
       const size = ownerState?.size || defaultSize;
       const isSmallSize = size === "small";
@@ -43,12 +43,20 @@ export const MuiButton: {
         fontWeight: 600,
         borderRadius: "8px",
         textTransform: "none",
+        transition: "all 0.2s ease-in-out",
 
         "&.MuiButton-contained": {
           backgroundColor: contained?.backgroundColor,
           color: contained?.color,
 
-          "&:hover": {},
+          "&:hover": {
+            backgroundColor: contained?.hover.backgroundColor,
+          },
+
+          "&:disabled": {
+            backgroundColor: contained?.disabled.backgroundColor,
+            color: contained?.disabled.color,
+          },
         },
 
         "&.MuiButton-outlined": {
@@ -57,14 +65,18 @@ export const MuiButton: {
           borderColor: outlined?.borderColor,
 
           "&:hover": {
-            backgroundColor: contained?.backgroundColor,
-            color: contained?.color,
-            borderColor: "transparent",
+            backgroundColor: outlined?.hover.backgroundColor,
+            color: outlined?.hover.color,
+            borderColor: outlined?.hover.borderColor,
+          },
+
+          "&:disabled": {
+            color: outlined?.disabled.color,
+            borderColor: outlined?.disabled.borderColor,
           },
         },
 
         "&.MuiButton-text": {
-          backgroundColor: text?.backgroundColor,
           color: text?.color,
 
           // disabaling the ripple on text:
@@ -73,13 +85,12 @@ export const MuiButton: {
           },
 
           "&:hover": {
-            color: contained?.backgroundColor,
+            backgroundColor: text?.hover?.backgroundColor,
+            color: text?.hover?.color,
           },
-        },
-
-        "&.Mui-disabled": {
-          backgroundColor: disabled?.backgroundColor,
-          color: disabled?.color,
+          "&:disabled": {
+            color: text?.disabled?.color,
+          },
         },
       };
     },

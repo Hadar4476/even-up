@@ -1,16 +1,23 @@
-import { Button, TextField } from "@mui/material";
+import { useState } from "react";
+import { Button, TextField, IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { useLogin } from "./useLogin";
 
 const Login = () => {
   const { formik, isPending } = useLogin();
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <form className="w-full flex flex-col gap-4" onSubmit={formik.handleSubmit}>
       <TextField
         label="Email"
         name="email"
-        variant="outlined"
         type="email"
         fullWidth
         value={formik.values.email}
@@ -23,14 +30,29 @@ const Login = () => {
       <TextField
         label="Password"
         name="password"
-        type="password"
-        variant="outlined"
+        type={showPassword ? "text" : "password"}
         fullWidth
         value={formik.values.password}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         error={formik.touched.password && Boolean(formik.errors.password)}
         helperText={formik.touched.password && formik.errors.password}
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment className="px-2" position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleTogglePasswordVisibility}
+                  edge="end"
+                  disableRipple
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
+        }}
       />
 
       <Button

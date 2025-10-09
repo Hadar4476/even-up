@@ -7,14 +7,21 @@ interface BasePalette {
     disabled?: string;
     primary?: string;
     secondary?: string;
-    title?: string;
-    highlight?: string;
+    brand?: string;
+    hover?: string;
+  };
+  primary?: {
+    main?: string;
+    dark?: string;
   };
   button?: {
     contained: {
       backgroundColor?: string;
       color?: string;
       hover: {
+        backgroundColor?: string;
+      };
+      disabled: {
         backgroundColor?: string;
         color?: string;
       };
@@ -28,14 +35,20 @@ interface BasePalette {
         color?: string;
         borderColor: string;
       };
+      disabled: {
+        color?: string;
+        borderColor: string;
+      };
     };
     text: {
-      backgroundColor?: string;
       color?: string;
-    };
-    disabled: {
-      backgroundColor?: string;
-      color?: string;
+      hover?: {
+        backgroundColor?: string; // 12% brand color
+        color?: string;
+      };
+      disabled?: {
+        color?: string;
+      };
     };
   };
   app_bar?: {
@@ -214,7 +227,8 @@ declare module "@mui/material/styles" {
 
   // Add custom property here
   interface TypeText {
-    highlight?: string;
+    brand?: string;
+    hover?: string;
   }
 
   interface Palette extends BasePalette {}

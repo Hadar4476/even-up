@@ -1,16 +1,28 @@
-import { Button, TextField } from "@mui/material";
+import { useState } from "react";
+import { Button, TextField, IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { useRegister } from "./useRegister";
 
 const Register = () => {
   const { formik, isPending } = useRegister();
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const handleToggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword((prev) => !prev);
+  };
+
   return (
     <form className="w-full flex flex-col gap-4" onSubmit={formik.handleSubmit}>
       <TextField
         label="Name"
         name="name"
-        variant="outlined"
         fullWidth
         value={formik.values.name}
         onChange={formik.handleChange}
@@ -18,10 +30,10 @@ const Register = () => {
         error={formik.touched.name && Boolean(formik.errors.name)}
         helperText={formik.touched.name && formik.errors.name}
       />
+
       <TextField
         label="Phone Number"
         name="phoneNumber"
-        variant="outlined"
         fullWidth
         placeholder="+12125551234"
         type="tel"
@@ -35,11 +47,11 @@ const Register = () => {
             : "Format: +1XXXXXXXXXX"
         }
       />
+
       <TextField
         label="Email"
         name="email"
         type="email"
-        variant="outlined"
         fullWidth
         value={formik.values.email}
         onChange={formik.handleChange}
@@ -47,24 +59,39 @@ const Register = () => {
         error={formik.touched.email && Boolean(formik.errors.email)}
         helperText={formik.touched.email && formik.errors.email}
       />
+
       <TextField
         label="Password"
         name="password"
-        type="password"
-        variant="outlined"
+        type={showPassword ? "text" : "password"}
         fullWidth
         value={formik.values.password}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         error={formik.touched.password && Boolean(formik.errors.password)}
         helperText={formik.touched.password && formik.errors.password}
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment className="px-2" position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleTogglePasswordVisibility}
+                  edge="end"
+                  disableRipple
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
+        }}
       />
 
       <TextField
-        name="confirmPassword"
-        type="password"
         label="Confirm Password"
-        variant="outlined"
+        name="confirmPassword"
+        type={showConfirmPassword ? "text" : "password"}
         fullWidth
         value={formik.values.confirmPassword}
         onChange={formik.handleChange}
@@ -76,6 +103,22 @@ const Register = () => {
         helperText={
           formik.touched.confirmPassword && formik.errors.confirmPassword
         }
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment className="px-2" position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleToggleConfirmPasswordVisibility}
+                  edge="end"
+                  disableRipple
+                >
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
+        }}
       />
 
       <Button

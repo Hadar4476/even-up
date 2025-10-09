@@ -13,7 +13,7 @@ const AuthLayout = () => {
   const isLogin = location.pathname === "/login";
 
   const title = isLogin
-    ? "Welcome back! Please sign in to your account"
+    ? "Please sign in to your account"
     : "Create your account to get started";
 
   const linkGuidingText = isLogin
@@ -42,14 +42,14 @@ const AuthLayout = () => {
           <Stack className="items-center gap-3">
             <Stack className="w-full items-center gap-3">
               <Logo className="max-h-[80px]" />
-              <Typography variant="b_18" color="text.highlight">
+              <Typography variant="b_18" color="primary.main">
                 {title}
               </Typography>
             </Stack>
             <Outlet />
             <Stack className="w-full !flex-row items-center justify-center gap-2">
               <Typography variant="regular_16">{linkGuidingText}</Typography>
-              <AppLink className="font-medium ease-out" to={to} replace>
+              <AppLink className="font-bold" to={to} replace>
                 {linkText}
               </AppLink>
             </Stack>

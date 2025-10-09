@@ -9,40 +9,52 @@ export const darkTheme = createTheme({
   palette: {
     mode: "dark",
     background: {
-      default: "#121212",
+      default: colors.black.regular,
     },
     text: {
-      primary: "#E0E0E0",
-      secondary: "#CFCCC8",
-      highlight: "#00c2c7",
-      disabled: "#FFFFFF",
+      primary: colors.white.dark1,
+      secondary: colors.white.dark2,
+      disabled: colors.white.disabled,
+    },
+    primary: {
+      main: colors.brand.dark.default,
+      dark: colors.brand.dark.hover,
     },
     button: {
       contained: {
-        backgroundColor: "#00c2c7",
-        color: "#FCFCFA",
+        backgroundColor: colors.brand.dark.default,
+        color: colors.black.regular,
         hover: {
-          backgroundColor: "#00c2c7",
-          color: "#FCFCFA",
+          backgroundColor: colors.brand.dark.hover,
+        },
+        disabled: {
+          backgroundColor: colors.brand.dark.disabled,
+          color: colors.white.disabled,
         },
       },
       outlined: {
-        backgroundColor: "#FCFCFA",
-        color: "#00c2c7",
-        borderColor: "#00c2c7",
+        backgroundColor: "transparent",
+        color: colors.brand.dark.default,
+        borderColor: colors.brand.dark.default,
         hover: {
-          backgroundColor: "#FCFCFA",
-          color: "#00c2c7",
-          borderColor: "#00c2c7",
+          backgroundColor: colors.brand.dark.default,
+          color: colors.black.regular,
+          borderColor: colors.brand.dark.default,
+        },
+        disabled: {
+          borderColor: colors.brand.dark.disabled,
+          color: colors.brand.dark.disabled,
         },
       },
       text: {
-        backgroundColor: "transparent",
-        color: "#FCFCFA",
-      },
-      disabled: {
-        backgroundColor: "#BFBCB8",
-        color: "#736E6B",
+        color: colors.white.dark1,
+        hover: {
+          backgroundColor: "#26CBCF1F", // 12% brand color
+          color: colors.brand.dark.hover,
+        },
+        disabled: {
+          color: colors.white.disabled,
+        },
       },
     },
     app_bar: {

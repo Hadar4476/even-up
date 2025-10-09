@@ -2,15 +2,11 @@ import { styled } from "@mui/material";
 import { Link, LinkProps } from "react-router-dom";
 
 const AppLink = styled(Link)(({ theme }) => ({
-  color: theme.palette.text.highlight,
+  color: theme.palette.primary.main,
   textDecoration: "none",
   "&:hover": {
-    color: "#00c2c7",
-    fontWeight: "bold",
+    textDecoration: "underline",
   },
-  // "&:visited": {
-  //   color: "#00c2c7",
-  // },
 }));
 
 export default AppLink;
