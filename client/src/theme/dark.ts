@@ -1,63 +1,40 @@
 import { createTheme } from "@mui/material/styles";
 
-import typography from "./typography";
+import colors from "./colors";
 
 import components from "./components";
-
-// COLORS
-
-// blue(light to dark):
-// #daf8e3
-// #97ebdb
-// #00c2c7
-// #0086ad
-// #005582
-
-// purple(light to dark):
-// #efbbff
-// #d896ff
-// #be29ec
-// #800080
-// #660066
-
-// white/grey/black(light-dark):
-// #FCFCFA
-// #EDECE9
-// #DEDCD8
-// #CFCCC8
-// #BFBCB8
-// #999591
-// #736E6B
-// #4D4946
-// #262422
+import typography from "./typography";
 
 export const darkTheme = createTheme({
   palette: {
     mode: "dark",
     background: {
-      default: "#262422",
-    },
-    common: {
-      white: "#FCFCFA",
-      black: "#262422",
-    },
-    app_bar: {
-      backgroundColor: "#262422",
+      default: "#121212",
     },
     text: {
-      disabled: "#999591",
-      primary: "#FCFCFA",
+      primary: "#E0E0E0",
       secondary: "#CFCCC8",
+      highlight: "#00c2c7",
+      disabled: "#FFFFFF",
     },
     button: {
       contained: {
         backgroundColor: "#00c2c7",
         color: "#FCFCFA",
+        hover: {
+          backgroundColor: "#00c2c7",
+          color: "#FCFCFA",
+        },
       },
       outlined: {
         backgroundColor: "#FCFCFA",
-        color: "#04c3cb",
-        borderColor: "#04c3cb",
+        color: "#00c2c7",
+        borderColor: "#00c2c7",
+        hover: {
+          backgroundColor: "#FCFCFA",
+          color: "#00c2c7",
+          borderColor: "#00c2c7",
+        },
       },
       text: {
         backgroundColor: "transparent",
@@ -67,6 +44,9 @@ export const darkTheme = createTheme({
         backgroundColor: "#BFBCB8",
         color: "#736E6B",
       },
+    },
+    app_bar: {
+      backgroundColor: "#262422",
     },
     modal: {
       backgroundColor: "#262422",

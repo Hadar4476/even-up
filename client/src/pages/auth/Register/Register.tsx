@@ -1,117 +1,93 @@
-import { Button, TextField, Typography, Stack } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 import { useRegister } from "./useRegister";
-import AppLink from "@/components/common/AppLink";
-
-// The ?react suffix tells Vite to transform the SVG into React component
-import Logo from "@/assets/svg/logos/logo.svg?react";
 
 const Register = () => {
   const { formik, isPending } = useRegister();
 
   return (
-    <Stack className="items-center gap-3">
-      <Stack className="w-full items-center gap-3">
-        <Logo className="max-h-[100px]" />
-        <Typography variant="b_14" color="textSecondary">
-          Create your account to get started.
-        </Typography>
-      </Stack>
-      <form
-        className="w-full flex flex-col gap-4"
-        onSubmit={formik.handleSubmit}
+    <form className="w-full flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+      <TextField
+        label="Name"
+        name="name"
+        variant="outlined"
+        fullWidth
+        value={formik.values.name}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={formik.touched.name && Boolean(formik.errors.name)}
+        helperText={formik.touched.name && formik.errors.name}
+      />
+      <TextField
+        label="Phone Number"
+        name="phoneNumber"
+        variant="outlined"
+        fullWidth
+        placeholder="+12125551234"
+        type="tel"
+        value={formik.values.phoneNumber}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+        helperText={
+          formik.touched.phoneNumber && formik.errors.phoneNumber
+            ? formik.errors.phoneNumber
+            : "Format: +1XXXXXXXXXX"
+        }
+      />
+      <TextField
+        label="Email"
+        name="email"
+        type="email"
+        variant="outlined"
+        fullWidth
+        value={formik.values.email}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={formik.touched.email && Boolean(formik.errors.email)}
+        helperText={formik.touched.email && formik.errors.email}
+      />
+      <TextField
+        label="Password"
+        name="password"
+        type="password"
+        variant="outlined"
+        fullWidth
+        value={formik.values.password}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={formik.touched.password && Boolean(formik.errors.password)}
+        helperText={formik.touched.password && formik.errors.password}
+      />
+
+      <TextField
+        name="confirmPassword"
+        type="password"
+        label="Confirm Password"
+        variant="outlined"
+        fullWidth
+        value={formik.values.confirmPassword}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={
+          formik.touched.confirmPassword &&
+          Boolean(formik.errors.confirmPassword)
+        }
+        helperText={
+          formik.touched.confirmPassword && formik.errors.confirmPassword
+        }
+      />
+
+      <Button
+        size="large"
+        sx={{ height: "56px" }}
+        fullWidth
+        type="submit"
+        disabled={isPending}
       >
-        <TextField
-          label="Name"
-          name="name"
-          variant="outlined"
-          fullWidth
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
-        />
-        <TextField
-          label="Phone Number"
-          name="phoneNumber"
-          variant="outlined"
-          fullWidth
-          placeholder="+12125551234"
-          type="tel"
-          value={formik.values.phoneNumber}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
-          }
-          helperText={
-            formik.touched.phoneNumber && formik.errors.phoneNumber
-              ? formik.errors.phoneNumber
-              : "Format: +1XXXXXXXXXX"
-          }
-        />
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          variant="outlined"
-          fullWidth
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-        />
-        <TextField
-          label="Password"
-          name="password"
-          type="password"
-          variant="outlined"
-          fullWidth
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-
-        <TextField
-          name="confirmPassword"
-          type="password"
-          label="Confirm Password"
-          variant="outlined"
-          fullWidth
-          value={formik.values.confirmPassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.confirmPassword &&
-            Boolean(formik.errors.confirmPassword)
-          }
-          helperText={
-            formik.touched.confirmPassword && formik.errors.confirmPassword
-          }
-        />
-
-        <Button
-          variant="contained"
-          size="large"
-          fullWidth
-          type="submit"
-          disabled={isPending}
-        >
-          Confirm
-        </Button>
-
-        <Stack className="w-full !flex-row items-center justify-center gap-2">
-          <Typography variant="body2">Already have an account?</Typography>
-          <AppLink className="font-medium" to="/login" replace>
-            Sign in here
-          </AppLink>
-        </Stack>
-      </form>
-    </Stack>
+        Confirm
+      </Button>
+    </form>
   );
 };
 

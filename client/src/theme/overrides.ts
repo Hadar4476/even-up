@@ -3,24 +3,31 @@ import { TypeText } from "@mui/material/styles";
 import { InputBasePropsSizeOverrides } from "@mui/material";
 
 interface BasePalette {
-  app_bar?: {
-    backgroundColor?: string;
-  };
   text?: {
     disabled?: string;
     primary?: string;
     secondary?: string;
     title?: string;
+    highlight?: string;
   };
   button?: {
     contained: {
       backgroundColor?: string;
       color?: string;
+      hover: {
+        backgroundColor?: string;
+        color?: string;
+      };
     };
     outlined: {
       backgroundColor?: string;
       color?: string;
       borderColor: string;
+      hover: {
+        backgroundColor?: string;
+        color?: string;
+        borderColor: string;
+      };
     };
     text: {
       backgroundColor?: string;
@@ -30,6 +37,9 @@ interface BasePalette {
       backgroundColor?: string;
       color?: string;
     };
+  };
+  app_bar?: {
+    backgroundColor?: string;
   };
   modal: {
     backgroundColor?: string;
@@ -202,9 +212,9 @@ declare module "@mui/material/styles" {
     eb_38: React.CSSProperties;
   }
 
+  // Add custom property here
   interface TypeText {
-    title?: string; // Add custom property here
-    link?: string;
+    highlight?: string;
   }
 
   interface Palette extends BasePalette {}

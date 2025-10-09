@@ -11,16 +11,15 @@ import {
 
 import useTrans from "@/hooks/useTrans";
 import useLogout from "@/hooks/useLogout";
-import { useThemeContext } from "@/context/ThemeContext";
 
 import LanguageSelector from "@/components/LanguageSelector";
+import ThemeSelector from "@/components/ThemeSelector";
 
 const MainLayout = () => {
   const location = useLocation();
   const t = useTrans();
   const logout = useLogout();
   const theme = useTheme();
-  const { onToggleTheme, mode } = useThemeContext();
 
   return (
     <Stack className="min-h-screen">
@@ -35,9 +34,7 @@ const MainLayout = () => {
           </Typography>
           <Stack direction="row" alignItems="center" gap="12px">
             <LanguageSelector />
-            <Button size="small" onClick={onToggleTheme}>
-              {t("system.toggle_theme")}
-            </Button>
+            <ThemeSelector />
             <Button size="small" onClick={logout}>
               {t("system.logout")}
             </Button>

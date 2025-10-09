@@ -76,12 +76,7 @@ const LoadMoreShowcase = () => {
       </Stack>
 
       {/* Load More Button */}
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={loadMoreItems}
-        disabled={isLoading}
-      >
+      <Button color="primary" onClick={loadMoreItems} disabled={isLoading}>
         {isLoading ? "Loading..." : "Load More"}
       </Button>
     </Stack>

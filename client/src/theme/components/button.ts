@@ -16,19 +16,30 @@ export const MuiButton: {
         theme.palette.button ?? {};
 
       const size = ownerState?.size || defaultSize;
+      const isSmallSize = size === "small";
+      const isMediumSize = size === "medium";
 
-      const height =
-        size === "small" ? "32px" : size === "medium" ? "40px" : "48px";
       const width = ownerState.fullWidth ? "100%" : "fit-content";
+      let height = "48px";
+      let remSize = 1.15;
+      let lineHeight = 1.3;
 
-      const remSize = size === "small" ? 0.8 : size === "medium" ? 1 : 1.15;
-      const fontSize = `${remSize}rem`;
+      if (isSmallSize) {
+        height = "32px";
+        remSize = 0.8;
+        lineHeight = 1.4;
+      } else if (isMediumSize) {
+        height = "40px";
+        remSize = 1;
+        lineHeight = 1.5;
+      }
 
       return {
-        height,
         width,
+        height,
         minWidth: "fit-content",
-        fontSize,
+        fontSize: `${remSize}rem`,
+        lineHeight,
         fontWeight: 600,
         borderRadius: "8px",
         textTransform: "none",
@@ -36,6 +47,8 @@ export const MuiButton: {
         "&.MuiButton-contained": {
           backgroundColor: contained?.backgroundColor,
           color: contained?.color,
+
+          "&:hover": {},
         },
 
         "&.MuiButton-outlined": {
