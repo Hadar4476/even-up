@@ -65,13 +65,14 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
     navigate(to);
   };
 
-  const tabElements = navigationTabs.map((tab) => {
+  const tabElements = navigationTabs.map((tab, index) => {
     const { to, icon: IconComponent } = tab;
     const isGroupsTab = to === ROUTE_NAMES.GROUPS;
+    const isLastTab = index === navigationTabs.length - 1;
 
     const icon =
       !isMobile && isGroupsTab ? (
-        <AppLogo className={!isMobile && "max-h-[60px]"} />
+        <AppLogo className={!isMobile && "max-h-[60px] max-w-[60px]"} />
       ) : (
         <IconComponent />
       );
@@ -83,15 +84,17 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
         icon={icon}
         disableRipple={!isMobile}
         label={isMobile ? to : ""}
-        iconPosition={isMobile ? "top" : "start"}
+        iconPosition="top"
         sx={{
-          color: "rgba(255, 255, 255, 0.7)",
-          minHeight: isMobile ? 56 : 64,
+          width: "fit-content",
           "&.Mui-selected": {
             color: theme.palette.common.white,
           },
-          textTransform: "none",
-          fontSize: isMobile ? "0.75rem" : "0.875rem",
+          textTransform: "capitalize",
+          ...(!isMobile &&
+            isLastTab && {
+              marginLeft: "-32px", // Adjust this value to control the gap
+            }),
         }}
       />
     );
@@ -109,10 +112,16 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
         variant={isMobile ? "fullWidth" : "standard"}
         centered={!isMobile}
         sx={{
-          width: "100%",
+          paddingX: "30px",
           "& .MuiTabs-indicator": {
             backgroundColor: isMobile ? theme.palette.common.white : "",
           },
+          ...(!isMobile && {
+            "& .MuiTabs-flexContainer": {
+              display: "grid",
+              gridTemplateColumns: "1fr auto auto auto",
+            },
+          }),
         }}
       >
         {tabElements}
