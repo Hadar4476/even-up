@@ -5,7 +5,9 @@ export enum ROUTE_NAMES {
   HOME = "/",
   LOGIN = "login",
   REGISTER = "register",
-  DASHBOARD = "dashboard",
+  GROUPS = "groups",
+  INVITATIONS = "invitations",
+  SETTINGS = "settings",
   SHOWCASE = "showcase",
   NOT_FOUND = "not-found",
 }

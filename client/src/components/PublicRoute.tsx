@@ -15,7 +15,7 @@ const PublicRoute = () => {
 
   useEffect(() => {
     if (isAppLoaded && isLoggedIn) {
-      navigate(ROUTE_NAMES.DASHBOARD, { replace: true });
+      navigate(ROUTE_NAMES.GROUPS, { replace: true });
     }
   }, [isAppLoaded, isLoggedIn, navigate]);
 

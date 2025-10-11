@@ -60,7 +60,7 @@ export const lightTheme = createTheme({
       },
     },
     app_bar: {
-      backgroundColor: "#FCFCFA",
+      backgroundColor: colors.brand.light.default,
     },
     modal: {
       backgroundColor: "#FCFCFA",

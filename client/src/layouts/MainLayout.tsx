@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+import useResponsive from "@/hooks/useResponsive";
 import { Outlet, useLocation } from "react-router-dom";
 import {
   AppBar,
@@ -21,11 +23,37 @@ const MainLayout = () => {
   const logout = useLogout();
   const theme = useTheme();
 
+  const { isMobile } = useResponsive();
+
+  const appBarRef = useRef<HTMLDivElement>(null);
+  const [appBarHeight, setAppBarHeight] = useState(0);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (appBarRef.current) {
+        setAppBarHeight(appBarRef.current.offsetHeight);
+      }
+    };
+
+    // Initial height measurement
+    updateHeight();
+
+    // Update height on window resize
+    window.addEventListener("resize", updateHeight);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
+
   return (
     <Stack className="min-h-screen">
-      <AppBar position="sticky">
+      <AppBar
+        ref={appBarRef}
+        position={isMobile ? "fixed" : "sticky"}
+        sx={isMobile ? { top: "auto", bottom: 0 } : { top: 0 }}
+      >
         <Toolbar>
-          <Typography
+          {/* <Typography
             className="flex-1"
             variant="h6"
             style={{ color: theme.palette.text?.primary }}
@@ -38,11 +66,16 @@ const MainLayout = () => {
             <Button size="small" onClick={logout}>
               {t("system.logout")}
             </Button>
-          </Stack>
+          </Stack> */}
         </Toolbar>
       </AppBar>
 
-      <main className="flex-grow p-8 flex flex-col">
+      <main
+        className="flex-grow p-8 flex flex-col"
+        style={{
+          paddingBottom: isMobile ? `${appBarHeight}px` : "0",
+        }}
+      >
         <Outlet />
       </main>
     </Stack>
