@@ -1,5 +1,7 @@
 import { icons } from "@/theme";
 import { IAuthState, IGroupState } from "./";
+import { SvgIconTypeMap } from "@mui/material";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 export enum ROUTE_NAMES {
   HOME = "/",
@@ -10,6 +12,11 @@ export enum ROUTE_NAMES {
   SETTINGS = "settings",
   SHOWCASE = "showcase",
   NOT_FOUND = "not-found",
+}
+
+export interface INavigationTab {
+  to: ROUTE_NAMES;
+  icon: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
 }
 
 export interface IDocument {

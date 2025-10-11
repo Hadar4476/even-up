@@ -1,7 +1,7 @@
 import React from "react";
 
 const Invitations = () => {
-  return <div></div>;
+  return <div>Invitations</div>;
 };
 
 export default Invitations;

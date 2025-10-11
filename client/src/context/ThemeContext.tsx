@@ -5,7 +5,7 @@ import { lightTheme, darkTheme } from "@/theme";
 
 interface ThemeContextProps {
   onToggleTheme: () => void;
-  mode: "light" | "dark";
+  isDarkMode: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
@@ -35,10 +35,12 @@ export const ThemeContextProvider = ({
     localStorage.setItem("theme", newMode);
   };
 
+  const isDarkMode = mode === "dark";
+
   const theme: Theme = mode === "light" ? lightTheme : darkTheme;
 
   return (
-    <ThemeContext.Provider value={{ onToggleTheme, mode }}>
+    <ThemeContext.Provider value={{ onToggleTheme, isDarkMode }}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </ThemeContext.Provider>
   );

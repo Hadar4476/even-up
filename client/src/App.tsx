@@ -4,8 +4,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import { ROUTE_NAMES } from "./types";
 
-import PublicRoute from "@/components/PublicRoute";
-import PrivateRoute from "@/components/PrivateRoute";
+import PublicRoute from "@/components/routes/PublicRoute";
+import PrivateRoute from "@/components/routes/PrivateRoute";
 
 import publicRoutes from "@/routes/public";
 import privateRoutes from "@/routes/private";
