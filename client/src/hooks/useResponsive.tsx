@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 
 const useResponsive = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    // Initialize with actual value instead of false
+    if (typeof window !== "undefined") {
+      return window.matchMedia("(max-width: 767px)").matches;
+    }
+
+    return false; // SSR fallback
+  });
 
   useEffect(() => {
-    // Tailwind's md breakpoint is 768px
     const mediaQuery = window.matchMedia("(max-width: 767px)");
-
-    // Set initial value
     setIsMobile(mediaQuery.matches);
 
-    // Listen for changes
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mediaQuery.addEventListener("change", handler);
 

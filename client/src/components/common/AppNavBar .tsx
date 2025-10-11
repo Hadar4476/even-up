@@ -1,11 +1,12 @@
 import { useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import useTrans from "@/hooks/useTrans";
+import useResponsive from "@/hooks/useResponsive";
+
+import { INavigationTab, ROUTE_NAMES } from "@/types";
 
 import { AppBar, useTheme, Tab, Tabs } from "@mui/material";
 import { Groups, Mail, Settings } from "@mui/icons-material";
-import { INavigationTab, ROUTE_NAMES } from "@/types";
-import useResponsive from "@/hooks/useResponsive";
+import AppLogo from "./AppLogo";
 
 interface AppNavBarProps {
   onHeightChange: (height: number) => void;
@@ -51,8 +52,6 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
   // Derive selected tab directly from current route (single source of truth)
   const getCurrentTab = (): ROUTE_NAMES => {
     const currentPath = location.pathname;
-    console.log({ currentPath });
-
     const foundTab = navigationTabs.find((tab) =>
       currentPath.startsWith(`/${tab.to}`)
     );
@@ -63,20 +62,27 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
   const selectedTab = getCurrentTab();
 
   const handleTabChange = (_event: React.SyntheticEvent, to: ROUTE_NAMES) => {
-    console.log({ to });
-
     navigate(to);
   };
 
   const tabElements = navigationTabs.map((tab) => {
-    const IconComponent = tab.icon;
+    const { to, icon: IconComponent } = tab;
+    const isGroupsTab = to === ROUTE_NAMES.GROUPS;
+
+    const icon =
+      !isMobile && isGroupsTab ? (
+        <AppLogo className={!isMobile && "max-h-[60px]"} />
+      ) : (
+        <IconComponent />
+      );
 
     return (
       <Tab
-        key={tab.to}
-        value={tab.to}
-        icon={<IconComponent />}
-        label={tab.to}
+        key={to}
+        value={to}
+        icon={icon}
+        disableRipple={!isMobile}
+        label={isMobile ? to : ""}
         iconPosition={isMobile ? "top" : "start"}
         sx={{
           color: "rgba(255, 255, 255, 0.7)",
@@ -95,16 +101,7 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
     <AppBar
       ref={appBarRef}
       position={isMobile ? "fixed" : "sticky"}
-      sx={{
-        top: 0,
-        bottom: "auto",
-        // Use media query to switch positioning on mobile
-        "@media (max-width: 767px)": {
-          position: "fixed",
-          top: "auto",
-          bottom: 0,
-        },
-      }}
+      sx={isMobile ? { top: "auto", bottom: 0 } : { top: 0 }}
     >
       <Tabs
         value={selectedTab}
@@ -112,7 +109,7 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
         variant={isMobile ? "fullWidth" : "standard"}
         centered={!isMobile}
         sx={{
-          width: isMobile ? "100%" : "auto",
+          width: "100%",
           "& .MuiTabs-indicator": {
             backgroundColor: isMobile ? theme.palette.common.white : "",
           },

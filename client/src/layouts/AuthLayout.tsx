@@ -1,16 +1,12 @@
 import { useLocation } from "react-router";
-import { Outlet } from "react-router-dom";
-import { Container, Paper, Stack, Typography } from "@mui/material";
-import AppLink from "@/components/common/AppLink";
 
-// The ?react suffix tells Vite to transform the SVG into React component
-import LogoLight from "@/assets/svg/logos/logo-light.svg?react";
-import LogoDark from "@/assets/svg/logos/logo-dark.svg?react";
-import { useThemeContext } from "@/context/ThemeContext";
+import { Outlet } from "react-router-dom";
+import { Paper, Stack, Typography } from "@mui/material";
+import AppLink from "@/components/common/AppLink";
+import AppLogo from "@/components/common/AppLogo";
 
 const AuthLayout = () => {
   const location = useLocation();
-  const { isDarkMode } = useThemeContext();
 
   const isLogin = location.pathname === "/login";
 
@@ -32,11 +28,7 @@ const AuthLayout = () => {
       >
         <Stack className="items-center gap-3">
           <Stack className="w-full items-center gap-3">
-            {isDarkMode ? (
-              <LogoDark className="max-h-[80px]" />
-            ) : (
-              <LogoLight className="max-h-[80px]" />
-            )}
+            <AppLogo />
             <Typography variant="b_18" color="primary.main">
               {title}
             </Typography>
