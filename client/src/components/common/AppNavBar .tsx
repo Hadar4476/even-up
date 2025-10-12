@@ -49,7 +49,6 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
     return () => window.removeEventListener("resize", updateHeight);
   }, [onHeightChange]);
 
-  // Derive selected tab directly from current route (single source of truth)
   const getCurrentTab = (): ROUTE_NAMES => {
     const currentPath = location.pathname;
     const foundTab = navigationTabs.find((tab) =>
@@ -68,7 +67,7 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
   const tabElements = navigationTabs.map((tab, index) => {
     const { to, icon: IconComponent } = tab;
     const isGroupsTab = to === ROUTE_NAMES.GROUPS;
-    const isLastTab = index === navigationTabs.length - 1;
+    const isFirst = index === 0;
 
     const icon =
       !isMobile && isGroupsTab ? (
@@ -87,14 +86,15 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
         iconPosition="top"
         sx={{
           width: "fit-content",
+          textTransform: "capitalize",
           "&.Mui-selected": {
             color: theme.palette.common.white,
           },
-          textTransform: "capitalize",
-          ...(!isMobile &&
-            isLastTab && {
-              marginLeft: "-32px", // Adjust this value to control the gap
-            }),
+          ...(!isMobile && {
+            paddingY: 0,
+            paddingX: !isFirst ? "12px" : 0,
+            minWidth: "unset",
+          }),
         }}
       />
     );
@@ -107,12 +107,12 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
       sx={isMobile ? { top: "auto", bottom: 0 } : { top: 0 }}
     >
       <Tabs
+        className="py-1"
         value={selectedTab}
         onChange={handleTabChange}
         variant={isMobile ? "fullWidth" : "standard"}
         centered={!isMobile}
         sx={{
-          paddingX: "30px",
           "& .MuiTabs-indicator": {
             backgroundColor: isMobile ? theme.palette.common.white : "",
           },
@@ -120,6 +120,8 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
             "& .MuiTabs-flexContainer": {
               display: "grid",
               gridTemplateColumns: "1fr auto auto auto",
+              maxWidth: "70%",
+              marginX: "auto",
             },
           }),
         }}
