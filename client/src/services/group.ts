@@ -9,8 +9,8 @@ import {
 
 const route = "/group";
 
-export const getAllGroups = async (): Promise<IGroup[]> => {
-  return api.get<IGroup[]>(`${route}/getAll`);
+export const getAllGroups = async (): Promise<Omit<IGroup, "expenses">[]> => {
+  return api.get<Omit<IGroup, "expenses">[]>(`${route}/getAll`);
 };
 
 export const getGroup = async (

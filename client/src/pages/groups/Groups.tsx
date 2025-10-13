@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { getAllGroups } from "@/services/group";
 
 import { Stack } from "@mui/material";
+import GroupItem from "@/components/GroupItem";
 
 const Groups = () => {
   const { groups } = useAppSelector(groupsSelector);
@@ -27,12 +28,14 @@ const Groups = () => {
     }
   }, []);
 
-  const groupElements = [];
+  const groupElements = groups.map((group) => {
+    return <GroupItem key={group._id} {...group} />;
+  });
 
   return (
-    <Stack className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      Groups
-    </Stack>
+    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {groupElements}
+    </div>
   );
 };
 

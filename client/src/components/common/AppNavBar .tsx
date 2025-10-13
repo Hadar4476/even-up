@@ -50,12 +50,8 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
   }, [onHeightChange]);
 
   const getCurrentTab = () => {
-    console.log("reached");
-
     const currentPath = location.pathname;
-    const foundTab = navigationTabs.find((tab) =>
-      currentPath.startsWith(`/${tab.to}`)
-    );
+    const foundTab = navigationTabs.find((tab) => currentPath === `/${tab.to}`);
 
     return foundTab?.to;
   };
@@ -71,12 +67,11 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
     const isGroupsTab = to === ROUTE_NAMES.GROUPS;
     const isFirst = index === 0;
 
-    const icon =
-      !isMobile && isGroupsTab ? (
-        <AppLogo className={!isMobile && "max-h-[60px] max-w-[60px]"} />
-      ) : (
-        <IconComponent />
-      );
+    let icon = <IconComponent />;
+
+    if (!isMobile && isGroupsTab) {
+      icon = <AppLogo className={!isMobile && "max-h-[60px] max-w-[60px]"} />;
+    }
 
     return (
       <Tab
