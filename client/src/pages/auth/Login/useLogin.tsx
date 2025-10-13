@@ -10,7 +10,7 @@ import { authActions } from "@/store/reducers/auth";
 
 import { login } from "@/services/auth";
 
-import { IToast } from "@/types";
+import { IToast, ROUTE_NAMES } from "@/types";
 
 // Define the shape of your form fields
 interface LoginFormValues {
@@ -81,7 +81,8 @@ export const useLogin = () => {
             user,
           })
         );
-        navigate("/");
+
+        navigate(ROUTE_NAMES.HOME, { replace: true });
       } catch (error: any) {
         const toast: Omit<IToast, "id"> = {
           type: "error",
@@ -95,43 +96,6 @@ export const useLogin = () => {
         setIsPending(false);
       }
     },
-    // onSubmit: (values) => {
-    //   mutate(values, {
-    //     onSuccess: (data) => {
-    //       const { token, user } = data;
-
-    //       console.log("Login successful:", data);
-
-    //       localStorage.setItem("token", token);
-    //       localStorage.setItem("userId", user._id);
-
-    //       // will expire in 1 hour
-    //       const remainingMilliseconds = 60 * 60 * 1000;
-    //       const expiryDate = new Date(
-    //         new Date().getTime() + remainingMilliseconds
-    //       );
-
-    //       localStorage.setItem("expiryDate", expiryDate.toISOString());
-
-    //       // save in store
-
-    //       dispatch(
-    //         authActions.setLoggedInUser({
-    //           isLoggedIn: true,
-    //           token,
-    //           expiryDate: expiryDate.toISOString(),
-    //           user,
-    //         })
-    //       );
-
-    //       navigate("/");
-    //     },
-    //     onError: (error) => {
-    //       console.error("Login failed:", error);
-    //       // Handle error (e.g., show a message)
-    //     },
-    //   });
-    // },
   });
 
   return {

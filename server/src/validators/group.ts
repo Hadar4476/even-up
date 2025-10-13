@@ -13,7 +13,6 @@ export const createGroupValidation = [
     .withMessage("Description is required")
     .isLength({ max: 1000 })
     .withMessage("Description must be between 1 and 100 characters"),
-  body("img").optional().trim(),
 ];
 
 export const updateGroupValidation = [

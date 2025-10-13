@@ -7,7 +7,7 @@ import { useToast } from "@/context/ToastContext";
 
 import { register } from "@/services/auth";
 
-import { IRegisterFormData, IToast } from "@/types";
+import { IRegisterFormData, IToast, ROUTE_NAMES } from "@/types";
 
 export const useRegister = () => {
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ export const useRegister = () => {
         const response = await register(registerData);
 
         if (response) {
-          navigate("/login");
+          navigate(`/${ROUTE_NAMES.LOGIN}`, { replace: true });
         }
       } catch (error: any) {
         const toast: Omit<IToast, "id"> = {

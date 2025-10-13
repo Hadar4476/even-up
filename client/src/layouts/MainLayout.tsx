@@ -12,13 +12,13 @@ const MainLayout = () => {
 
   return (
     <main
-      className="min-h-screen flex flex-col"
+      className="min-h-screen flex flex-col items-center"
       style={{
         paddingBottom: isMobile ? `${appBarHeight}px` : "0",
       }}
     >
       <AppNavBar onHeightChange={setAppBarHeight} />
-      <Stack className="p-8">
+      <Stack className="w-full max-w-7xl p-6 md:p-8">
         <Outlet />
       </Stack>
     </main>

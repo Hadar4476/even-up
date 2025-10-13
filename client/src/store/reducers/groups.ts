@@ -15,12 +15,20 @@ const defaultGroupsState: IGroupState = {
   selectedGroup: null,
   groups: [],
   groupInvitations: [],
+  isLoading: false,
+  error: null,
 };
 
 const groups = createSlice({
   name: "groups",
   initialState: defaultGroupsState,
   reducers: {
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
+    },
     // SELECTED GROUP
     selectGroup: (state, action: PayloadAction<IGroupWithSettlement>) => {
       state.selectedGroup = action.payload;

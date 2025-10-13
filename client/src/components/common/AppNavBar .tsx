@@ -49,19 +49,21 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
     return () => window.removeEventListener("resize", updateHeight);
   }, [onHeightChange]);
 
-  const getCurrentTab = (): ROUTE_NAMES => {
+  const getCurrentTab = () => {
+    console.log("reached");
+
     const currentPath = location.pathname;
     const foundTab = navigationTabs.find((tab) =>
       currentPath.startsWith(`/${tab.to}`)
     );
 
-    return foundTab?.to || ROUTE_NAMES.GROUPS;
+    return foundTab?.to;
   };
 
   const selectedTab = getCurrentTab();
 
   const handleTabChange = (_event: React.SyntheticEvent, to: ROUTE_NAMES) => {
-    navigate(to);
+    navigate(`/${to}`, { replace: true });
   };
 
   const tabElements = navigationTabs.map((tab, index) => {
@@ -103,24 +105,26 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
   return (
     <AppBar
       ref={appBarRef}
+      className="flex flex-col items-center"
       position={isMobile ? "fixed" : "sticky"}
       sx={isMobile ? { top: "auto", bottom: 0 } : { top: 0 }}
     >
       <Tabs
-        className="py-1"
+        className={`w-full max-w-7xl ${!isMobile ? "py-2 px-4" : ""}`}
         value={selectedTab}
         onChange={handleTabChange}
         variant={isMobile ? "fullWidth" : "standard"}
         centered={!isMobile}
         sx={{
           "& .MuiTabs-indicator": {
-            backgroundColor: isMobile ? theme.palette.common.white : "",
+            backgroundColor: isMobile
+              ? theme.palette.common.white
+              : "transparent",
           },
           ...(!isMobile && {
             "& .MuiTabs-flexContainer": {
               display: "grid",
-              gridTemplateColumns: "1fr auto auto auto",
-              maxWidth: "70%",
+              gridTemplateColumns: "1fr auto auto auto auto",
               marginX: "auto",
             },
           }),
