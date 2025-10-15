@@ -97,6 +97,7 @@ const TypographyShowcase = () => {
           <Typography variant="b_22">{text_size_22}</Typography>
           <Typography variant="b_24">{text_size_24}</Typography>
           <Typography variant="b_38">{text_size_38}</Typography>
+          <Typography variant="b_64">{text_size_38}</Typography>
         </Stack>
       </Stack>
       <Divider />

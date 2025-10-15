@@ -186,6 +186,11 @@ const typography = {
     fontWeight: 700,
     lineHeight: "50px",
   },
+  b_64: {
+    fontSize: "64px",
+    fontWeight: 700,
+    lineHeight: "76px",
+  },
 
   // EXTRA-BOLD
   eb_10: {

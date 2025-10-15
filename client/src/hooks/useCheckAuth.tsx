@@ -33,7 +33,9 @@ const useCheckAuth = () => {
 
     await onGetUser();
 
-    onAutoLogout(remainingMilliseconds);
+    if (!isInDevelopment) {
+      onAutoLogout(remainingMilliseconds);
+    }
   };
 
   const onAutoLogout = (milliseconds: number) => {

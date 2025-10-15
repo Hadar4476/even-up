@@ -107,6 +107,7 @@ declare module "@mui/material/Typography" {
     b_22: true;
     b_24: true;
     b_38: true;
+    b_64: true;
 
     eb_10: true;
     eb_12: true;
@@ -161,6 +162,7 @@ declare module "@mui/material/styles" {
     b_22: true;
     b_24: true;
     b_38: true;
+    b_64: true;
 
     eb_10: true;
     eb_12: true;
@@ -213,6 +215,7 @@ declare module "@mui/material/styles" {
     b_22?: React.CSSProperties;
     b_24?: React.CSSProperties;
     b_38?: React.CSSProperties;
+    b_64?: React.CSSProperties;
 
     eb_10?: React.CSSProperties;
     eb_12?: React.CSSProperties;

@@ -111,11 +111,6 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
         variant={isMobile ? "fullWidth" : "standard"}
         centered={!isMobile}
         sx={{
-          "& .MuiTabs-indicator": {
-            backgroundColor: isMobile
-              ? theme.palette.common.white
-              : "transparent",
-          },
           ...(!isMobile && {
             "& .MuiTabs-flexContainer": {
               display: "grid",
