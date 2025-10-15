@@ -19,6 +19,18 @@ export const MuiButton: {
       const isSmallSize = size === "small";
       const isMediumSize = size === "medium";
 
+      // Check if a custom color is being used (not MUI built-in colors)
+      const hasCustomColor =
+        ownerState?.color &&
+        ![
+          "primary",
+          "secondary",
+          "error",
+          "warning",
+          "info",
+          "success",
+        ].includes(ownerState.color);
+
       const width = ownerState.fullWidth ? "100%" : "fit-content";
       let height = "48px";
       let remSize = 1.15;
@@ -46,50 +58,68 @@ export const MuiButton: {
         transition: "all 0.2s ease-in-out",
 
         "&.MuiButton-contained": {
-          backgroundColor: contained?.backgroundColor,
-          color: contained?.color,
+          ...(hasCustomColor && {
+            backgroundColor: contained?.backgroundColor,
+            color: contained?.color,
+          }),
 
           "&:hover": {
-            backgroundColor: contained?.hover.backgroundColor,
+            ...(hasCustomColor && {
+              backgroundColor: contained?.hover.backgroundColor,
+            }),
           },
 
           "&:disabled": {
-            backgroundColor: contained?.disabled.backgroundColor,
-            color: contained?.disabled.color,
+            ...(hasCustomColor && {
+              backgroundColor: contained?.disabled.backgroundColor,
+              color: contained?.disabled.color,
+            }),
           },
         },
 
         "&.MuiButton-outlined": {
-          backgroundColor: outlined?.backgroundColor,
-          color: outlined?.color,
-          borderColor: outlined?.borderColor,
+          ...(hasCustomColor && {
+            backgroundColor: outlined?.backgroundColor,
+            color: outlined?.color,
+            borderColor: outlined?.borderColor,
+          }),
 
           "&:hover": {
-            backgroundColor: outlined?.hover.backgroundColor,
-            color: outlined?.hover.color,
-            borderColor: outlined?.hover.borderColor,
+            ...(hasCustomColor && {
+              backgroundColor: outlined?.hover.backgroundColor,
+              color: outlined?.hover.color,
+              borderColor: outlined?.hover.borderColor,
+            }),
           },
 
           "&:disabled": {
-            color: outlined?.disabled.color,
-            borderColor: outlined?.disabled.borderColor,
+            ...(hasCustomColor && {
+              color: outlined?.disabled.color,
+              borderColor: outlined?.disabled.borderColor,
+            }),
           },
         },
 
         "&.MuiButton-text": {
-          color: text?.color,
+          ...(hasCustomColor && {
+            color: text?.color,
+          }),
 
-          // disabaling the ripple on text:
+          // disabling the ripple on text:
           ">.MuiTouchRipple-root": {
             display: "none",
           },
 
           "&:hover": {
-            backgroundColor: text?.hover?.backgroundColor,
-            color: text?.hover?.color,
+            ...(hasCustomColor && {
+              backgroundColor: text?.hover?.backgroundColor,
+              color: text?.hover?.color,
+            }),
           },
           "&:disabled": {
-            color: text?.disabled?.color,
+            ...(hasCustomColor && {
+              color: text?.disabled?.color,
+            }),
           },
         },
       };

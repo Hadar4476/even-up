@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import config from "@/config";
 
 import useLogout from "./useLogout";
 
@@ -20,11 +21,12 @@ const useCheckAuth = () => {
       return;
     }
 
+    const isInDevelopment = config.enviroment === "development";
     const hasExpired = new Date(expiryDate) <= new Date();
     const remainingMilliseconds =
       new Date(expiryDate).getTime() - new Date().getTime();
 
-    if (hasExpired) {
+    if (!isInDevelopment && hasExpired) {
       logout();
       return;
     }

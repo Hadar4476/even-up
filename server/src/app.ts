@@ -1,4 +1,5 @@
 import http from "http";
+import path from "path";
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -25,6 +26,8 @@ app.use(bodyParser.json());
 app.use(requestLogger);
 
 app.use(cors());
+
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 const MAIN_ROUTE = "/api";
 

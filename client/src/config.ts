@@ -2,6 +2,7 @@ const env = import.meta.env;
 
 const config = {
   apiUrl: env.VITE_API_URL,
+  uploadsUrl: env.VITE_UPLOADS_URL,
   enviroment: env.VITE_ENV,
 };
 

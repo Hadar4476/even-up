@@ -56,7 +56,7 @@ const LanguageSelector = () => {
   return (
     <Select
       value={selectedLanguage}
-      size="small"
+      size="medium"
       onChange={(event) => onChangeLanguage(event.target.value)}
       fullWidth
       renderValue={(selectedValue) => {
