@@ -3,7 +3,12 @@ import useResponsive from "@/hooks/useResponsive";
 import { Add } from "@mui/icons-material";
 import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
 
-const AddGroup = () => {
+interface AddGroupProps {
+  className?: string;
+  hasGroups?: boolean;
+}
+
+const AddGroup = ({ className, hasGroups }: AddGroupProps) => {
   const theme = useTheme();
   const { isMobile } = useResponsive();
 
@@ -27,12 +32,14 @@ const AddGroup = () => {
   );
 
   const AddGroupMobile = (
-    <Box className="flex items-end justify-end">{AddGroupButton}</Box>
+    <Box className={`flex items-end justify-end ${className}`}>
+      {AddGroupButton}
+    </Box>
   );
 
   const AddGroupDesktop = (
     <Paper
-      className="cursor-pointer h-60 flex flex-col items-center justify-center gap-2 !rounded-xl border border-dashed"
+      className={`cursor-pointer h-60 flex flex-col items-center justify-center gap-2 !rounded-xl border border-dashed ${className}`}
       sx={{
         backgroundColor: theme.palette.background.paper,
         borderColor: theme.palette.border?.default,
@@ -50,7 +57,7 @@ const AddGroup = () => {
           color: theme.palette.text.primary,
         }}
       >
-        Create New Group
+        {hasGroups ? "Create New Group" : "Create First Group"}
       </Typography>
     </Paper>
   );
