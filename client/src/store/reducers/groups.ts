@@ -15,6 +15,8 @@ const defaultGroupsState: IGroupState = {
   selectedGroup: null,
   groups: [],
   groupInvitations: [],
+  page: 1,
+  hasMore: false,
   isLoading: false,
   error: null,
 };
@@ -23,6 +25,13 @@ const groups = createSlice({
   name: "groups",
   initialState: defaultGroupsState,
   reducers: {
+    // GENERAL
+    setPage: (state, action: PayloadAction<number>) => {
+      state.page = action.payload;
+    },
+    setHasMore: (state, action: PayloadAction<boolean>) => {
+      state.hasMore = action.payload;
+    },
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
@@ -71,8 +80,8 @@ const groups = createSlice({
       }
     },
     // GROUPS
-    initGroups: (state, action: PayloadAction<Omit<IGroup, "expenses">[]>) => {
-      state.groups = [...action.payload];
+    setGroups: (state, action: PayloadAction<Omit<IGroup, "expenses">[]>) => {
+      state.groups = [...state.groups, ...action.payload];
     },
     addGroup: (state, action: PayloadAction<IGroup>) => {
       state.groups.push(action.payload);

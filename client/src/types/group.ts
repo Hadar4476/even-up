@@ -4,6 +4,8 @@ export interface IGroupState {
   selectedGroup: IGroupWithSettlement | null;
   groups: Omit<IGroup, "expenses">[];
   groupInvitations: IGroupInvitation[];
+  page: number;
+  hasMore: boolean;
   isLoading: boolean;
   error?: string | null;
 }

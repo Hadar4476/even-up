@@ -67,7 +67,7 @@ export const useRegister = () => {
         const response = await register(registerData);
 
         if (response) {
-          navigate(`/${ROUTE_NAMES.LOGIN}`, { replace: true });
+          navigate(`/${ROUTE_NAMES.LOGIN}`);
         }
       } catch (error: any) {
         const toast: Omit<IToast, "id"> = {

@@ -74,7 +74,7 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
   const selectedTab = getCurrentTab();
 
   const handleTabChange = (to: ROUTE_NAMES) => {
-    navigate(`/${to}`, { replace: true });
+    navigate(`/${to}`);
   };
 
   const tabElements = navigationTabs.map((tab, index) => {
@@ -121,7 +121,7 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
       sx={isMobile ? { top: "auto", bottom: 0 } : { top: 0 }}
     >
       <Tabs
-        className={`w-full max-w-7xl ${!isMobile ? "py-2 px-4" : ""}`}
+        className={`w-full xl:px-80 ${!isMobile ? "py-2 px-4" : ""}`}
         value={selectedTab}
         onChange={(_event, to) => handleTabChange(to)}
         variant={isMobile ? "fullWidth" : "standard"}

@@ -56,14 +56,24 @@ const getAllGroups = async (
 ) => {
   const userId = req.user?.id;
 
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || (page === 1 ? 11 : 12);
+  const skip = (page - 1) * limit;
+
   try {
+    const total = await Group.countDocuments({
+      users: { $in: [userId] },
+    });
+
     const groups = await Group.find({
       users: { $in: [userId] },
     })
       .select("-expenses")
-      .populate("users", "name email");
+      .populate("users", "name email")
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json({ success: true, data: groups });
+    res.status(200).json({ success: true, data: { groups, total } });
   } catch (error) {
     next(error);
   }

@@ -6,6 +6,7 @@ import { upload } from "../utils/fileUpload";
 
 import { validate } from "../middleware/validate";
 import {
+  getAllGroupsValidation,
   createGroupValidation,
   updateGroupValidation,
 } from "../validators/group";
@@ -14,7 +15,13 @@ import groupController from "../controllers/group";
 
 const router = express.Router();
 
-router.get("/getAll", checkAuthentication, groupController.getAllGroups);
+router.get(
+  "/getAll",
+  checkAuthentication,
+  getAllGroupsValidation,
+  validate,
+  groupController.getAllGroups
+);
 
 router.get("/:groupId", checkAuthentication, groupController.getGroup);
 

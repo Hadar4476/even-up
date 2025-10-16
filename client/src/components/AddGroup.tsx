@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 
 import { Add } from "@mui/icons-material";
@@ -7,8 +6,6 @@ import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
 const AddGroup = () => {
   const theme = useTheme();
   const { isMobile } = useResponsive();
-
-  const [elevation, setElevation] = useState(1);
 
   const AddGroupButton = (
     <Button
@@ -35,10 +32,7 @@ const AddGroup = () => {
 
   const AddGroupDesktop = (
     <Paper
-      className="cursor-pointer h-[240px] flex flex-col items-center justify-center gap-2 !rounded-xl border border-dashed"
-      elevation={elevation}
-      onMouseEnter={() => setElevation(2)}
-      onMouseLeave={() => setElevation(1)}
+      className="cursor-pointer h-60 flex flex-col items-center justify-center gap-2 !rounded-xl border border-dashed"
       sx={{
         backgroundColor: theme.palette.background.paper,
         borderColor: theme.palette.border?.default,

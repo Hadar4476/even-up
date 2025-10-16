@@ -9,8 +9,13 @@ import {
 
 const route = "/group";
 
-export const getAllGroups = async (): Promise<Omit<IGroup, "expenses">[]> => {
-  return api.get<Omit<IGroup, "expenses">[]>(`${route}/getAll`);
+export const getAllGroups = async (
+  page: number,
+  limit: number
+): Promise<{ groups: Omit<IGroup, "expenses">[]; total: number }> => {
+  return api.get<{ groups: Omit<IGroup, "expenses">[]; total: number }>(
+    `${route}/getAll?page=${page}&limit=${limit}`
+  );
 };
 
 export const getGroup = async (

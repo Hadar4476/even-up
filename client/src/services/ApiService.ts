@@ -21,6 +21,16 @@ class ApiService {
     throw error;
   }
 
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    try {
+      const response = await apiClient.get<ICommonResponse<T>>(url, config);
+
+      return this.handleResponse(response.data);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
   async post<T>(
     url: string,
     data?: any,
@@ -32,16 +42,6 @@ class ApiService {
         data,
         config
       );
-
-      return this.handleResponse(response.data);
-    } catch (error) {
-      this.handleError(error);
-    }
-  }
-
-  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    try {
-      const response = await apiClient.get<ICommonResponse<T>>(url, config);
 
       return this.handleResponse(response.data);
     } catch (error) {
