@@ -10,6 +10,8 @@ export const darkTheme = createTheme({
     mode: "dark",
     background: {
       default: colors.black.regular,
+      paper: colors.black.dark1,
+      hover: colors.black.dark3,
     },
     text: {
       primary: colors.white.dark1,
@@ -49,7 +51,7 @@ export const darkTheme = createTheme({
       text: {
         color: colors.white.dark1,
         hover: {
-          backgroundColor: "#26CBCF1F", // 12% brand color
+          backgroundColor: "#26CBCF1F",
           color: colors.brand.dark.hover,
         },
         disabled: {
@@ -63,6 +65,11 @@ export const darkTheme = createTheme({
     modal: {
       backgroundColor: "#262422",
     },
+    border: {
+      default: colors.black.dark2,
+      hover: colors.brand.dark.default,
+    },
+    avatar: colors.avatar,
   },
   typography: {
     ...typography,

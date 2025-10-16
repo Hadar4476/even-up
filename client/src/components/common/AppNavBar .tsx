@@ -51,14 +51,29 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
 
   const getCurrentTab = () => {
     const currentPath = location.pathname;
-    const foundTab = navigationTabs.find((tab) => currentPath === `/${tab.to}`);
 
-    return foundTab?.to;
+    const exactMatch = navigationTabs.find(
+      (tab) => currentPath === `/${tab.to}`
+    );
+
+    if (exactMatch) {
+      return exactMatch.to;
+    }
+
+    const nestedMatch = navigationTabs.find((tab) =>
+      currentPath.startsWith(`/${tab.to}/`)
+    );
+
+    if (nestedMatch) {
+      return nestedMatch.to;
+    }
+
+    return false;
   };
 
   const selectedTab = getCurrentTab();
 
-  const handleTabChange = (_event: React.SyntheticEvent, to: ROUTE_NAMES) => {
+  const handleTabChange = (to: ROUTE_NAMES) => {
     navigate(`/${to}`, { replace: true });
   };
 
@@ -70,7 +85,7 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
     let icon = <IconComponent />;
 
     if (!isMobile && isGroupsTab) {
-      icon = <AppLogo className={!isMobile && "max-h-[60px] max-w-[60px]"} />;
+      icon = <AppLogo className="max-h-[60px] max-w-[60px]" />;
     }
 
     return (
@@ -81,6 +96,7 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
         disableRipple={!isMobile}
         label={isMobile ? to : ""}
         iconPosition="top"
+        onClick={() => handleTabChange(to)}
         sx={{
           width: "fit-content",
           textTransform: "capitalize",
@@ -107,7 +123,7 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
       <Tabs
         className={`w-full max-w-7xl ${!isMobile ? "py-2 px-4" : ""}`}
         value={selectedTab}
-        onChange={handleTabChange}
+        onChange={(_event, to) => handleTabChange(to)}
         variant={isMobile ? "fullWidth" : "standard"}
         centered={!isMobile}
         sx={{

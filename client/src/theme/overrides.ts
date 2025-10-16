@@ -57,6 +57,11 @@ interface BasePalette {
   modal: {
     backgroundColor?: string;
   };
+  border?: {
+    default?: string;
+    hover?: string;
+  };
+  avatar?: string[];
 }
 
 // Extend the size property to include 'large'
@@ -232,6 +237,11 @@ declare module "@mui/material/styles" {
   interface TypeText {
     brand?: string;
     hover?: string;
+  }
+
+  // Extend TypeBackground to include hover
+  interface TypeBackground {
+    hover: string;
   }
 
   interface Palette extends BasePalette {}

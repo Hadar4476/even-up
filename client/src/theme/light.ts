@@ -10,6 +10,8 @@ export const lightTheme = createTheme({
     mode: "light",
     background: {
       default: colors.white.regular,
+      paper: colors.white.pure,
+      hover: colors.white.light1,
     },
     text: {
       primary: colors.black.light1,
@@ -51,7 +53,7 @@ export const lightTheme = createTheme({
       text: {
         color: colors.black.light1,
         hover: {
-          backgroundColor: "#009FA314",
+          backgroundColor: colors.brand.light.background,
           color: colors.brand.light.hover,
         },
         disabled: {
@@ -63,8 +65,13 @@ export const lightTheme = createTheme({
       backgroundColor: colors.brand.light.default,
     },
     modal: {
-      backgroundColor: "#FCFCFA",
+      backgroundColor: colors.modal.light,
     },
+    border: {
+      default: colors.white.dark1,
+      hover: colors.brand.light.default,
+    },
+    avatar: colors.avatar,
   },
   typography: {
     ...typography,

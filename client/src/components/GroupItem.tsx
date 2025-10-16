@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useThemeContext } from "@/context/ThemeContext";
+import { useState, useMemo } from "react";
 import useResponsive from "@/hooks/useResponsive";
 
 import config from "@/config";
@@ -12,7 +11,6 @@ import { useNavigate } from "react-router";
 
 const GroupItem = ({ _id, title, img, users }: Omit<IGroup, "expenses">) => {
   const navigate = useNavigate();
-  const { isDarkMode } = useThemeContext();
   const { isMobile } = useResponsive();
   const theme = useTheme();
 
@@ -20,17 +18,36 @@ const GroupItem = ({ _id, title, img, users }: Omit<IGroup, "expenses">) => {
 
   const imgUrl = img ? `${config.uploadsUrl}/${img}` : "";
 
+  // Generate a consistent color based on the group ID
+  const avatarColor = useMemo(() => {
+    // Use the _id to generate a consistent index
+    const hash = _id.split("").reduce((acc, char) => {
+      return char.charCodeAt(0) + ((acc << 5) - acc);
+    }, 0);
+
+    return theme.palette.avatar?.[
+      Math.abs(hash) % theme.palette.avatar?.length
+    ];
+  }, [_id, theme.palette.avatar]);
+
   const handleClick = () => {
     navigate(`/${ROUTE_NAMES.GROUPS}/${_id}`, { replace: true });
   };
 
   return (
     <Paper
-      className="cursor-pointer !rounded-xl flex items-center justify-between md:items-start p-2 md:p-0 overflow-hidden md:h-[200px]"
+      className="cursor-pointer !rounded-xl flex items-center justify-between md:items-start p-2 md:p-0 overflow-hidden md:h-60"
       elevation={elevation}
       onMouseEnter={() => setElevation(2)}
       onMouseLeave={() => setElevation(1)}
       onClick={handleClick}
+      sx={{
+        backgroundColor: theme.palette.background.paper,
+        transition: "all 0.2s ease-in-out",
+        "&:hover": {
+          backgroundColor: theme.palette.background.hover,
+        },
+      }}
     >
       <Box className="flex items-center gap-4 md:flex-col md:items-start md:justify-between md:gap-0 md:w-full md:h-full">
         <Avatar
@@ -42,9 +59,17 @@ const GroupItem = ({ _id, title, img, users }: Omit<IGroup, "expenses">) => {
           {!img && (
             <Box
               className="flex items-center justify-center w-full h-full"
-              bgcolor={theme.palette.common.white}
+              sx={{
+                backgroundColor: avatarColor,
+              }}
             >
-              <Typography variant={isMobile ? "b_38" : "b_64"}>
+              <Typography
+                variant={isMobile ? "b_38" : "b_64"}
+                sx={{
+                  color: theme.palette.common.white,
+                  fontWeight: 600,
+                }}
+              >
                 {title.charAt(0).toUpperCase()}
               </Typography>
             </Box>
@@ -55,6 +80,9 @@ const GroupItem = ({ _id, title, img, users }: Omit<IGroup, "expenses">) => {
           <Typography
             className="truncate capitalize"
             variant={isMobile ? "b_18" : "b_22"}
+            sx={{
+              color: theme.palette.text.primary,
+            }}
           >
             {title}
           </Typography>
@@ -62,7 +90,7 @@ const GroupItem = ({ _id, title, img, users }: Omit<IGroup, "expenses">) => {
             <Typography
               variant={isMobile ? "regular_12" : "regular_16"}
               sx={{
-                color: "text.secondary",
+                color: theme.palette.text.secondary,
               }}
             >
               {users.length} {users.length === 1 ? "member" : "members"}
@@ -73,7 +101,10 @@ const GroupItem = ({ _id, title, img, users }: Omit<IGroup, "expenses">) => {
 
       {isMobile && (
         <Box className="flex-shrink-0">
-          <ChevronRight className="w-6 h-6 text.secondary" />
+          <ChevronRight
+            className="w-6 h-6"
+            sx={{ color: theme.palette.text.secondary }}
+          />
         </Box>
       )}
     </Paper>

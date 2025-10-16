@@ -19,8 +19,9 @@ const Groups = () => {
 
   useEffect(() => {
     if (!groups.length) {
+      disptach(groupsActions.setIsLoading(true));
+
       const initGroups = async () => {
-        disptach(groupsActions.setIsLoading(true));
         await commonUtils.sleep(1);
 
         try {

@@ -14,11 +14,18 @@ const AddGroup = () => {
     <Button
       className="!w-[48px] !h-[48px] !rounded-full !p-0"
       disableRipple={!isMobile}
+      sx={{
+        backgroundColor: theme.palette.primary.main,
+        color:
+          theme.palette.mode === "dark"
+            ? theme.palette.background.default
+            : theme.palette.common.white,
+        "&:hover": {
+          backgroundColor: theme.palette.primary.dark,
+        },
+      }}
     >
-      <Add
-        className="md:!text-2xl"
-        sx={{ color: theme.palette.text.primary }}
-      />
+      <Add className="md:!text-2xl" />
     </Button>
   );
 
@@ -28,13 +35,29 @@ const AddGroup = () => {
 
   const AddGroupDesktop = (
     <Paper
-      className="cursor-pointer h-[200px] flex flex-col items-center justify-center gap-2 !rounded-xl border border-dashed"
+      className="cursor-pointer h-[240px] flex flex-col items-center justify-center gap-2 !rounded-xl border border-dashed"
       elevation={elevation}
       onMouseEnter={() => setElevation(2)}
       onMouseLeave={() => setElevation(1)}
+      sx={{
+        backgroundColor: theme.palette.background.paper,
+        borderColor: theme.palette.border?.default,
+        transition: "all 0.2s ease-in-out",
+        "&:hover": {
+          backgroundColor: theme.palette.background.hover,
+          borderColor: theme.palette.border?.hover,
+        },
+      }}
     >
-      {AddGroupMobile}
-      <Typography variant="b_22">Create New Group</Typography>
+      {AddGroupButton}
+      <Typography
+        variant="b_22"
+        sx={{
+          color: theme.palette.text.primary,
+        }}
+      >
+        Create New Group
+      </Typography>
     </Paper>
   );
 
