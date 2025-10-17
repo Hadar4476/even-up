@@ -109,14 +109,28 @@ const Groups = () => {
     return <GroupItem key={group._id} {...group} />;
   });
 
-  if (isLoading) {
-    return <AppLoader />;
-  }
-
   return (
     <Stack className="flex-1 w-full gap-6">
+      {isLoading && <AppLoader />}
       {isMobile && <AddGroup />}
-      {groups.length > 0 ? (
+      {!isLoading && !groups.length && (
+        <Stack className="flex-1 w-full gap-2 md:gap-6 items-center justify-center text-center">
+          <Typography
+            variant={isMobile ? "b_16" : "b_24"}
+            sx={{
+              color: theme.palette.primary.main,
+            }}
+          >
+            Ready to make sharing expenses easier?
+          </Typography>
+          <Typography variant={isMobile ? "b_14" : "b_16"}>
+            Create your first group to start splitting expenses with friends,
+            roommates, or travel buddies.
+          </Typography>
+          {!isMobile && <AddGroup className="w-96" />}
+        </Stack>
+      )}
+      {groups.length > 0 && (
         <>
           <TextField
             fullWidth
@@ -150,22 +164,6 @@ const Groups = () => {
             </Stack>
           )}
         </>
-      ) : (
-        <Stack className="flex-1 w-full gap-2 md:gap-6 items-center justify-center text-center">
-          <Typography
-            variant={isMobile ? "b_16" : "b_24"}
-            sx={{
-              color: theme.palette.primary.main,
-            }}
-          >
-            Ready to make sharing expenses easier?
-          </Typography>
-          <Typography variant={isMobile ? "b_14" : "b_16"}>
-            Create your first group to start splitting expenses with friends,
-            roommates, or travel buddies.
-          </Typography>
-          {!isMobile && <AddGroup className="w-96" />}
-        </Stack>
       )}
     </Stack>
   );

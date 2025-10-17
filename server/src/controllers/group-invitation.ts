@@ -21,7 +21,7 @@ const getInvitations = async (
     })
       .populate("groupId", "title")
       .populate("from", "name")
-      .sort({ updatedAt: -1 });
+      .sort({ updatedAt: -1, _id: -1 });
 
     res.status(200).json({ success: true, data: invitations });
   } catch (error) {
