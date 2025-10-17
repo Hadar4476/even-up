@@ -56,8 +56,8 @@ const getAllGroups = async (
 ) => {
   const userId = req.user?.id;
 
-  const page = parseInt(req.query.page as string) || 1;
-  const limit = parseInt(req.query.limit as string) || (page === 1 ? 11 : 12);
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || (page === 1 ? 11 : 12);
   const skip = (page - 1) * limit;
 
   try {
@@ -72,6 +72,39 @@ const getAllGroups = async (
       .populate("users", "name email")
       .skip(skip)
       .limit(limit);
+
+    res.status(200).json({ success: true, data: { groups, total } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const searchGroups = async (
+  req: CommonRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+
+  const { query, limit = 10, page = 1 } = req.query;
+
+  const skip = (Number(page) - 1) * Number(limit);
+
+  try {
+    const groups = await Group.find({
+      $text: { $search: query as string },
+      users: userId,
+    })
+      .select("-expenses")
+      .limit(Number(limit))
+      .skip(skip)
+      .sort({ score: { $meta: "textScore" } }) // Sort by relevance
+      .lean(); // Convert to plain JavaScript objects for better performance
+
+    const total = await Group.countDocuments({
+      $text: { $search: query as string },
+      users: userId,
+    });
 
     res.status(200).json({ success: true, data: { groups, total } });
   } catch (error) {
@@ -200,6 +233,7 @@ const deleteGroup = async (
 export default {
   getGroup,
   getAllGroups,
+  searchGroups,
   settleUp,
   createGroup,
   updateGroup,

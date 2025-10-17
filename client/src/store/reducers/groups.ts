@@ -81,6 +81,12 @@ const groups = createSlice({
     },
     // GROUPS
     setGroups: (state, action: PayloadAction<Omit<IGroup, "expenses">[]>) => {
+      state.groups = action.payload;
+    },
+    appendGroups: (
+      state,
+      action: PayloadAction<Omit<IGroup, "expenses">[]>
+    ) => {
       state.groups = [...state.groups, ...action.payload];
     },
     addGroup: (state, action: PayloadAction<IGroup>) => {

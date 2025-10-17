@@ -9,6 +9,7 @@ import {
   getAllGroupsValidation,
   createGroupValidation,
   updateGroupValidation,
+  searchGroupsValidation,
 } from "../validators/group";
 
 import groupController from "../controllers/group";
@@ -21,6 +22,14 @@ router.get(
   getAllGroupsValidation,
   validate,
   groupController.getAllGroups
+);
+
+router.get(
+  "/searchGroups",
+  checkAuthentication,
+  searchGroupsValidation,
+  validate,
+  groupController.searchGroups
 );
 
 router.get("/:groupId", checkAuthentication, groupController.getGroup);

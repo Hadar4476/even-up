@@ -27,6 +27,8 @@ const groupSchema: Schema = new Schema(
   }
 );
 
+groupSchema.index({ title: "text" });
+
 const Group = mongoose.model<IGroup>("Group", groupSchema);
 
 export default Group;

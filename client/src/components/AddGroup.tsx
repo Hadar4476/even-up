@@ -39,7 +39,7 @@ const AddGroup = ({ className, hasGroups }: AddGroupProps) => {
 
   const AddGroupDesktop = (
     <Paper
-      className={`cursor-pointer h-60 flex flex-col items-center justify-center gap-2 !rounded-xl border border-dashed ${className}`}
+      className={`cursor-pointer h-60 flex flex-col items-center justify-center gap-4 !rounded-xl border border-dashed ${className}`}
       sx={{
         backgroundColor: theme.palette.background.paper,
         borderColor: theme.palette.border?.default,
@@ -52,12 +52,12 @@ const AddGroup = ({ className, hasGroups }: AddGroupProps) => {
     >
       {AddGroupButton}
       <Typography
-        variant="b_22"
+        variant="b_18"
         sx={{
           color: theme.palette.text.primary,
         }}
       >
-        {hasGroups ? "Create New Group" : "Create First Group"}
+        {hasGroups ? "Create New Group" : "Create Your First Group"}
       </Typography>
     </Paper>
   );

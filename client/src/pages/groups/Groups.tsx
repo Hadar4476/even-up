@@ -9,13 +9,14 @@ import commonUtils from "@/utils/common";
 import { groupsSelector } from "@/store/reducers/groups";
 import { groupsActions } from "@/store/reducers/groups";
 
-import { Stack, Button, Typography } from "@mui/material";
+import { Stack, Button, Typography, useTheme } from "@mui/material";
 import GroupItem from "@/components/GroupItem";
 import AppLoader from "@/components/common/AppLoader";
 import AddGroup from "@/components/AddGroup";
 
 const Groups = () => {
   const { isMobile } = useResponsive();
+  const theme = useTheme();
   const { groups, page, hasMore, isLoading } = useAppSelector(groupsSelector);
   const dispatch = useDispatch();
 
@@ -32,7 +33,11 @@ const Groups = () => {
       const response = await getAllGroups(page, limit);
       const skip = (page - 1) * limit;
 
-      dispatch(groupsActions.setGroups(response.groups));
+      if (!isInitialized) {
+        dispatch(groupsActions.setGroups(response.groups));
+      } else {
+        dispatch(groupsActions.appendGroups(response.groups));
+      }
 
       const hasMoreGroups = skip + response.groups.length < response.total;
 
@@ -65,10 +70,15 @@ const Groups = () => {
       {isMobile && <AddGroup />}
       {!isLoading && isInitialized && !groups.length && (
         <Stack className="flex-1 w-full gap-2 md:gap-6 items-center justify-center text-center">
-          <Typography variant={isMobile ? "b_16" : "b_24"}>
+          <Typography
+            variant={isMobile ? "b_16" : "b_24"}
+            sx={{
+              color: theme.palette.primary.main,
+            }}
+          >
             Ready to make sharing expenses easier?
           </Typography>
-          <Typography variant={isMobile ? "b_14" : "b_20"}>
+          <Typography variant={isMobile ? "b_14" : "b_16"}>
             Create your first group to start splitting expenses with friends,
             roommates, or travel buddies.
           </Typography>

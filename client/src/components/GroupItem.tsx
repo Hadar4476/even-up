@@ -71,7 +71,7 @@ const GroupItem = ({ _id, title, img, users }: Omit<IGroup, "expenses">) => {
         <Stack className="gap-2 md:p-4 md:w-full">
           <Typography
             className="truncate capitalize"
-            variant={isMobile ? "b_16" : "b_22"}
+            variant={isMobile ? "b_16" : "b_18"}
             sx={{
               color: theme.palette.text.primary,
             }}
@@ -80,7 +80,7 @@ const GroupItem = ({ _id, title, img, users }: Omit<IGroup, "expenses">) => {
           </Typography>
           {users && users.length > 0 && (
             <Typography
-              variant={isMobile ? "regular_12" : "regular_16"}
+              variant={isMobile ? "regular_12" : "regular_14"}
               sx={{
                 color: theme.palette.text.secondary,
               }}
