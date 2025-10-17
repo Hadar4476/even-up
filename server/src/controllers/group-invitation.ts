@@ -20,7 +20,8 @@ const getInvitations = async (
       status: GroupInvitationStatus.PENDING,
     })
       .populate("groupId", "title")
-      .populate("from", "name");
+      .populate("from", "name")
+      .sort({ updatedAt: -1 });
 
     res.status(200).json({ success: true, data: invitations });
   } catch (error) {

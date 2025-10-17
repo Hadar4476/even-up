@@ -71,7 +71,8 @@ const getAllGroups = async (
       .select("-expenses")
       .populate("users", "name email")
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .sort({ updatedAt: -1 });
 
     res.status(200).json({ success: true, data: { groups, total } });
   } catch (error) {
