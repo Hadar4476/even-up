@@ -18,6 +18,16 @@ export const getAllGroups = async (
   );
 };
 
+export const searchGroups = async (
+  query: string,
+  page: number,
+  limit: number
+): Promise<{ groups: Omit<IGroup, "expenses">[]; total: number }> => {
+  return api.get<{ groups: Omit<IGroup, "expenses">[]; total: number }>(
+    `${route}/searchGroups?query=${query}&page=${page}&limit=${limit}`
+  );
+};
+
 export const getGroup = async (
   groupId: IGroup["_id"]
 ): Promise<IGroupWithSettlement> => {
