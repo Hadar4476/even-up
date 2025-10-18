@@ -3,6 +3,7 @@ import { api } from "./ApiService";
 import {
   IGroup,
   IGroupFormData,
+  IGroupWithPagination,
   IGroupWithSettlement,
   ISettlementResult,
 } from "@/types/group";
@@ -12,8 +13,8 @@ const route = "/group";
 export const getAllGroups = async (
   page: number,
   limit: number
-): Promise<{ groups: Omit<IGroup, "expenses">[]; total: number }> => {
-  return api.get<{ groups: Omit<IGroup, "expenses">[]; total: number }>(
+): Promise<IGroupWithPagination> => {
+  return api.get<IGroupWithPagination>(
     `${route}/getAll?page=${page}&limit=${limit}`
   );
 };
@@ -22,8 +23,8 @@ export const searchGroups = async (
   query: string,
   page: number,
   limit: number
-): Promise<{ groups: Omit<IGroup, "expenses">[]; total: number }> => {
-  return api.get<{ groups: Omit<IGroup, "expenses">[]; total: number }>(
+): Promise<IGroupWithPagination> => {
+  return api.get<IGroupWithPagination>(
     `${route}/searchGroups?query=${query}&page=${page}&limit=${limit}`
   );
 };

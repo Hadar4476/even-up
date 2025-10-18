@@ -57,7 +57,7 @@ const getAllGroups = async (
   const userId = req.user?.id;
 
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || (page === 1 ? 11 : 12);
+  const limit = Number(req.query.limit) || 9;
   const skip = (page - 1) * limit;
 
   try {
@@ -74,7 +74,15 @@ const getAllGroups = async (
       .skip(skip)
       .limit(limit);
 
-    res.status(200).json({ success: true, data: { groups, total } });
+    const hasMore = skip + groups.length < total;
+
+    const pagination = {
+      page,
+      limit,
+      hasMore,
+    };
+
+    res.status(200).json({ success: true, data: { groups, pagination } });
   } catch (error) {
     next(error);
   }
@@ -87,27 +95,36 @@ const searchGroups = async (
 ) => {
   const userId = req.user?.id;
 
-  const { query, limit = 10, page = 1 } = req.query;
-
-  const skip = (Number(page) - 1) * Number(limit);
+  const query = req.query.query as string;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 9;
+  const skip = (page - 1) * limit;
 
   try {
     const groups = await Group.find({
-      $text: { $search: query as string },
+      $text: { $search: query },
       users: userId,
     })
       .select("-expenses")
-      .limit(Number(limit))
+      .limit(limit)
       .skip(skip)
       .sort({ score: { $meta: "textScore" } }) // Sort by relevance
       .lean(); // Convert to plain JavaScript objects for better performance
 
     const total = await Group.countDocuments({
-      $text: { $search: query as string },
+      $text: { $search: query },
       users: userId,
     });
 
-    res.status(200).json({ success: true, data: { groups, total } });
+    const hasMore = skip + groups.length < total;
+
+    const pagination = {
+      page,
+      limit,
+      hasMore,
+    };
+
+    res.status(200).json({ success: true, data: { groups, pagination } });
   } catch (error) {
     next(error);
   }

@@ -2,10 +2,10 @@ import { IDocument, IUser, IExpense, IGroupInvitation } from "./";
 
 export interface IGroupState {
   selectedGroup: IGroupWithSettlement | null;
-  groups: Omit<IGroup, "expenses">[];
+  groupsData: IGroupWithPagination;
   groupInvitations: IGroupInvitation[];
-  page: number;
-  hasMore: boolean;
+  searchQuery: string;
+  isInitialized: boolean;
   isLoading: boolean;
   error?: string | null;
 }
@@ -18,6 +18,19 @@ export interface IGroup extends IDocument {
   expenses?: IExpense[] | null;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export type GroupWithoutExpenses = Omit<IGroup, "expenses">;
+
+export interface IPagination {
+  page: number;
+  limit: number;
+  hasMore: boolean;
+}
+
+export interface IGroupWithPagination {
+  groups: GroupWithoutExpenses[];
+  pagination: IPagination;
 }
 
 export interface IGroupFormData {

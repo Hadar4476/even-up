@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import useResponsive from "@/hooks/useResponsive";
 import { useAppSelector } from "@/store";
@@ -25,101 +25,140 @@ import AddGroup from "@/components/AddGroup";
 const Groups = () => {
   const { isMobile } = useResponsive();
   const theme = useTheme();
-  const { groups, page, hasMore, isLoading } = useAppSelector(groupsSelector);
+  const { groupsData, searchQuery, isLoading, isInitialized } =
+    useAppSelector(groupsSelector);
+  const { groups, pagination } = groupsData;
+  const { page, limit, hasMore } = pagination;
+
   const dispatch = useDispatch();
 
-  const [query, setQuery] = useState("");
-
-  const limit = page === 1 ? 11 : 12;
-  const skip = (page - 1) * limit;
-
-  const fetchGroups = async (shouldAppend?: boolean) => {
+  const fetchGroups = useCallback(async () => {
     dispatch(groupsActions.setIsLoading(true));
     await commonUtils.sleep(1);
 
     try {
-      const response = await getAllGroups(page, limit);
-
-      if (shouldAppend) {
-        dispatch(groupsActions.appendGroups(response.groups));
-      } else {
-        dispatch(groupsActions.setGroups(response.groups));
-      }
-
-      const hasMoreGroups = skip + response.groups.length < response.total;
-
-      if (hasMoreGroups) {
-        dispatch(groupsActions.setPage(page + 1));
-      }
-
-      dispatch(groupsActions.setHasMore(hasMoreGroups));
+      const response = await getAllGroups(1, limit);
+      dispatch(groupsActions.setGroupsData(response));
+      dispatch(groupsActions.setIsInitialized(true));
     } catch (error: any) {
       dispatch(groupsActions.setError(error.message));
     } finally {
       dispatch(groupsActions.setIsLoading(false));
+    }
+  }, [dispatch, limit]);
+
+  const loadMoreGroups = useCallback(async () => {
+    if (isLoading || !hasMore) return;
+
+    dispatch(groupsActions.setIsLoading(true));
+    await commonUtils.sleep(1);
+
+    try {
+      const response = await getAllGroups(page + 1, limit);
+      dispatch(groupsActions.appendGroupsData(response));
+    } catch (error: any) {
+      dispatch(groupsActions.setError(error.message));
+    } finally {
+      dispatch(groupsActions.setIsLoading(false));
+    }
+  }, [dispatch, page, limit, isLoading, hasMore]);
+
+  const handleSearch = useCallback(
+    async (query: string) => {
+      if (!query.trim()) return;
+
+      dispatch(groupsActions.setIsLoading(true));
+      await commonUtils.sleep(1);
+
+      try {
+        const response = await searchGroups(query, 1, limit);
+        dispatch(groupsActions.setGroupsData(response));
+      } catch (error: any) {
+        dispatch(groupsActions.setError(error.message));
+      } finally {
+        dispatch(groupsActions.setIsLoading(false));
+      }
+    },
+    [dispatch, limit]
+  );
+
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    dispatch(groupsActions.setSearchQuery(value));
+
+    if (!value.trim()) {
+      fetchGroups();
     }
   };
 
-  const handleSearchGroups = useCallback(async (searchQuery: string) => {
-    if (!searchQuery.trim()) {
-      return;
-    }
-
-    dispatch(groupsActions.setIsLoading(true));
-    await commonUtils.sleep(1);
-
-    try {
-      const response = await searchGroups(searchQuery, page, limit);
-
-      console.log({ response });
-
-      // dispatch(groupsActions.setGroups(response.groups));
-
-      const hasMoreGroups = skip + response.groups.length < response.total;
-
-      if (hasMoreGroups) {
-        dispatch(groupsActions.setPage(page + 1));
-      }
-
-      dispatch(groupsActions.setHasMore(hasMoreGroups));
-    } catch (error: any) {
-      dispatch(groupsActions.setError(error.message));
-    } finally {
-      dispatch(groupsActions.setIsLoading(false));
-    }
+  useEffect(() => {
+    fetchGroups();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!groups.length) {
-      fetchGroups();
-    }
-  }, []);
+    if (!searchQuery.trim()) return;
+
+    const timer = setTimeout(() => {
+      handleSearch(searchQuery);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, handleSearch]);
 
   useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      handleSearchGroups(query);
-    }, 500); // 500ms delay
-
     return () => {
-      clearTimeout(debounceTimer);
+      dispatch(groupsActions.setSearchQuery(""));
+      dispatch(groupsActions.setIsInitialized(false));
     };
-  }, [query, handleSearchGroups]);
+  }, [dispatch]);
 
-  const groupElements = groups.map((group) => {
-    return <GroupItem key={group._id} {...group} />;
-  });
+  // Loading state on first load
+  if (!isInitialized && isLoading) {
+    return (
+      <Stack className="flex-1 w-full items-center justify-center">
+        <AppLoader />
+      </Stack>
+    );
+  }
+
+  if (!isInitialized) {
+    return null;
+  }
+
+  const groupElements = groups.map((group) => (
+    <GroupItem key={group._id} {...group} />
+  ));
+
+  const isSearching = searchQuery.trim().length > 0;
+  const hasNoGroups = groups.length === 0 && !isLoading;
 
   return (
     <Stack className="flex-1 w-full gap-6">
-      {isLoading && <AppLoader />}
-      {isMobile && <AddGroup />}
-      {!isLoading && !groups.length && (
-        <Stack className="flex-1 w-full gap-2 md:gap-6 items-center justify-center text-center">
+      <AddGroup />
+
+      <TextField
+        fullWidth
+        variant="outlined"
+        placeholder="Search your groups"
+        value={searchQuery}
+        onChange={handleQueryChange}
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <Search />
+              </InputAdornment>
+            ),
+          },
+        }}
+      />
+
+      {hasNoGroups && !isSearching && (
+        <Stack className="flex-1 w-full gap-2 md:gap-6 items-center justify-center text-center py-12">
           <Typography
             variant={isMobile ? "b_16" : "b_24"}
-            sx={{
-              color: theme.palette.primary.main,
-            }}
+            sx={{ color: theme.palette.primary.main }}
           >
             Ready to make sharing expenses easier?
           </Typography>
@@ -127,40 +166,48 @@ const Groups = () => {
             Create your first group to start splitting expenses with friends,
             roommates, or travel buddies.
           </Typography>
-          {!isMobile && <AddGroup className="w-96" />}
         </Stack>
       )}
+
+      {hasNoGroups && isSearching && (
+        <Stack className="flex-1 w-full gap-2 items-center justify-center text-center py-12">
+          <Typography
+            variant={isMobile ? "b_16" : "b_20"}
+            sx={{ color: theme.palette.text.secondary }}
+          >
+            No groups found
+          </Typography>
+          <Typography
+            variant={isMobile ? "b_14" : "b_16"}
+            sx={{ color: theme.palette.text.secondary }}
+          >
+            Try a different search term
+          </Typography>
+        </Stack>
+      )}
+
       {groups.length > 0 && (
         <>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Search your groups"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Search />
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
           <div className="w-full grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {!isMobile && <AddGroup hasGroups />}
             {groupElements}
           </div>
+
           {hasMore && (
             <Stack className="w-full items-center justify-center">
               <Button
                 className="!w-full !h-[60px]"
                 size="large"
-                onClick={() => fetchGroups(true)}
+                onClick={loadMoreGroups}
+                disabled={isLoading}
               >
-                Load More
+                {isLoading ? "Loading..." : "Load More"}
               </Button>
+            </Stack>
+          )}
+
+          {isLoading && (
+            <Stack className="w-full items-center justify-center py-4">
+              <AppLoader />
             </Stack>
           )}
         </>

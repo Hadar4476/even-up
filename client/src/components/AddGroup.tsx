@@ -1,68 +1,38 @@
 import useResponsive from "@/hooks/useResponsive";
 
 import { Add } from "@mui/icons-material";
-import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 
 interface AddGroupProps {
   className?: string;
-  hasGroups?: boolean;
 }
 
-const AddGroup = ({ className, hasGroups }: AddGroupProps) => {
+const AddGroup = ({ className }: AddGroupProps) => {
   const theme = useTheme();
   const { isMobile } = useResponsive();
 
-  const AddGroupButton = (
-    <Button
-      className="!w-[48px] !h-[48px] !rounded-full !p-0"
-      disableRipple={!isMobile}
-      sx={{
-        backgroundColor: theme.palette.primary.main,
-        color:
-          theme.palette.mode === "dark"
-            ? theme.palette.background.default
-            : theme.palette.common.white,
-        "&:hover": {
-          backgroundColor: theme.palette.primary.dark,
-        },
-      }}
-    >
-      <Add className="md:!text-2xl" />
-    </Button>
-  );
-
-  const AddGroupMobile = (
+  return (
     <Box className={`flex items-end justify-end ${className}`}>
-      {AddGroupButton}
-    </Box>
-  );
-
-  const AddGroupDesktop = (
-    <Paper
-      className={`cursor-pointer h-60 flex flex-col items-center justify-center gap-4 !rounded-xl border border-dashed ${className}`}
-      sx={{
-        backgroundColor: theme.palette.background.paper,
-        borderColor: theme.palette.border?.default,
-        transition: "all 0.2s ease-in-out",
-        "&:hover": {
-          backgroundColor: theme.palette.background.hover,
-          borderColor: theme.palette.border?.hover,
-        },
-      }}
-    >
-      {AddGroupButton}
-      <Typography
-        variant="b_18"
+      <Button
+        className="!w-[40px] !p-0 md:!px-4 !rounded-full"
+        disableRipple={!isMobile}
+        size="medium"
         sx={{
-          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.primary.main,
+          color:
+            theme.palette.mode === "dark"
+              ? theme.palette.background.default
+              : theme.palette.common.white,
+          "&:hover": {
+            backgroundColor: theme.palette.primary.dark,
+          },
         }}
       >
-        {hasGroups ? "Create New Group" : "Create Your First Group"}
-      </Typography>
-    </Paper>
+        <Add className="md:!text-lg" />
+        {!isMobile && "New Group"}
+      </Button>
+    </Box>
   );
-
-  return isMobile ? AddGroupMobile : AddGroupDesktop;
 };
 
 export default AddGroup;

@@ -5,19 +5,30 @@ import {
   IGroup,
   IGroupInvitation,
   IGroupState,
+  IGroupWithPagination,
   IGroupWithSettlement,
+  IPagination,
   IRootState,
   ISettlementResult,
 } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+const initialPagination: IPagination = {
+  page: 0,
+  limit: 9,
+  hasMore: false,
+};
+
 const defaultGroupsState: IGroupState = {
   selectedGroup: null,
-  groups: [],
+  groupsData: {
+    groups: [],
+    pagination: initialPagination,
+  },
+  searchQuery: "",
   groupInvitations: [],
-  page: 1,
-  hasMore: false,
   isLoading: false,
+  isInitialized: false,
   error: null,
 };
 
@@ -26,14 +37,14 @@ const groups = createSlice({
   initialState: defaultGroupsState,
   reducers: {
     // GENERAL
-    setPage: (state, action: PayloadAction<number>) => {
-      state.page = action.payload;
-    },
-    setHasMore: (state, action: PayloadAction<boolean>) => {
-      state.hasMore = action.payload;
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload;
     },
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
+    },
+    setIsInitialized: (state, action: PayloadAction<boolean>) => {
+      state.isInitialized = action.payload;
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
@@ -51,13 +62,13 @@ const groups = createSlice({
           group,
         };
 
-        const groupIndex = state.groups.findIndex(
+        const groupIndex = state.groupsData.groups.findIndex(
           (g) => g._id === state.selectedGroup?.group._id
         );
 
         if (groupIndex >= 0) {
-          state.groups[groupIndex] = {
-            ...state.groups[groupIndex],
+          state.groupsData.groups[groupIndex] = {
+            ...state.groupsData.groups[groupIndex],
             title: group.title,
             description: group.description,
             img: group.img,
@@ -69,7 +80,9 @@ const groups = createSlice({
     deleteGroup: (state, action: PayloadAction<IGroup["_id"]>) => {
       const groupId = action.payload;
 
-      state.groups = state.groups.filter((g) => g._id !== groupId);
+      state.groupsData.groups = state.groupsData.groups.filter(
+        (g) => g._id !== groupId
+      );
 
       if (state.selectedGroup) {
         const isSelectedGroup = state.selectedGroup.group._id === groupId;
@@ -80,17 +93,25 @@ const groups = createSlice({
       }
     },
     // GROUPS
-    setGroups: (state, action: PayloadAction<Omit<IGroup, "expenses">[]>) => {
-      state.groups = action.payload;
+    setGroupsData: (state, action: PayloadAction<IGroupWithPagination>) => {
+      const { groups, pagination } = action.payload;
+
+      state.groupsData = {
+        groups,
+        pagination,
+      };
     },
-    appendGroups: (
-      state,
-      action: PayloadAction<Omit<IGroup, "expenses">[]>
-    ) => {
-      state.groups = [...state.groups, ...action.payload];
+    appendGroupsData: (state, action: PayloadAction<IGroupWithPagination>) => {
+      const { groups, pagination } = action.payload;
+
+      state.groupsData = {
+        groups: [...state.groupsData.groups, ...groups],
+        pagination,
+      };
     },
     addGroup: (state, action: PayloadAction<IGroup>) => {
-      state.groups.push(action.payload);
+      // When a new group is created, add it to the beginning of the list
+      state.groupsData.groups.unshift(action.payload);
     },
     // GROUP INVITATIONS
     initGroupInvitations: (
@@ -124,11 +145,13 @@ const groups = createSlice({
           }
         }
 
-        const groupIndex = state.groups.findIndex((g) => g._id === group._id);
+        const groupIndex = state.groupsData.groups.findIndex(
+          (g) => g._id === group._id
+        );
 
         if (groupIndex >= 0) {
-          state.groups[groupIndex] = {
-            ...state.groups[groupIndex],
+          state.groupsData.groups[groupIndex] = {
+            ...state.groupsData.groups[groupIndex],
             users: group.users,
             updatedAt: group.updatedAt,
           };

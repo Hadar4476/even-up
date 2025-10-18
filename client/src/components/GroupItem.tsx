@@ -3,13 +3,13 @@ import useResponsive from "@/hooks/useResponsive";
 
 import config from "@/config";
 
-import { IGroup, ROUTE_NAMES } from "@/types";
+import { GroupWithoutExpenses, ROUTE_NAMES } from "@/types";
 
 import { ChevronRight } from "@mui/icons-material";
 import { Avatar, Box, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router";
 
-const GroupItem = ({ _id, title, img, users }: Omit<IGroup, "expenses">) => {
+const GroupItem = ({ _id, title, img, users }: GroupWithoutExpenses) => {
   const navigate = useNavigate();
   const { isMobile } = useResponsive();
   const theme = useTheme();

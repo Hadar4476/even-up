@@ -36,9 +36,10 @@ const login = async (req: CommonRequest, res: Response, next: NextFunction) => {
     };
 
     const tokenSecret = config.TOKEN_SECRET;
+    const isInDevelopment = config.NODE_ENV === "development";
 
     const tokenConfig = {
-      expiresIn: "1h",
+      ...(!isInDevelopment && { expiresIn: "1h" }),
     };
 
     const token = jwt.sign(tokenJsonData, tokenSecret, tokenConfig);
