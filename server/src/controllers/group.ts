@@ -57,7 +57,7 @@ const getAllGroups = async (
   const userId = req.user?.id;
 
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 9;
+  const limit = Number(req.query.limit) || 12;
   const skip = (page - 1) * limit;
 
   try {
@@ -97,7 +97,7 @@ const searchGroups = async (
 
   const query = req.query.query as string;
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 9;
+  const limit = Number(req.query.limit) || 12;
   const skip = (page - 1) * limit;
 
   try {

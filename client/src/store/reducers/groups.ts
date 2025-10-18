@@ -15,7 +15,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialPagination: IPagination = {
   page: 0,
-  limit: 9,
+  limit: 12,
   hasMore: false,
 };
 

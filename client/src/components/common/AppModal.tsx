@@ -3,13 +3,20 @@ import React from "react";
 import { Modal, Backdrop, Fade, Stack, SxProps } from "@mui/material";
 
 interface AppModalProps {
+  className?: string;
   isOpen: boolean;
   children: React.ReactNode;
   sx?: SxProps;
   emitClose: () => void;
 }
 
-const AppModal = ({ isOpen, children, sx, emitClose }: AppModalProps) => {
+const AppModal = ({
+  className,
+  sx,
+  isOpen,
+  children,
+  emitClose,
+}: AppModalProps) => {
   const modalRoot = document.getElementById("modal-root");
 
   return (
@@ -28,7 +35,9 @@ const AppModal = ({ isOpen, children, sx, emitClose }: AppModalProps) => {
       }}
     >
       <Fade in={isOpen}>
-        <Stack sx={{ padding: "20px", ...sx }}>{children}</Stack>
+        <Stack className={className} sx={{ padding: "20px", ...sx }}>
+          {children}
+        </Stack>
       </Fade>
     </Modal>
   );

@@ -1,37 +1,58 @@
+import { useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 
-import { Add } from "@mui/icons-material";
-import { Box, Button, useTheme } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import { Add, Close } from "@mui/icons-material";
+import AppModal from "./common/AppModal";
 
-interface AddGroupProps {
-  className?: string;
-}
-
-const AddGroup = ({ className }: AddGroupProps) => {
-  const theme = useTheme();
+const AddGroup = () => {
   const { isMobile } = useResponsive();
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenGroupEditor = () => {
+    setIsOpen(true);
+
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleCloseGroupEditor = () => {
+    setIsOpen(false);
+
+    document.body.style.overflow = "unset";
+  };
+
   return (
-    <Box className={`flex items-end justify-end ${className}`}>
-      <Button
-        className="!w-[40px] !p-0 md:!px-4 !rounded-full"
-        disableRipple={!isMobile}
-        size="medium"
-        sx={{
-          backgroundColor: theme.palette.primary.main,
-          color:
-            theme.palette.mode === "dark"
-              ? theme.palette.background.default
-              : theme.palette.common.white,
-          "&:hover": {
-            backgroundColor: theme.palette.primary.dark,
-          },
-        }}
+    <>
+      <AppModal
+        className="w-full h-full md:max-w-xl md:h-auto md:min-h-0 !rounded-none"
+        isOpen={isOpen}
+        emitClose={handleCloseGroupEditor}
       >
-        <Add className="md:!text-lg" />
-        {!isMobile && "New Group"}
-      </Button>
-    </Box>
+        {isMobile && (
+          <Box className="flex items-end justify-end">
+            <Button
+              className="!w-[40px] !p-0 md:!px-4 !rounded-full"
+              onClick={handleCloseGroupEditor}
+              variant="outlined"
+            >
+              <Close className="md:!text-lg" />
+            </Button>
+          </Box>
+        )}
+      </AppModal>
+      <Box className="flex items-end justify-end">
+        <Button
+          className="!w-[40px] !p-0 md:!px-4 !rounded-full"
+          disableRipple={!isMobile}
+          size="medium"
+          onClick={handleOpenGroupEditor}
+        >
+          <Add className="md:!text-lg" />
+          {!isMobile && "New Group"}
+        </Button>
+      </Box>
+    </>
   );
 };
 
