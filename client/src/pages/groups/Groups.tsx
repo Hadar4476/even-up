@@ -38,6 +38,7 @@ const Groups = () => {
 
     try {
       const response = await getAllGroups(1, limit);
+
       dispatch(groupsActions.setGroupsData(response));
       dispatch(groupsActions.setIsInitialized(true));
     } catch (error: any) {
@@ -55,6 +56,7 @@ const Groups = () => {
 
     try {
       const response = await getAllGroups(page + 1, limit);
+
       dispatch(groupsActions.appendGroupsData(response));
     } catch (error: any) {
       dispatch(groupsActions.setError(error.message));
@@ -72,6 +74,7 @@ const Groups = () => {
 
       try {
         const response = await searchGroups(query, 1, limit);
+
         dispatch(groupsActions.setGroupsData(response));
       } catch (error: any) {
         dispatch(groupsActions.setError(error.message));
@@ -93,7 +96,6 @@ const Groups = () => {
 
   useEffect(() => {
     fetchGroups();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -113,13 +115,8 @@ const Groups = () => {
     };
   }, [dispatch]);
 
-  // Loading state on first load
   if (!isInitialized && isLoading) {
-    return (
-      <Stack className="flex-1 w-full items-center justify-center">
-        <AppLoader />
-      </Stack>
-    );
+    return <AppLoader />;
   }
 
   if (!isInitialized) {
@@ -154,34 +151,23 @@ const Groups = () => {
         }}
       />
 
-      {hasNoGroups && !isSearching && (
-        <Stack className="flex-1 w-full gap-2 md:gap-6 items-center justify-center text-center py-12">
-          <Typography
-            variant={isMobile ? "b_16" : "b_24"}
-            sx={{ color: theme.palette.primary.main }}
-          >
-            Ready to make sharing expenses easier?
-          </Typography>
-          <Typography variant={isMobile ? "b_14" : "b_16"}>
-            Create your first group to start splitting expenses with friends,
-            roommates, or travel buddies.
-          </Typography>
-        </Stack>
-      )}
-
-      {hasNoGroups && isSearching && (
+      {hasNoGroups && (
         <Stack className="flex-1 w-full gap-2 items-center justify-center text-center py-12">
           <Typography
             variant={isMobile ? "b_16" : "b_20"}
             sx={{ color: theme.palette.text.secondary }}
           >
-            No groups found
+            {isSearching
+              ? "No groups found"
+              : "Ready to make sharing expenses easier?"}
           </Typography>
           <Typography
             variant={isMobile ? "b_14" : "b_16"}
             sx={{ color: theme.palette.text.secondary }}
           >
-            Try a different search term
+            {isSearching
+              ? "Try a different search term"
+              : "Create your first group to start splitting expenses with friends, roommates or travel buddies."}
           </Typography>
         </Stack>
       )}
