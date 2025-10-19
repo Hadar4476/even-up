@@ -190,7 +190,8 @@ const updateGroup = async (
 ) => {
   const userId = req.user?.id;
   const { groupId } = req.params;
-  const { title, description, img } = req.body;
+  const { title, description } = req.body;
+  const img = req.file ? req.file.filename : "";
 
   try {
     const group = await Group.findOne({
@@ -202,6 +203,10 @@ const updateGroup = async (
 
     if (!group) {
       throw new AppError("Resource not found", 404);
+    }
+
+    if (group.img && !img) {
+      deleteFile(group.img);
     }
 
     group.title = title ?? group.title;
@@ -232,6 +237,10 @@ const deleteGroup = async (
 
     if (!group) {
       throw new AppError("Resource not found", 404);
+    }
+
+    if (group.img) {
+      deleteFile(group.img);
     }
 
     await Expense.deleteMany({ groupId });

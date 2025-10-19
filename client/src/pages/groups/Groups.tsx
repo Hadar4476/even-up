@@ -134,23 +134,6 @@ const Groups = () => {
     <Stack className="flex-1 w-full gap-6">
       <GroupEditor />
 
-      <TextField
-        fullWidth
-        variant="outlined"
-        placeholder="Search your groups"
-        value={searchQuery}
-        onChange={handleQueryChange}
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment position="end">
-                <Search />
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
-
       {hasNoGroups && (
         <Stack className="flex-1 w-full gap-2 items-center justify-center text-center py-12">
           <Typography
@@ -174,6 +157,23 @@ const Groups = () => {
 
       {groups.length > 0 && (
         <>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Search your groups"
+            value={searchQuery}
+            onChange={handleQueryChange}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Search />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+
           <div className="w-full grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {groupElements}
           </div>
