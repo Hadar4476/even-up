@@ -7,8 +7,7 @@ import { upload } from "../utils/fileUpload";
 import { validate } from "../middleware/validate";
 import {
   getAllGroupsValidation,
-  createGroupValidation,
-  updateGroupValidation,
+  groupValidation,
   searchGroupsValidation,
 } from "../validators/group";
 
@@ -38,7 +37,7 @@ router.post(
   "/",
   checkAuthentication,
   upload.single("img"),
-  createGroupValidation,
+  groupValidation,
   validate,
   groupController.createGroup
 );
@@ -48,7 +47,8 @@ router.post("/settle/:groupId", checkAuthentication, groupController.settleUp);
 router.put(
   "/:groupId",
   checkAuthentication,
-  updateGroupValidation,
+  upload.single("img"),
+  groupValidation,
   validate,
   groupController.updateGroup
 );

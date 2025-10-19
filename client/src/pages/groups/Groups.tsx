@@ -18,9 +18,9 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import GroupItem from "@/components/GroupItem";
+import GroupItem from "@/components/groups/GroupItem";
 import AppLoader from "@/components/common/AppLoader";
-import AddGroup from "@/components/AddGroup";
+import GroupEditor from "@/components/groups/GroupEditor";
 
 const Groups = () => {
   const { isMobile } = useResponsive();
@@ -132,7 +132,7 @@ const Groups = () => {
 
   return (
     <Stack className="flex-1 w-full gap-6">
-      <AddGroup />
+      <GroupEditor />
 
       <TextField
         fullWidth

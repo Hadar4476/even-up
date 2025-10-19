@@ -12,7 +12,7 @@ const AuthLayout = () => {
 
   const title = isLogin
     ? "Please sign in to your account"
-    : "Create your account to get started";
+    : "Create your account";
 
   const linkGuidingText = isLogin
     ? "Don't have an account?"
@@ -29,7 +29,7 @@ const AuthLayout = () => {
         <Stack className="items-center gap-3">
           <Stack className="w-full items-center gap-3">
             <AppLogo />
-            <Typography variant="b_18" color="primary.main">
+            <Typography variant="b_22" color="primary.main">
               {title}
             </Typography>
           </Stack>

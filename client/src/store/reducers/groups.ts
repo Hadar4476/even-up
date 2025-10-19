@@ -50,7 +50,7 @@ const groups = createSlice({
       state.error = action.payload;
     },
     // SELECTED GROUP
-    selectGroup: (state, action: PayloadAction<IGroupWithSettlement>) => {
+    setSelectedGroup: (state, action: PayloadAction<IGroupWithSettlement>) => {
       state.selectedGroup = action.payload;
     },
     updateGroup: (state, action: PayloadAction<IGroup>) => {
@@ -110,7 +110,6 @@ const groups = createSlice({
       };
     },
     addGroup: (state, action: PayloadAction<IGroup>) => {
-      // When a new group is created, add it to the beginning of the list
       state.groupsData.groups.unshift(action.payload);
     },
     // GROUP INVITATIONS

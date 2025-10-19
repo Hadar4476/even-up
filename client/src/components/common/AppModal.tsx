@@ -35,7 +35,7 @@ const AppModal = ({
       }}
     >
       <Fade in={isOpen}>
-        <Stack className={className} sx={{ padding: "20px", ...sx }}>
+        <Stack className={className} sx={sx}>
           {children}
         </Stack>
       </Fade>

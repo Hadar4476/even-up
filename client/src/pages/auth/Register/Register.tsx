@@ -25,6 +25,7 @@ const Register = () => {
         label="Name"
         name="name"
         fullWidth
+        required
         value={formik.values.name}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
@@ -35,9 +36,10 @@ const Register = () => {
       <TextField
         label="Phone Number"
         name="phoneNumber"
-        fullWidth
         placeholder="+12125551234"
         type="tel"
+        fullWidth
+        required
         value={formik.values.phoneNumber}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
@@ -54,6 +56,7 @@ const Register = () => {
         name="email"
         type="email"
         fullWidth
+        required
         value={formik.values.email}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
@@ -66,6 +69,7 @@ const Register = () => {
         name="password"
         type={showPassword ? "text" : "password"}
         fullWidth
+        required
         value={formik.values.password}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
@@ -94,6 +98,7 @@ const Register = () => {
         name="confirmPassword"
         type={showConfirmPassword ? "text" : "password"}
         fullWidth
+        required
         value={formik.values.confirmPassword}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}

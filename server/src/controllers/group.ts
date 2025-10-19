@@ -206,7 +206,7 @@ const updateGroup = async (
 
     group.title = title ?? group.title;
     group.description = description ?? group.description;
-    group.img = img ?? group.img;
+    group.img = img;
 
     const updatedGroup = await group.save();
 

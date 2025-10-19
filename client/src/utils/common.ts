@@ -54,6 +54,17 @@ const commonUtils = {
   isRTL: (language: string) => {
     return language === "he";
   },
+  urlToFile: async (url: string, fileName: string): Promise<File | null> => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+
+      return new File([blob], fileName, { type: blob.type });
+    } catch (error) {
+      console.error("Error converting URL to File:", error);
+      return null;
+    }
+  },
 };
 
 export default commonUtils;

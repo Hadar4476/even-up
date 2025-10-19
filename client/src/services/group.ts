@@ -41,19 +41,23 @@ export const settleUp = async (groupId: IGroup["img"]) => {
   return api.post(`${route}/settle/${groupId}`);
 };
 
-export const createGroup = async (
-  groupData: IGroupFormData
-): Promise<IGroupWithSettlement> => {
-  return api.post<IGroupWithSettlement>(`${route}`, groupData);
+export const createGroup = async (groupData: FormData): Promise<IGroup> => {
+  return api.post<IGroup>(`${route}`, groupData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
-export const updateGroup = async ({
-  groupId,
-  ...groupData
-}: {
-  groupId: IGroup["_id"];
-} & IGroupFormData): Promise<IGroup> => {
-  return api.put<IGroup>(`${route}/${groupId}`, groupData);
+export const updateGroup = async (
+  groupId: IGroup["_id"],
+  groupData: FormData
+): Promise<IGroup> => {
+  return api.put<IGroup>(`${route}/${groupId}`, groupData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 export const deleteGroup = async (groupId: IGroup["_id"]) => {
