@@ -11,11 +11,11 @@ import User from "../models/user";
 import AppError from "../error";
 
 const login = async (req: CommonRequest, res: Response, next: NextFunction) => {
-  const { email, password } = req.body;
-
-  const errorMessage = "Invalid email or password";
-
   try {
+    const { email, password } = req.body;
+
+    const errorMessage = "Invalid email or password";
+
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -65,9 +65,9 @@ const register = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, email, password, phoneNumber } = req.body;
-
   try {
+    const { name, email, password, phoneNumber } = req.body;
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const isEmailTaken = await User.findOne({ email });

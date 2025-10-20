@@ -12,9 +12,9 @@ const getInvitations = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userId = req.user?.id;
-
   try {
+    const userId = req.user?.id;
+
     const invitations = await GroupInvitation.find({
       to: userId,
       status: GroupInvitationStatus.PENDING,
@@ -34,12 +34,11 @@ const sendInvitation = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { groupId } = req.params;
-  const from = req.user?.id;
-  const { to } = req.body;
-
   try {
-    // Checking if invitation is already established
+    const { groupId } = req.params;
+    const from = req.user?.id;
+    const { to } = req.body;
+
     const existingInvitation = await GroupInvitation.findOne({
       groupId,
       $or: [
@@ -85,10 +84,10 @@ const updateInvitationStatus = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { invitationId } = req.params;
-  const { status } = req.body;
-
   try {
+    const { invitationId } = req.params;
+    const { status } = req.body;
+
     const groupInvitation = await GroupInvitation.findById(invitationId);
 
     if (!groupInvitation) {

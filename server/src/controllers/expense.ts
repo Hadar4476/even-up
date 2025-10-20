@@ -14,10 +14,10 @@ const addExpense = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userId = req.user?.id;
-  const { groupId, description, amount } = req.body;
-
   try {
+    const userId = req.user?.id;
+    const { groupId, description, amount } = req.body;
+
     const group = await Group.findOne({
       _id: groupId,
       users: userId, // Verify user is in the users array
@@ -66,11 +66,11 @@ const updateExpense = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userId = req.user?.id;
-  const { expenseId } = req.params;
-  const { description, amount } = req.body;
-
   try {
+    const userId = req.user?.id;
+    const { expenseId } = req.params;
+    const { description, amount } = req.body;
+
     const expense = await Expense.findById(expenseId);
 
     if (!expense) {
@@ -122,10 +122,10 @@ const deleteExpense = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userId = req.user?.id;
-  const { expenseId } = req.params;
-
   try {
+    const userId = req.user?.id;
+    const { expenseId } = req.params;
+
     const expense = await Expense.findById(expenseId);
 
     if (!expense) {
