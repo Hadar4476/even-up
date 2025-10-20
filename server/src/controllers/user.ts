@@ -35,13 +35,16 @@ const updateProfile = async (
     const userId = req.user?.id;
     const { name, email, phoneNumber } = req.body;
 
-    const isEmailTaken = await User.findOne({ email });
+    const isEmailTaken = await User.findOne({ email, _id: { $ne: userId } });
 
     if (isEmailTaken) {
       throw new AppError("Email is already taken", 409);
     }
 
-    const isPhoneNumberTaken = await User.findOne({ phoneNumber });
+    const isPhoneNumberTaken = await User.findOne({
+      phoneNumber,
+      _id: { $ne: userId },
+    });
 
     if (isPhoneNumberTaken) {
       throw new AppError("Phone number is already taken", 409);
@@ -54,8 +57,8 @@ const updateProfile = async (
     }
 
     user.name = name ?? user.name;
-    user.email = name ?? user.email;
-    user.phoneNumber = name ?? user.phoneNumber;
+    user.email = email ?? user.email;
+    user.phoneNumber = phoneNumber ?? user.phoneNumber;
 
     const updatedUser = await user.save();
 

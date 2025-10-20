@@ -51,6 +51,11 @@ const AppToast = ({
         zIndex: zIndex.primary,
         transform: `translate(-50%, -${positionOffset}px) !important`,
         height: "fit-content",
+        "@media (max-width: 599.95px)": {
+          left: "50%",
+          right: "auto",
+          bottom: "24px",
+        },
       }}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       autoHideDuration={duration}

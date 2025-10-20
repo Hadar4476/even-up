@@ -18,7 +18,7 @@ const MainLayout = () => {
       }}
     >
       <AppNavBar onHeightChange={setAppBarHeight} />
-      <Stack className="flex-1 w-full max-w-7xl p-6 md:p-8">
+      <Stack className="flex-1 w-full max-w-7xl">
         <Outlet />
       </Stack>
     </main>

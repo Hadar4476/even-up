@@ -3,7 +3,7 @@ import { body } from "express-validator";
 import { isEmail, isPassword } from "./common";
 
 export const updateProfileValidation = [
-  body("name").trim().notEmpty(),
+  body("name").trim().notEmpty().withMessage("Name is required"),
   body("phoneNumber")
     .trim()
     .notEmpty()

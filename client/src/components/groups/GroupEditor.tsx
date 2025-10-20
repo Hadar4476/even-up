@@ -98,33 +98,31 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
     buttonText = group ? "Edit Group" : "New Group";
   }
 
-  const backArrow = (
-    <Button
-      className="!absolute !w-[40px] !h-[40px] !p-0 md:!px-4 !rounded-full"
-      variant="text"
-      sx={{ left: "1px" }}
-      onClick={handleClose}
-    >
-      <ArrowBack sx={{ color: theme.palette.text.primary }} />
-    </Button>
-  );
-
   let content = (
     <>
       <Box
         className="flex flex-row p-6 relative items-center justify-center md:justify-start md:px-8"
         sx={{
+          backgroundColor: isMobile
+            ? theme.palette.background.paper
+            : theme.palette.background.default,
           ...(!isDarkMode && {
             borderBottom: "1px solid",
             borderColor: theme.palette.border?.default,
           }),
-          ...(!isMobile && {
-            backgroundColor: theme.palette.background.default,
-          }),
         }}
       >
-        {isMobile && backArrow}
-        <Typography variant={isMobile ? "b_22" : "b_24"} color="textPrimary">
+        {isMobile && (
+          <Button
+            className="!absolute !w-[40px] !h-[40px] !p-0 md:!px-4 !rounded-full"
+            variant="text"
+            sx={{ left: "1px" }}
+            onClick={handleClose}
+          >
+            <ArrowBack sx={{ color: theme.palette.text.primary }} />
+          </Button>
+        )}
+        <Typography variant={isMobile ? "b_20" : "b_24"} color="textPrimary">
           {group ? "Edit Group" : "Create Group"}
         </Typography>
       </Box>
@@ -270,7 +268,17 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
           backgroundColor: theme.palette.background.default,
         }}
       >
-        {isMobile && backArrow}
+        {isMobile && (
+          <Button
+            className="!absolute !w-[40px] !h-[40px] p-2 md:!px-4 !rounded-full"
+            variant="text"
+            sx={{ left: "1px", top: "9px" }}
+            onClick={handleClose}
+            disabled={isPending}
+          >
+            <ArrowBack sx={{ color: theme.palette.text.primary }} />
+          </Button>
+        )}
         <Box className="w-full h-full flex flex-col items-center justify-center">
           {isPending && <CircularProgress size={60} />}
           {isSuccess && (

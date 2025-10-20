@@ -17,9 +17,9 @@ const useUpdateProfile = () => {
   const dispatch = useDispatch();
   const { showToast } = useToast();
 
+  const [isEditable, setIsEditable] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
 
   const initialValues: IProfileData = {
     name: "",
@@ -58,7 +58,13 @@ const useUpdateProfile = () => {
 
         if (response) {
           dispatch(authActions.updateProfile(response));
-          setIsSuccess(true);
+
+          const toast: Omit<IToast, "id"> = {
+            type: "success",
+            message: "Profile updated!",
+            duration: 5000,
+          };
+          showToast(toast);
         }
       } catch (error: any) {
         const toast: Omit<IToast, "id"> = {
@@ -93,9 +99,10 @@ const useUpdateProfile = () => {
 
   return {
     formik,
+    isEditable,
     isPending,
-    isSuccess,
     error,
+    setIsEditable,
   };
 };
 

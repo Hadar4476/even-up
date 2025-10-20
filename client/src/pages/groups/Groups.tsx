@@ -131,7 +131,7 @@ const Groups = () => {
   const hasNoGroups = groups.length === 0 && !isLoading;
 
   return (
-    <Stack className="flex-1 w-full gap-6">
+    <Stack className="flex-1 w-full gap-6 p-6 md:p-8">
       <GroupEditor />
 
       <TextField

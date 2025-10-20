@@ -48,7 +48,7 @@ const SingleGroup = () => {
   }
 
   return (
-    <Stack>
+    <Stack className="p-6 md:p-8">
       <GroupEditor group={selectedGroup.group} />
     </Stack>
   );
