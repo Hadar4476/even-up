@@ -47,6 +47,11 @@ export const groupValidation = [
     .withMessage("Description is required")
     .isLength({ max: 1000 })
     .withMessage("Description must be between 1 and 100 characters"),
+  body("removeImg")
+    .optional()
+    .isBoolean()
+    .withMessage("removeImg must be a boolean")
+    .toBoolean(),
 ];
 
 export const inviteToGroupValidation = [body("userId").trim().notEmpty()];

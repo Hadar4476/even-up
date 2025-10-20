@@ -21,6 +21,10 @@ export const useGroupEditor = (group?: IGroup) => {
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const reset = () => {
+    setIsSuccess(false);
+  };
+
   const initialValues: IGroupFormData = {
     title: "",
     description: "",
@@ -73,7 +77,11 @@ export const useGroupEditor = (group?: IGroup) => {
         formData.append("description", values.description);
 
         if (values.img) {
+          // New file selected - upload it
           formData.append("img", values.img);
+        } else if (!values.img && group?.img) {
+          // Image was explicitly removed
+          formData.append("removeImg", "true");
         }
 
         let response: IGroup;
@@ -140,6 +148,7 @@ export const useGroupEditor = (group?: IGroup) => {
     isPending,
     isLoadingImage,
     isSuccess,
+    reset,
     error,
   };
 };

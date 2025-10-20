@@ -190,8 +190,8 @@ const updateGroup = async (
 ) => {
   const userId = req.user?.id;
   const { groupId } = req.params;
-  const { title, description } = req.body;
-  const img = req.file ? req.file.filename : "";
+  const { title, description, removeImg } = req.body;
+  const img = req.file ? req.file.filename : null;
 
   try {
     const group = await Group.findOne({
@@ -211,7 +211,20 @@ const updateGroup = async (
 
     group.title = title ?? group.title;
     group.description = description ?? group.description;
-    group.img = img;
+
+    if (removeImg) {
+      // User explicitly removed the image
+      if (group.img) {
+        deleteFile(group.img);
+        group.img = "";
+      }
+    } else if (img) {
+      // New image uploaded - delete old one if exists
+      if (group.img) {
+        deleteFile(group.img);
+      }
+      group.img = img;
+    }
 
     const updatedGroup = await group.save();
 

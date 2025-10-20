@@ -10,7 +10,7 @@ import PrivateRoute from "@/components/routes/PrivateRoute";
 import publicRoutes from "@/routes/public";
 import privateRoutes from "@/routes/private";
 
-import { ThemeContextProvider } from "@/context/ThemeContext";
+import { ThemeContextProvider, useThemeContext } from "@/context/ThemeContext";
 import { ToastProvider } from "./context/ToastContext";
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -25,11 +25,9 @@ import AppLoader from "./components/common/AppLoader";
 
 const App = () => {
   const dispatch = useDispatch();
-
-  const { isAppLoaded } = useAppSelector(systemSelector);
-
   const checkLanguage = useCheckLanguage();
   const checkAuth = useCheckAuth();
+  const { isAppLoaded } = useAppSelector(systemSelector);
 
   useEffect(() => {
     const initializeApp = async () => {
