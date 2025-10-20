@@ -5,3 +5,5 @@ export interface IUser extends IDocument {
   phoneNumber: string;
   email: string;
 }
+
+export type IProfileData = Omit<IUser, "_id">;
