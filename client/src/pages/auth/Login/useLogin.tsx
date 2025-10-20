@@ -12,24 +12,25 @@ import { login } from "@/services/auth";
 
 import { IToast, ROUTE_NAMES } from "@/types";
 
-// Define the shape of your form fields
 interface LoginFormValues {
   email: string;
   password: string;
 }
 
-// Define the hook
-export const useLogin = () => {
+const useLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { showToast } = useToast();
 
-  // const { mutate, isPending, error } = useLoginApi();
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState("");
 
-  // Yup validation schema
+  const initialValues: LoginFormValues = {
+    email: "",
+    password: "",
+  };
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email address")
@@ -45,13 +46,6 @@ export const useLogin = () => {
       .required("Password is required"),
   });
 
-  // Initial values
-  const initialValues: LoginFormValues = {
-    email: "",
-    password: "",
-  };
-
-  // Formik for managing form state and validation
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -72,7 +66,6 @@ export const useLogin = () => {
 
         localStorage.setItem("expiryDate", expiryDate.toISOString());
 
-        // save in store
         dispatch(
           authActions.setLoggedInUser({
             isLoggedIn: true,
@@ -104,3 +97,5 @@ export const useLogin = () => {
     error,
   };
 };
+
+export default useLogin;

@@ -148,7 +148,7 @@ export const useGroupEditor = (group?: IGroup) => {
     isPending,
     isLoadingImage,
     isSuccess,
-    reset,
     error,
+    reset,
   };
 };

@@ -1,4 +1,4 @@
-import { IAuthState, IRootState } from "@/types";
+import { IAuthState, IRootState, IUser } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const defaultAuthState: IAuthState = {
@@ -12,6 +12,7 @@ const auth = createSlice({
   name: "auth",
   initialState: defaultAuthState,
   reducers: {
+    // AUTH
     setLoggedInUser: (state, action: PayloadAction<IAuthState>) => {
       const { isLoggedIn, token, expiryDate, user } = action.payload;
 
@@ -19,6 +20,16 @@ const auth = createSlice({
       state.token = token;
       state.expiryDate = expiryDate;
       state.user = user;
+    },
+    // USER
+    updateProfile: (state, action: PayloadAction<IUser>) => {
+      const { name, phoneNumber, email } = action.payload;
+
+      if (state.user) {
+        state.user.name = name;
+        state.user.phoneNumber = phoneNumber;
+        state.user.email = email;
+      }
     },
   },
 });

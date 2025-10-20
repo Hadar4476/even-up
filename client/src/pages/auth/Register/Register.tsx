@@ -1,9 +1,8 @@
 import { useState } from "react";
+import useRegister from "./useRegister";
+
 import { Button, TextField, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
-import { useRegister } from "./useRegister";
-import useResponsive from "@/hooks/useResponsive";
 
 const Register = () => {
   const { formik, isPending } = useRegister();

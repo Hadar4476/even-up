@@ -9,13 +9,21 @@ import { register } from "@/services/auth";
 
 import { IRegisterFormData, IToast, ROUTE_NAMES } from "@/types";
 
-export const useRegister = () => {
+const useRegister = () => {
   const navigate = useNavigate();
 
   const { showToast } = useToast();
 
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState("");
+
+  const initialValues: IRegisterFormData = {
+    name: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
 
   const validationSchema = Yup.object({
     name: Yup.string().trim().required("Name is required"),
@@ -46,14 +54,6 @@ export const useRegister = () => {
       .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Please confirm your password"),
   });
-
-  const initialValues: IRegisterFormData = {
-    name: "",
-    phoneNumber: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  };
 
   const formik = useFormik({
     initialValues,
@@ -90,3 +90,5 @@ export const useRegister = () => {
     error,
   };
 };
+
+export default useRegister;
