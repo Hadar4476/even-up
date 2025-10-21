@@ -12,9 +12,6 @@ import {
 } from "@mui/material";
 import { Edit, Close } from "@mui/icons-material";
 
-// PADDING FOR CONTAINERS
-// p-6 md:p-8
-
 const UserProfile = () => {
   const { isMobile } = useResponsive();
   const theme = useTheme();
@@ -22,7 +19,7 @@ const UserProfile = () => {
 
   return (
     <Stack
-      className="gap-6 p-6 md:px-8 border-b md:border md:rounded-xl"
+      className="gap-6 p-6 md:px-8 border-b md:border-b-0 md:shadow-md md:rounded-xl"
       sx={{
         borderColor: theme.palette.border?.default,
         ...(!isMobile && {
@@ -51,7 +48,7 @@ const UserProfile = () => {
         className="w-full flex flex-col gap-4"
         onSubmit={formik.handleSubmit}
       >
-        <Box className="flex flex-col gap-6 md:max-w-[70%]">
+        <Box className="flex flex-col gap-6 md:max-w-[50%]">
           <TextField
             label="Name"
             name="name"
