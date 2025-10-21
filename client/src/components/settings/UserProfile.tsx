@@ -1,7 +1,10 @@
 import useUpdateProfile from "./useUpdateProfile";
+import useResponsive from "@/hooks/useResponsive";
+
 import {
   Box,
   Button,
+  CircularProgress,
   Stack,
   TextField,
   Typography,
@@ -13,27 +16,33 @@ import { Edit, Close } from "@mui/icons-material";
 // p-6 md:p-8
 
 const UserProfile = () => {
+  const { isMobile } = useResponsive();
   const theme = useTheme();
   const { formik, isEditable, isPending, setIsEditable } = useUpdateProfile();
 
   return (
     <Stack
-      className="gap-6 p-6 md:px-8"
+      className="gap-6 p-6 md:px-8 border-b md:border md:rounded-xl"
       sx={{
-        borderBottom: "1px solid",
         borderColor: theme.palette.border?.default,
+        ...(!isMobile && {
+          backgroundColor: theme.palette.background.paper,
+        }),
       }}
     >
       <Box className="flex items-center justify-between">
-        <Typography variant="b_18">User Profile</Typography>
+        <Typography variant={isMobile ? "b_18" : "b_24"}>
+          User Profile
+        </Typography>
         <Button
+          className="!min-w-[40px] !rounded-full"
           variant="text"
           onClick={() => setIsEditable((prevState) => !prevState)}
         >
           {isEditable ? (
-            <Close className="md:!text-lg" />
+            <Close className="md:!text-2xl" />
           ) : (
-            <Edit className="md:!text-lg" />
+            <Edit className="md:!text-2xl" />
           )}
         </Button>
       </Box>
@@ -42,59 +51,67 @@ const UserProfile = () => {
         className="w-full flex flex-col gap-4"
         onSubmit={formik.handleSubmit}
       >
-        <TextField
-          label="Name"
-          name="name"
-          fullWidth
-          required
-          disabled={!isEditable}
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
-        />
+        <Box className="flex flex-col gap-6 md:max-w-[70%]">
+          <TextField
+            label="Name"
+            name="name"
+            fullWidth
+            required
+            disabled={!isEditable}
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.name && Boolean(formik.errors.name)}
+            helperText={formik.touched.name && formik.errors.name}
+          />
 
-        <TextField
-          label="Phone Number"
-          name="phoneNumber"
-          placeholder="+12125551234"
-          type="tel"
-          fullWidth
-          required
-          disabled={!isEditable}
-          value={formik.values.phoneNumber}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
-          }
-          helperText={
-            formik.touched.phoneNumber && formik.errors.phoneNumber
-              ? formik.errors.phoneNumber
-              : "Format: +1XXXXXXXXXX"
-          }
-        />
+          <TextField
+            label="Phone Number"
+            name="phoneNumber"
+            placeholder="+12125551234"
+            type="tel"
+            fullWidth
+            required
+            disabled={!isEditable}
+            value={formik.values.phoneNumber}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
+            }
+            helperText={
+              formik.touched.phoneNumber && formik.errors.phoneNumber
+                ? formik.errors.phoneNumber
+                : "Format: +1XXXXXXXXXX"
+            }
+          />
 
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          fullWidth
-          required
-          disabled={!isEditable}
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-        />
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            fullWidth
+            required
+            disabled={!isEditable}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
+        </Box>
 
-        {isEditable && (
-          <Button fullWidth size="large" type="submit" disabled={isPending}>
-            Save
+        <Box className="flex md:justify-end">
+          <Button
+            className="flex items-center justify-center md:max-w-40"
+            fullWidth
+            size="large"
+            type="submit"
+            disabled={isPending || !isEditable}
+          >
+            {isPending ? <CircularProgress size={20} /> : "Save"}
           </Button>
-        )}
+        </Box>
       </form>
     </Stack>
   );

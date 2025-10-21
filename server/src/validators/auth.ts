@@ -2,7 +2,7 @@ import { body } from "express-validator";
 
 import { isEmail, isPassword } from "./common";
 
-export const loginValidation = [isEmail(), isPassword()];
+export const loginValidation = [isEmail(), isPassword("password")];
 
 export const registerValidation = [
   body("name").trim().notEmpty().withMessage("Name is required"),
@@ -17,5 +17,5 @@ export const registerValidation = [
     .isLength({ min: 8, max: 16 })
     .withMessage("Phone number must be between 8-16 characters"),
   isEmail(),
-  isPassword(),
+  isPassword("password"),
 ];

@@ -3,8 +3,8 @@ import { body } from "express-validator";
 export const isEmail = () =>
   body("email").isEmail().withMessage("Must be a valid email address");
 
-export const isPassword = () =>
-  body("password")
+export const isPassword = (field: string) =>
+  body(field)
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters long")
     .matches(/[a-z]/)

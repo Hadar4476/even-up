@@ -75,9 +75,11 @@ const changePassword = async (
 ) => {
   try {
     const userId = req.user?.id;
-    const { password } = req.body;
+    const { currentPassword, newPassword } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    if (!currentPassword || !newPassword) {
+      throw new AppError("Current and new password are required", 400);
+    }
 
     const user = await User.findById(userId);
 
@@ -85,11 +87,29 @@ const changePassword = async (
       throw new AppError("Validation failed", 401);
     }
 
+    const isPasswordValid = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
+    if (!isPasswordValid) {
+      throw new AppError("Current password is incorrect", 401);
+    }
+
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      throw new AppError(
+        "New password must be different from current password",
+        400
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
     user.password = hashedPassword ?? user.password;
 
     await user.save();
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, data: {} });
   } catch (error) {
     next(error);
   }

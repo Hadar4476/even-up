@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/context/ToastContext";
 
+import commonUtils from "@/utils/common";
 import { register } from "@/services/auth";
 
 import { IRegisterFormData, IToast, ROUTE_NAMES } from "@/types";
@@ -60,6 +61,7 @@ const useRegister = () => {
     validationSchema,
     onSubmit: async (values) => {
       setIsPending(true);
+      await commonUtils.sleep(1);
 
       try {
         const { confirmPassword, ...registerData } = values;

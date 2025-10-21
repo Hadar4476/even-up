@@ -1,7 +1,13 @@
 import { useState } from "react";
 import useRegister from "./useRegister";
 
-import { Button, TextField, IconButton, InputAdornment } from "@mui/material";
+import {
+  Button,
+  TextField,
+  IconButton,
+  InputAdornment,
+  CircularProgress,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Register = () => {
@@ -133,7 +139,7 @@ const Register = () => {
         type="submit"
         disabled={isPending}
       >
-        Confirm
+        {isPending ? <CircularProgress size={20} /> : "Confirm"}
       </Button>
     </form>
   );

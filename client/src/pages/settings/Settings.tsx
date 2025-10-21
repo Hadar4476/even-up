@@ -14,7 +14,7 @@ const Settings = () => {
   const logout = useLogout();
 
   return (
-    <Stack className="md:gap-10 md:!rounded-xl">
+    <Stack className="md:gap-10 md:!rounded-xl md:p-6">
       {isMobile && (
         <Box
           className="p-6 md:px-8 text-center"
@@ -32,7 +32,7 @@ const Settings = () => {
       <UserProfile />
       <AccountSettings />
       <Preferences />
-      <Box className="p-6 md:px-8">
+      <Box className="p-6 md:px-0">
         <Button className="!w-full" color="error" size="large" onClick={logout}>
           {t("system.logout")}
         </Button>

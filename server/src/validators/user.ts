@@ -17,4 +17,7 @@ export const updateProfileValidation = [
   isEmail(),
 ];
 
-export const changePasswordValidation = [isPassword()];
+export const changePasswordValidation = [
+  isPassword("currentPassword"),
+  isPassword("newPassword"),
+];

@@ -14,6 +14,12 @@ export const updateProfile = async (
   return api.put<IUser>(`${route}/updateProfile`, profileData);
 };
 
-export const changePassword = async (password: string) => {
-  return api.put(`${route}/changePassword`, password);
+export const changePassword = async ({
+  currentPassword,
+  newPassword,
+}: {
+  currentPassword: string;
+  newPassword: string;
+}) => {
+  return api.put(`${route}/changePassword`, { currentPassword, newPassword });
 };

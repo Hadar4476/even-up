@@ -11,17 +11,22 @@ import { IToast } from "@/types";
 const useChangePassword = () => {
   const { showToast } = useToast();
 
+  const [isEditable, setIsEditable] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
 
-  const initialValues: { password: string; confirmPassword: string } = {
-    password: "",
+  const initialValues: {
+    currentPassword: "";
+    newPassword: string;
+    confirmPassword: string;
+  } = {
+    currentPassword: "",
+    newPassword: "",
     confirmPassword: "",
   };
 
   const validationSchema = Yup.object({
-    password: Yup.string()
+    currentPassword: Yup.string()
       .min(8, "Password must be at least 8 characters")
       .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
       .matches(/[a-z]/, "Password must contain at least one lowercase letter")
@@ -31,8 +36,23 @@ const useChangePassword = () => {
       )
       .trim()
       .required("Password is required"),
+    newPassword: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+      .matches(/[0-9]/, "Password must contain at least one number") // Add this
+      .matches(
+        /[!@#$%^&*(),.?":{}|<>]/,
+        "Password must contain at least one special character"
+      )
+      .notOneOf(
+        [Yup.ref("currentPassword")],
+        "New password must be different from current password"
+      )
+      .trim()
+      .required("New password is required"),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password")], "Passwords must match")
+      .oneOf([Yup.ref("newPassword")], "Passwords must match")
       .required("Please confirm your password"),
   });
 
@@ -44,12 +64,24 @@ const useChangePassword = () => {
       await commonUtils.sleep(1);
 
       try {
-        const response = await changePassword(values.password);
+        const payload = {
+          currentPassword: values.currentPassword,
+          newPassword: values.newPassword,
+        };
+        const response = await changePassword(payload);
 
         if (response) {
-          setIsSuccess(true);
+          const toast: Omit<IToast, "id"> = {
+            type: "success",
+            message: "Password changed!",
+            duration: 5000,
+          };
+
+          showToast(toast);
         }
       } catch (error: any) {
+        console.log({ error });
+
         const toast: Omit<IToast, "id"> = {
           type: "error",
           message: error.message,
@@ -66,9 +98,10 @@ const useChangePassword = () => {
 
   return {
     formik,
+    isEditable,
     isPending,
-    isSuccess,
     error,
+    setIsEditable,
   };
 };
 
