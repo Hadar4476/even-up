@@ -115,8 +115,31 @@ const changePassword = async (
   }
 };
 
+const searchUsers = async (
+  req: CommonRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const query = req.query.query as string;
+
+    const searchRegex = new RegExp(query, "i");
+
+    const users = await User.find({
+      $or: [{ name: searchRegex }, { email: searchRegex }],
+    })
+      .select("-password -phoneNumber")
+      .limit(50);
+
+    res.status(200).json({ success: true, data: users });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getUser,
   updateProfile,
   changePassword,
+  searchUsers,
 };

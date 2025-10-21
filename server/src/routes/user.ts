@@ -6,6 +6,7 @@ import { validate } from "../middleware/validate";
 import {
   updateProfileValidation,
   changePasswordValidation,
+  searchUsersValidation,
 } from "../validators/user";
 
 import userController from "../controllers/user";
@@ -28,6 +29,14 @@ router.put(
   changePasswordValidation,
   validate,
   userController.changePassword
+);
+
+router.get(
+  "/searchUsers",
+  checkAuthentication,
+  searchUsersValidation,
+  validate,
+  userController.searchUsers
 );
 
 export default router;
