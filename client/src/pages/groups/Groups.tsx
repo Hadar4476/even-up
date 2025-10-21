@@ -172,7 +172,7 @@ const Groups = () => {
         </Stack>
       )}
 
-      {groups.length > 0 && (
+      {groups.length > 0 && !isLoading && (
         <>
           <div className="w-full grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {groupElements}

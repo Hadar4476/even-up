@@ -10,7 +10,13 @@ import { systemActions, systemSelector } from "@/store/reducers/system";
 import { TranslationKeys } from "@/locales/i18n";
 import { ISelectOption } from "@/types";
 
-import { MenuItem, Select, Stack, Typography } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+  TypographyProps,
+} from "@mui/material";
 
 const options: ISelectOption[] = languages.map((language) => {
   return {
@@ -37,11 +43,17 @@ const LanguageSelector = () => {
 
     const translatedLabel = t(`languages.${option.label}` as TranslationKeys);
 
+    let variant = isSelected ? "b_14" : "medium_14";
+
+    if (isMobile) {
+      variant = isSelected ? "b_12" : "medium_12";
+    }
+
     return (
       <MenuItem key={option.value} value={option.value}>
         <Typography
           className={isMobile ? "uppercase" : "capitalize"}
-          variant={isSelected ? "b_12" : "medium_12"}
+          variant={variant as TypographyProps["variant"]}
         >
           {isMobile ? option.label : translatedLabel}
         </Typography>
@@ -51,6 +63,7 @@ const LanguageSelector = () => {
 
   return (
     <Select
+      className="md:p-2"
       value={selectedLanguage}
       size="medium"
       renderValue={(selectedValue) => {
@@ -66,7 +79,7 @@ const LanguageSelector = () => {
           <Stack className="justify-center">
             <Typography
               className={isMobile ? "uppercase" : "capitalize"}
-              variant="b_12"
+              variant={isMobile ? "b_12" : "b_14"}
             >
               {isMobile ? selectedOption?.label : translatedLabel}
             </Typography>

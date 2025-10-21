@@ -60,7 +60,7 @@ const Preferences = () => {
               </Typography>
             </Stack>
           </Stack>
-          <AppSwitch value={!isDarkMode} onClick={onToggleTheme} />
+          <AppSwitch checked={isDarkMode} onClick={onToggleTheme} />
         </Stack>
         <Stack
           className="!flex-row items-center justify-between rounded-xl md:p-4"

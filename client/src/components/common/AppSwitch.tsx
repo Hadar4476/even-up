@@ -1,6 +1,5 @@
 import colors from "@/theme/colors";
 import { styled, Switch, SwitchProps } from "@mui/material";
-import React from "react";
 
 const AppSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
