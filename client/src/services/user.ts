@@ -24,7 +24,7 @@ export const changePassword = async ({
   return api.put(`${route}/changePassword`, { currentPassword, newPassword });
 };
 
-export const searchGroups = async (
+export const searchUsers = async (
   query: string
 ): Promise<IUserSearchResult[]> => {
   return api.get<IUserSearchResult[]>(`${route}/searchUsers?query=${query}`);

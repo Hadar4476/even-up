@@ -135,6 +135,15 @@ const Groups = () => {
       <GroupEditor />
 
       <TextField
+        sx={{
+          "> .MuiInputBase-root": {
+            borderRadius: 100,
+
+            "> input": {
+              paddingX: "20px",
+            },
+          },
+        }}
         fullWidth
         variant="outlined"
         placeholder="Search your groups"
@@ -143,7 +152,7 @@ const Groups = () => {
         slotProps={{
           input: {
             endAdornment: (
-              <InputAdornment position="end">
+              <InputAdornment position="end" sx={{ paddingX: "6px" }}>
                 <Search />
               </InputAdornment>
             ),

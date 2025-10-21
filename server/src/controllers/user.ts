@@ -121,11 +121,13 @@ const searchUsers = async (
   next: NextFunction
 ) => {
   try {
+    const userId = req.user?.id;
     const query = req.query.query as string;
 
     const searchRegex = new RegExp(query, "i");
 
     const users = await User.find({
+      _id: { $ne: userId },
       $or: [{ name: searchRegex }, { email: searchRegex }],
     })
       .select("-password -phoneNumber")

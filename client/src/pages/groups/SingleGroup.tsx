@@ -1,16 +1,18 @@
+import { useEffect } from "react";
 import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
+import commonUtils from "@/utils/common";
 import { groupsActions, groupsSelector } from "@/store/reducers/groups";
+import { getGroup } from "@/services/group";
 
 import { IGroup } from "@/types";
-import { useEffect } from "react";
-import AppLoader from "@/components/common/AppLoader";
-import { useDispatch } from "react-redux";
-import commonUtils from "@/utils/common";
-import { getGroup } from "@/services/group";
+
 import { Stack } from "@mui/material";
+import AppLoader from "@/components/common/AppLoader";
 import GroupEditor from "@/components/groups/GroupEditor";
+import SearchUsers from "@/components/groups/SearchUsers";
 
 const SingleGroup = () => {
   const { groupId } = useParams<{ groupId: IGroup["_id"] }>();
@@ -50,6 +52,7 @@ const SingleGroup = () => {
   return (
     <Stack className="p-6 md:p-8">
       <GroupEditor group={selectedGroup.group} />
+      <SearchUsers />
     </Stack>
   );
 };
