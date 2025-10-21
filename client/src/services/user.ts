@@ -1,6 +1,6 @@
 import { api } from "./ApiService";
 
-import { IProfileData, IUser } from "@/types";
+import { IUser, IProfileData, IUserSearchResult } from "@/types";
 
 const route = "/user";
 
@@ -22,4 +22,10 @@ export const changePassword = async ({
   newPassword: string;
 }) => {
   return api.put(`${route}/changePassword`, { currentPassword, newPassword });
+};
+
+export const searchGroups = async (
+  query: string
+): Promise<IUserSearchResult[]> => {
+  return api.get<IUserSearchResult[]>(`${route}/searchUsers?query=${query}`);
 };

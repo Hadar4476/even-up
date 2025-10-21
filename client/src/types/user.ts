@@ -7,3 +7,5 @@ export interface IUser extends IDocument {
 }
 
 export type IProfileData = Omit<IUser, "_id">;
+
+export type IUserSearchResult = Omit<IUser, "phoneNumber">;
