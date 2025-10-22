@@ -4,7 +4,7 @@ import { IUser } from "../user";
 
 export interface SendInvitationRequest {
   groupId: IGroup["_id"];
-  to: IUser["_id"];
+  members: IUser["_id"][];
 }
 
 export interface UpdateInvitationStatusRequest {

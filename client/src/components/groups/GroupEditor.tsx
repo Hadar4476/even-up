@@ -114,9 +114,8 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
       >
         {isMobile && (
           <Button
-            className="!absolute !w-[40px] !h-[40px] !p-0 md:!px-4 !rounded-full"
+            className="!absolute left-0 !w-[40px] !h-[40px] !p-0 md:!px-4 !rounded-full"
             variant="text"
-            sx={{ left: "1px" }}
             onClick={handleClose}
           >
             <ArrowBack sx={{ color: theme.palette.text.primary }} />
@@ -270,9 +269,8 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
       >
         {isMobile && (
           <Button
-            className="!absolute !w-[40px] !h-[40px] p-2 md:!px-4 !rounded-full"
+            className="!absolute top-4 left-0 !w-[40px] !h-[40px] p-2 md:!px-4 !rounded-full"
             variant="text"
-            sx={{ left: "1px", top: "9px" }}
             onClick={handleClose}
             disabled={isPending}
           >
@@ -303,7 +301,7 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
     <>
       <Box className="flex items-end justify-end">
         <Button
-          className="!w-[40px] !p-0 md:flex md:gap-1 md:!px-4 !rounded-full"
+          className="!w-[40px] !p-0 md:!w-fit md:flex md:gap-1 md:!px-4 !rounded-full"
           disableRipple={!isMobile}
           size="medium"
           onClick={handleOpen}

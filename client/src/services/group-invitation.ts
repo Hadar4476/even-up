@@ -15,9 +15,9 @@ export const getInvitations = async (): Promise<IGroupInvitation[]> => {
 
 export const sendInvitation = async ({
   groupId,
-  to,
+  members,
 }: SendInvitationRequest): Promise<IGroupInvitation> => {
-  return api.post(`${route}/send/${groupId}`, { to });
+  return api.post(`${route}/send/${groupId}`, { members });
 };
 
 export const updateInvitationStatus = async ({

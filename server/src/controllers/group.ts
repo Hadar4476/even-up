@@ -2,12 +2,14 @@ import { NextFunction, Response } from "express";
 
 import { CommonRequest } from "../types";
 import { IGroupPopulated } from "../types/group";
+import { GroupInvitationStatus } from "../types/group-invitation";
 
 import { calculateSettlements } from "../services/expenseCalculator";
 
 import { deleteFile } from "../utils/fileUpload";
 
 import Group from "../models/group";
+import User from "../models/user";
 import GroupInvitation from "../models/group-invitation";
 import Expense from "../models/expense";
 
@@ -125,6 +127,56 @@ const searchGroups = async (
     };
 
     res.status(200).json({ success: true, data: { groups, pagination } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const searchUsers = async (
+  req: CommonRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { groupId } = req.params;
+    const userId = req.user?.id;
+    const query = req.query.query as string;
+
+    const searchRegex = new RegExp(query, "i");
+
+    let excludedUserIds = [userId];
+
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      throw new AppError("Resource not found", 404);
+    }
+
+    const usersInGroup = group.users.map((id) => id.toString());
+
+    const pendingInvitations = await GroupInvitation.find({
+      groupId,
+      status: GroupInvitationStatus.PENDING,
+    }).select("to");
+
+    const usersWithPendingInvites = pendingInvitations.map((inv) =>
+      inv.to.toString()
+    );
+
+    excludedUserIds = [
+      ...excludedUserIds,
+      ...usersInGroup,
+      ...usersWithPendingInvites,
+    ];
+
+    const users = await User.find({
+      _id: { $nin: excludedUserIds },
+      $or: [{ name: searchRegex }, { email: searchRegex }],
+    })
+      .select("-password -phoneNumber")
+      .limit(50);
+
+    res.status(200).json({ success: true, data: users });
   } catch (error) {
     next(error);
   }
@@ -274,6 +326,7 @@ export default {
   getGroup,
   getAllGroups,
   searchGroups,
+  searchUsers,
   settleUp,
   createGroup,
   updateGroup,

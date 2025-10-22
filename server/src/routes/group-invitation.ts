@@ -4,7 +4,7 @@ import checkAuthentication from "../middleware/auth";
 
 import { validate } from "../middleware/validate";
 import {
-  sentInvitationValidation,
+  sentInvitationsValidation,
   updatedInvitationValidation,
 } from "../validators/group-invitation";
 
@@ -21,9 +21,9 @@ router.get(
 router.post(
   "/send/:groupId",
   checkAuthentication,
-  sentInvitationValidation,
+  sentInvitationsValidation,
   validate,
-  groupInvitationController.sendInvitation
+  groupInvitationController.sendInvitations
 );
 
 router.put(

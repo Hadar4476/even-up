@@ -31,12 +31,4 @@ router.put(
   userController.changePassword
 );
 
-router.get(
-  "/searchUsers",
-  checkAuthentication,
-  searchUsersValidation,
-  validate,
-  userController.searchUsers
-);
-
 export default router;

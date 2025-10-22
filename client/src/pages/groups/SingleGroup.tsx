@@ -1,23 +1,32 @@
 import { useEffect } from "react";
+import useResponsive from "@/hooks/useResponsive";
 import { useAppSelector } from "@/store";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import commonUtils from "@/utils/common";
 import { groupsActions, groupsSelector } from "@/store/reducers/groups";
 import { getGroup } from "@/services/group";
 
-import { IGroup } from "@/types";
+import { IGroup, ROUTE_NAMES } from "@/types";
 
-import { Stack } from "@mui/material";
+import { Button, Stack, useTheme } from "@mui/material";
 import AppLoader from "@/components/common/AppLoader";
 import GroupEditor from "@/components/groups/GroupEditor";
-import SearchUsers from "@/components/groups/SearchUsers";
+import { ArrowBack } from "@mui/icons-material";
+import InviteUsers from "@/components/groups/InviteUsers";
 
 const SingleGroup = () => {
+  const { isMobile } = useResponsive();
+  const theme = useTheme();
+  const navigate = useNavigate();
   const { groupId } = useParams<{ groupId: IGroup["_id"] }>();
   const { selectedGroup, isLoading } = useAppSelector(groupsSelector);
   const dispatch = useDispatch();
+
+  const handleGoBack = () => {
+    navigate(`/${ROUTE_NAMES.GROUPS}`);
+  };
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -50,9 +59,20 @@ const SingleGroup = () => {
   }
 
   return (
-    <Stack className="p-6 md:p-8">
-      <GroupEditor group={selectedGroup.group} />
-      <SearchUsers />
+    <Stack className="gap-6 p-6 md:p-8">
+      {isMobile && (
+        <Button
+          className="!absolute top-4 left-0 !w-[40px] !h-[40px] !p-0 md:!px-4 !rounded-full"
+          variant="text"
+          onClick={handleGoBack}
+        >
+          <ArrowBack sx={{ color: theme.palette.text.primary }} />
+        </Button>
+      )}
+      <Stack className="!flex-row items-center justify-end gap-4">
+        <InviteUsers />
+        <GroupEditor group={selectedGroup.group} />
+      </Stack>
     </Stack>
   );
 };

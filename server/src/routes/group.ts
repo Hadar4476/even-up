@@ -12,6 +12,7 @@ import {
 } from "../validators/group";
 
 import groupController from "../controllers/group";
+import { searchUsersValidation } from "../validators/user";
 
 const router = express.Router();
 
@@ -29,6 +30,14 @@ router.get(
   searchGroupsValidation,
   validate,
   groupController.searchGroups
+);
+
+router.get(
+  "/searchUsers/:groupId",
+  checkAuthentication,
+  searchUsersValidation,
+  validate,
+  groupController.searchUsers
 );
 
 router.get("/:groupId", checkAuthentication, groupController.getGroup);

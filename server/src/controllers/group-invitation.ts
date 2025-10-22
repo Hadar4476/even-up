@@ -29,7 +29,7 @@ const getInvitations = async (
   }
 };
 
-const sendInvitation = async (
+const sendInvitations = async (
   req: CommonRequest,
   res: Response,
   next: NextFunction
@@ -37,19 +37,10 @@ const sendInvitation = async (
   try {
     const { groupId } = req.params;
     const from = req.user?.id;
-    const { to } = req.body;
+    const { members } = req.body;
 
-    const existingInvitation = await GroupInvitation.findOne({
-      groupId,
-      $or: [
-        { from, to },
-        { from: to, to: from },
-      ],
-      status: GroupInvitationStatus.PENDING,
-    });
-
-    if (existingInvitation) {
-      throw new AppError("Invitation already exists", 409);
+    if (!Array.isArray(members) || members.length === 0) {
+      throw new AppError("Members must be a non-empty array", 400);
     }
 
     const group = await Group.findById(groupId);
@@ -58,22 +49,21 @@ const sendInvitation = async (
       throw new AppError("Resource not found", 404);
     }
 
-    const isUserInGroup = group.users.includes(to);
-
-    if (isUserInGroup) {
-      throw new AppError("User is already in group", 409);
-    }
-
-    const newInvitation = new GroupInvitation({
+    const invitationsToCreate = members.map((userId) => ({
       groupId,
       status: GroupInvitationStatus.PENDING,
       from,
-      to,
+      to: userId,
+    }));
+
+    const createdInvitations = await GroupInvitation.insertMany(
+      invitationsToCreate
+    );
+
+    res.status(200).json({
+      success: true,
+      data: createdInvitations,
     });
-
-    const invitation = await newInvitation.save();
-
-    res.status(200).json({ success: true, data: invitation });
   } catch (error) {
     next(error);
   }
@@ -123,6 +113,6 @@ const updateInvitationStatus = async (
 
 export default {
   getInvitations,
-  sendInvitation,
+  sendInvitations,
   updateInvitationStatus,
 };

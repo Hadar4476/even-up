@@ -1,8 +1,8 @@
+import { IUserSearchResult } from "@/types";
 import { api } from "./ApiService";
 
 import {
   IGroup,
-  IGroupFormData,
   IGroupWithPagination,
   IGroupWithSettlement,
   ISettlementResult,
@@ -26,6 +26,15 @@ export const searchGroups = async (
 ): Promise<IGroupWithPagination> => {
   return api.get<IGroupWithPagination>(
     `${route}/searchGroups?query=${query}&page=${page}&limit=${limit}`
+  );
+};
+
+export const searchUsers = async (
+  groupId: IGroup["_id"],
+  query: string
+): Promise<IUserSearchResult[]> => {
+  return api.get<IUserSearchResult[]>(
+    `${route}/searchUsers/${groupId}?query=${query}`
   );
 };
 
