@@ -9,10 +9,10 @@ import {
   getAllGroupsValidation,
   groupValidation,
   searchGroupsValidation,
+  searchUsersValidation,
 } from "../validators/group";
 
 import groupController from "../controllers/group";
-import { searchUsersValidation } from "../validators/user";
 
 const router = express.Router();
 

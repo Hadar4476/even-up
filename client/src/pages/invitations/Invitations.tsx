@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/store";
+import useResponsive from "@/hooks/useResponsive";
 
 import {
   getInvitations,
@@ -8,15 +9,9 @@ import {
 } from "@/services/group-invitation";
 import { groupsActions, groupsSelector } from "@/store/reducers/groups";
 
+import { GroupInvitationStatus, IGroupInvitationPopulated } from "@/types";
+
 import { Box, Button, Stack, Typography, useTheme } from "@mui/material";
-import useResponsive from "@/hooks/useResponsive";
-import {
-  GroupInvitationStatus,
-  IGroupInvitation,
-  IGroupInvitationPopulated,
-  ROUTE_NAMES,
-} from "@/types";
-import AppLink from "@/components/common/AppLink";
 
 const Invitations = () => {
   const { isMobile } = useResponsive();
@@ -25,7 +20,7 @@ const Invitations = () => {
   const dispatch = useDispatch();
 
   const handleUpdateInvitationStatus = async (
-    invitationId: IGroupInvitation["_id"],
+    invitationId: IGroupInvitationPopulated["_id"],
     status: GroupInvitationStatus
   ) => {
     dispatch(groupsActions.setIsLoading(true));

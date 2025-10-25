@@ -6,7 +6,6 @@ import { validate } from "../middleware/validate";
 import {
   updateProfileValidation,
   changePasswordValidation,
-  searchUsersValidation,
 } from "../validators/user";
 
 import userController from "../controllers/user";

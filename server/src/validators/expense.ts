@@ -1,7 +1,11 @@
 import { body } from "express-validator";
 
 export const addExpenseValidation = [
-  body("groupId").trim().notEmpty(),
+  body("groupId")
+    .trim()
+    .notEmpty()
+    .isMongoId()
+    .withMessage("Field must be a valid MongoDB ID"),
   body("description")
     .trim()
     .notEmpty()

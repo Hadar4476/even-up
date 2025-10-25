@@ -64,5 +64,3 @@ export const groupValidation = [
     .withMessage("removeImg must be a boolean")
     .toBoolean(),
 ];
-
-export const inviteToGroupValidation = [body("userId").trim().notEmpty()];

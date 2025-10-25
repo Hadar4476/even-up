@@ -21,14 +21,3 @@ export const changePasswordValidation = [
   isPassword("currentPassword"),
   isPassword("newPassword"),
 ];
-
-export const searchUsersValidation = [
-  query("query")
-    .trim()
-    .notEmpty()
-    .withMessage("Search query is required")
-    .isString()
-    .withMessage("Search query must be a string")
-    .isLength({ min: 1, max: 100 })
-    .withMessage("Search query must be between 1 and 100 characters"),
-];
