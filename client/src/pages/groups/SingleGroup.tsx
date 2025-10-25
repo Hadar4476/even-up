@@ -41,6 +41,7 @@ const SingleGroup = () => {
           dispatch(groupsActions.setIsInitialized(true));
         }
       } catch (error: any) {
+        handleGoBack();
         dispatch(groupsActions.setError(error.message));
       } finally {
         dispatch(groupsActions.setIsLoading(false));

@@ -7,14 +7,14 @@ export enum GroupInvitationStatus {
 }
 
 export interface IGroupInvitation extends IDocument {
-  groupId: IGroup["_id"];
+  group: IGroup["_id"];
   status: GroupInvitationStatus;
   from: IUser["_id"];
   to: IUser["_id"];
 }
 
 export interface IGroupInvitationPopulated extends IDocument {
-  groupId: { _id: IGroup["_id"]; title: string };
+  group: { _id: IGroup["_id"]; title: string };
   status: GroupInvitationStatus;
   from: { _id: IUser["_id"]; name: string };
   to: IUser["_id"];

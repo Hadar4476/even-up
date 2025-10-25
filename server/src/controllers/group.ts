@@ -155,7 +155,7 @@ const searchUsers = async (
     const usersInGroup = group.users.map((id) => id.toString());
 
     const pendingInvitations = await GroupInvitation.find({
-      groupId,
+      group: groupId,
       status: GroupInvitationStatus.PENDING,
     }).select("to");
 
@@ -200,7 +200,7 @@ const settleUp = async (
       throw new AppError("Resource not found", 404);
     }
 
-    await Expense.deleteMany({ groupId });
+    await Expense.deleteMany({ group: groupId });
 
     await Group.findByIdAndUpdate(groupId, {
       $set: { expenses: [] },
@@ -308,8 +308,8 @@ const deleteGroup = async (
       deleteFile(group.img);
     }
 
-    await Expense.deleteMany({ groupId });
-    await GroupInvitation.deleteMany({ groupId });
+    await Expense.deleteMany({ group: groupId });
+    await GroupInvitation.deleteMany({ group: groupId });
 
     await Group.findByIdAndDelete(groupId);
 

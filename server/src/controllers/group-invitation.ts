@@ -19,7 +19,7 @@ const getInvitations = async (
       to: userId,
       status: GroupInvitationStatus.PENDING,
     })
-      .populate("groupId", "title")
+      .populate("group", "title")
       .populate("from", "name")
       .sort({ updatedAt: -1, _id: -1 });
 
@@ -54,7 +54,7 @@ const sendInvitations = async (
 
     // Check for existing invitations for this group and these users
     const existingInvitations = await GroupInvitation.find({
-      groupId,
+      group: groupId,
       to: { $in: members },
     });
 
@@ -79,7 +79,7 @@ const sendInvitations = async (
     }
 
     const invitationsToCreate = newMembers.map((userId) => ({
-      groupId,
+      group: groupId,
       status: GroupInvitationStatus.PENDING,
       from,
       to: userId,
@@ -118,7 +118,7 @@ const updateInvitationStatus = async (
     if (status === GroupInvitationStatus.ACCEPTED) {
       // Use $addToSet to prevent duplicates and handle race conditions
       const group = await Group.findOneAndUpdate(
-        { _id: groupInvitation.groupId },
+        { _id: groupInvitation.group },
         { $addToSet: { users: groupInvitation.to } },
         { new: true }
       )

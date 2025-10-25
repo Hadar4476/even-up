@@ -6,8 +6,8 @@ const expenseSchema: Schema = new Schema(
   {
     description: { type: String, required: true },
     amount: { type: Number, required: true },
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    groupId: { type: Schema.Types.ObjectId, ref: "Group", required: true },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    group: { type: Schema.Types.ObjectId, ref: "Group", required: true },
   },
   { timestamps: true }
 );

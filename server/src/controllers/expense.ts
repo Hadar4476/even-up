@@ -27,7 +27,12 @@ const addExpense = async (
       throw new AppError("Resource not found", 404);
     }
 
-    const newExpense = new Expense({ description, amount, userId, groupId });
+    const newExpense = new Expense({
+      description,
+      amount,
+      user: userId,
+      group: groupId,
+    });
 
     const savedExpense = await newExpense.save();
 
@@ -78,7 +83,7 @@ const updateExpense = async (
     }
 
     const group = await Group.findOne({
-      _id: expense.groupId,
+      _id: expense.group,
       users: userId, // Verify user is in the users array
     });
 
@@ -92,7 +97,7 @@ const updateExpense = async (
     const updatedExpense = await expense.save();
 
     // Fetch updated group with populated data to calculate settlements
-    const updatedGroup = (await Group.findById(expense.groupId)
+    const updatedGroup = (await Group.findById(expense.group)
       .populate("users", "name")
       .populate("expenses")) as IGroupPopulated | null;
 
@@ -133,7 +138,7 @@ const deleteExpense = async (
     }
 
     const group = await Group.findOne({
-      _id: expense.groupId,
+      _id: expense.group,
       users: userId, // Verify user is in the users array
     });
 
@@ -143,12 +148,12 @@ const deleteExpense = async (
 
     await Expense.findByIdAndDelete(expenseId);
 
-    await Group.findByIdAndUpdate(expense.groupId, {
+    await Group.findByIdAndUpdate(expense.group, {
       $pull: { expenses: expenseId },
     });
 
     // Fetch updated group with populated data to calculate settlements
-    const updatedGroup = (await Group.findById(expense.groupId)
+    const updatedGroup = (await Group.findById(expense.group)
       .populate("users", "name")
       .populate("expenses")) as IGroupPopulated | null;
 

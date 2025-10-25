@@ -7,7 +7,7 @@ export enum GroupInvitationStatus {
 }
 
 export interface IGroupInvitation extends Document {
-  groupId: Schema.Types.ObjectId;
+  group: Schema.Types.ObjectId;
   status: GroupInvitationStatus;
   from: Schema.Types.ObjectId;
   to: Schema.Types.ObjectId;

@@ -3,7 +3,7 @@ import { IGroupInvitation } from "../types/group-invitation";
 
 const groupInvitationSchema: Schema = new Schema(
   {
-    groupId: {
+    group: {
       type: Schema.Types.ObjectId,
       ref: "Group",
       required: true,
@@ -15,7 +15,7 @@ const groupInvitationSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-groupInvitationSchema.index({ groupId: 1, to: 1 }, { unique: true });
+groupInvitationSchema.index({ group: 1, to: 1 }, { unique: true });
 
 const GroupInvitation = mongoose.model<IGroupInvitation>(
   "GroupInvitation",

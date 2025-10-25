@@ -3,14 +3,14 @@ import { IDocument, IGroup, IUser, ISettlementResult } from "./";
 export interface IExpense extends IDocument {
   description: string;
   amount: number;
-  userId: IUser["_id"];
-  groupId: IGroup["_id"];
+  user: IUser["_id"];
+  group: IGroup["_id"];
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface IExpenseFormData {
-  groupId: IGroup["_id"];
+  group: IGroup["_id"];
   description: string;
   amount: number;
 }

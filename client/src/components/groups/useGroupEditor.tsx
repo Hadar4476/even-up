@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useToast } from "@/context/ToastContext";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { createGroup, updateGroup } from "@/services/group";
@@ -25,6 +25,12 @@ export const useGroupEditor = (group?: IGroup) => {
 
   const reset = async () => {
     setIsSuccess(false);
+
+    if (!group) {
+      setImagePreview(null);
+      formik.resetForm();
+      return;
+    }
 
     if (group?.img) {
       const imgUrl = `${config.uploadsUrl}/${group.img}`;

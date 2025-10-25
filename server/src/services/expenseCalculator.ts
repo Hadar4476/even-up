@@ -65,7 +65,7 @@ export function calculateSettlements(
 
   // Sum up actual payments
   expenses.forEach((expense) => {
-    const userId = expense.userId.toString();
+    const userId = expense.user.toString();
     const currentPayment = userPayments.get(userId) || 0;
     userPayments.set(userId, currentPayment + expense.amount);
   });

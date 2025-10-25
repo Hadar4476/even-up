@@ -63,7 +63,7 @@ const Invitations = () => {
   }, []);
 
   const invitationElements = groupInvitations.map((invitation) => {
-    const { _id, groupId, from } = invitation;
+    const { _id, group, from } = invitation;
     const hash = _id.split("").reduce((acc, char) => {
       return char.charCodeAt(0) + ((acc << 5) - acc);
     }, 0);
@@ -100,7 +100,7 @@ const Invitations = () => {
             <Typography variant="b_16">{from.name}</Typography>
             <Typography>invited you to join</Typography>
             <Typography className="capitalize" color="primary.main">
-              {groupId.title}
+              {group.title}
             </Typography>
           </Box>
           <Stack className="flex-1 w-full !flex-row gap-3">
