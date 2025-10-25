@@ -53,29 +53,31 @@ const useLogin = () => {
       try {
         const response = await login(values);
 
-        const { token, user } = response;
+        if (response) {
+          const { token, user } = response;
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("userId", user._id);
+          localStorage.setItem("token", token);
+          localStorage.setItem("userId", user._id);
 
-        // will expire in 1 hour
-        const remainingMilliseconds = 60 * 60 * 1000;
-        const expiryDate = new Date(
-          new Date().getTime() + remainingMilliseconds
-        );
+          // will expire in 1 hour
+          const remainingMilliseconds = 60 * 60 * 1000;
+          const expiryDate = new Date(
+            new Date().getTime() + remainingMilliseconds
+          );
 
-        localStorage.setItem("expiryDate", expiryDate.toISOString());
+          localStorage.setItem("expiryDate", expiryDate.toISOString());
 
-        dispatch(
-          authActions.setLoggedInUser({
-            isLoggedIn: true,
-            token,
-            expiryDate: expiryDate.toISOString(),
-            user,
-          })
-        );
+          dispatch(
+            authActions.setLoggedInUser({
+              isLoggedIn: true,
+              token,
+              expiryDate: expiryDate.toISOString(),
+              user,
+            })
+          );
 
-        navigate(ROUTE_NAMES.HOME, { replace: true });
+          navigate(ROUTE_NAMES.HOME, { replace: true });
+        }
       } catch (error: any) {
         const toast: Omit<IToast, "id"> = {
           type: "error",

@@ -37,10 +37,16 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
   const theme = useTheme();
   const { isDarkMode } = useThemeContext();
   const { isMobile } = useResponsive();
-  const { formik, isPending, isSuccess, isLoadingImage, reset } =
-    useGroupEditor(group);
+  const {
+    formik,
+    isPending,
+    isSuccess,
+    imagePreview,
+    isLoadingImage,
+    reset,
+    setImagePreview,
+  } = useGroupEditor(group);
 
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,10 +59,11 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
 
   const handleClose = async () => {
     if (isPending) return;
+
     setIsOpen(false);
 
     await commonUtils.sleep(1);
-    reset();
+    await reset();
 
     document.body.style.overflow = "unset";
   };
@@ -88,6 +95,7 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
   useEffect(() => {
     if (group?.img) {
       const imgUrl = `${config.uploadsUrl}/${group.img}`;
+
       setImagePreview(imgUrl);
     }
   }, [group?.img]);

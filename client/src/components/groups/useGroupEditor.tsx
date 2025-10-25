@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useToast } from "@/context/ToastContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { createGroup, updateGroup } from "@/services/group";
@@ -16,13 +16,26 @@ export const useGroupEditor = (group?: IGroup) => {
   const { showToast } = useToast();
   const dispatch = useDispatch();
 
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
+
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState("");
-  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const reset = () => {
+  const reset = async () => {
     setIsSuccess(false);
+
+    if (group?.img) {
+      const imgUrl = `${config.uploadsUrl}/${group.img}`;
+      const filename = group.img;
+      const file = await commonUtils.urlToFile(imgUrl, filename);
+
+      if (file) {
+        setImagePreview(imgUrl);
+        formik.setFieldValue("img", file);
+      }
+    }
   };
 
   const initialValues: IGroupFormData = {
@@ -146,9 +159,11 @@ export const useGroupEditor = (group?: IGroup) => {
   return {
     formik,
     isPending,
-    isLoadingImage,
     isSuccess,
+    imagePreview,
+    isLoadingImage,
     error,
     reset,
+    setImagePreview,
   };
 };

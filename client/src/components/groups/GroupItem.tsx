@@ -57,12 +57,13 @@ const GroupItem = ({ _id, title, img, users }: GroupWithoutExpenses) => {
               }}
             >
               <Typography
+                className="uppercase"
                 variant={isMobile ? "b_20" : "b_64"}
                 sx={{
                   color: theme.palette.common.white,
                 }}
               >
-                {title.charAt(0).toUpperCase()}
+                {title[0]}
               </Typography>
             </Box>
           )}

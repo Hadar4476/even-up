@@ -43,13 +43,42 @@ const sendInvitations = async (
       throw new AppError("Members must be a non-empty array", 400);
     }
 
-    const group = await Group.findById(groupId);
+    const group = await Group.findOne({
+      _id: groupId,
+      users: from, // Verify user is in the users array
+    });
 
     if (!group) {
       throw new AppError("Resource not found", 404);
     }
 
-    const invitationsToCreate = members.map((userId) => ({
+    // Check for existing invitations for this group and these users
+    const existingInvitations = await GroupInvitation.find({
+      groupId,
+      to: { $in: members },
+    });
+
+    // Create a Set of existing user IDs for efficient lookup
+    const existingUserIds = new Set(
+      existingInvitations.map((inv) => inv.to.toString())
+    );
+
+    // Filter out users who already have invitations
+    const newMembers = members.filter(
+      (userId) => !existingUserIds.has(userId.toString())
+    );
+
+    if (newMembers.length === 0) {
+      res.status(200).json({
+        success: true,
+        data: [],
+        message: "All users already have invitations for this group",
+      });
+
+      return;
+    }
+
+    const invitationsToCreate = newMembers.map((userId) => ({
       groupId,
       status: GroupInvitationStatus.PENDING,
       from,

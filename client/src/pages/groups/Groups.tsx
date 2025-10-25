@@ -39,8 +39,10 @@ const Groups = () => {
     try {
       const response = await getAllGroups(1, limit);
 
-      dispatch(groupsActions.setGroupsData(response));
-      dispatch(groupsActions.setIsInitialized(true));
+      if (response) {
+        dispatch(groupsActions.setGroupsData(response));
+        dispatch(groupsActions.setIsInitialized(true));
+      }
     } catch (error: any) {
       dispatch(groupsActions.setError(error.message));
     } finally {
@@ -57,7 +59,9 @@ const Groups = () => {
     try {
       const response = await getAllGroups(page + 1, limit);
 
-      dispatch(groupsActions.appendGroupsData(response));
+      if (response) {
+        dispatch(groupsActions.appendGroupsData(response));
+      }
     } catch (error: any) {
       dispatch(groupsActions.setError(error.message));
     } finally {
@@ -75,7 +79,9 @@ const Groups = () => {
       try {
         const response = await searchGroups(query, 1, limit);
 
-        dispatch(groupsActions.setGroupsData(response));
+        if (response) {
+          dispatch(groupsActions.setGroupsData(response));
+        }
       } catch (error: any) {
         dispatch(groupsActions.setError(error.message));
       } finally {

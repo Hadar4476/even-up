@@ -1,7 +1,10 @@
 import { IGroup } from "@/types";
 import { api } from "./ApiService";
 
-import { IGroupInvitation } from "@/types/group-invitation";
+import {
+  IGroupInvitation,
+  IGroupInvitationPopulated,
+} from "@/types/group-invitation";
 import {
   SendInvitationRequest,
   UpdateInvitationStatusRequest,
@@ -9,8 +12,10 @@ import {
 
 const route = "/group-invitation";
 
-export const getInvitations = async (): Promise<IGroupInvitation[]> => {
-  return api.get<IGroupInvitation[]>(`${route}/getAll`);
+export const getInvitations = async (): Promise<
+  IGroupInvitationPopulated[]
+> => {
+  return api.get<IGroupInvitationPopulated[]>(`${route}/getAll`);
 };
 
 export const sendInvitation = async ({

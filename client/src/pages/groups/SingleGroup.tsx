@@ -36,8 +36,10 @@ const SingleGroup = () => {
       try {
         const response = await getGroup(groupId as string);
 
-        dispatch(groupsActions.setSelectedGroup(response));
-        dispatch(groupsActions.setIsInitialized(true));
+        if (response) {
+          dispatch(groupsActions.setSelectedGroup(response));
+          dispatch(groupsActions.setIsInitialized(true));
+        }
       } catch (error: any) {
         dispatch(groupsActions.setError(error.message));
       } finally {

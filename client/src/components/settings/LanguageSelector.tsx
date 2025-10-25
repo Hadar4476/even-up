@@ -43,7 +43,7 @@ const LanguageSelector = () => {
 
     const translatedLabel = t(`languages.${option.label}` as TranslationKeys);
 
-    let variant = isSelected ? "b_14" : "medium_14";
+    let variant: TypographyProps["variant"] = isSelected ? "b_14" : "medium_14";
 
     if (isMobile) {
       variant = isSelected ? "b_12" : "medium_12";
@@ -53,7 +53,7 @@ const LanguageSelector = () => {
       <MenuItem key={option.value} value={option.value}>
         <Typography
           className={isMobile ? "uppercase" : "capitalize"}
-          variant={variant as TypographyProps["variant"]}
+          variant={variant}
         >
           {isMobile ? option.label : translatedLabel}
         </Typography>

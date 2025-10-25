@@ -1,9 +1,9 @@
-import { IDocument, IUser, IExpense, IGroupInvitation } from "./";
+import { IDocument, IUser, IExpense, IGroupInvitationPopulated } from "./";
 
 export interface IGroupState {
   selectedGroup: IGroupWithSettlement | null;
   groupsData: IGroupWithPagination;
-  groupInvitations: IGroupInvitation[];
+  groupInvitations: IGroupInvitationPopulated[];
   searchQuery: string;
   isInitialized: boolean;
   isLoading: boolean;

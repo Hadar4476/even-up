@@ -4,6 +4,7 @@ import {
   IExpenseWithSettlement,
   IGroup,
   IGroupInvitation,
+  IGroupInvitationPopulated,
   IGroupState,
   IGroupWithPagination,
   IGroupWithSettlement,
@@ -115,24 +116,24 @@ const groups = createSlice({
     // GROUP INVITATIONS
     initGroupInvitations: (
       state,
-      action: PayloadAction<IGroupInvitation[]>
+      action: PayloadAction<IGroupInvitationPopulated[]>
     ) => {
       state.groupInvitations = [...action.payload];
     },
     addGroupInvitation: (state, action: PayloadAction<IGroupInvitation>) => {
-      state.groupInvitations.push(action.payload);
+      // state.groupInvitations.push(action.payload);
     },
     updateGroupInvitation: (
       state,
       action: PayloadAction<{
-        groupInvitationId: IGroupInvitation["_id"];
-        group: IGroup;
+        invitationId: IGroupInvitation["_id"];
+        group: IGroup | null;
         status: IGroupInvitation["status"];
       }>
     ) => {
-      const { groupInvitationId, group, status } = action.payload;
+      const { invitationId, group, status } = action.payload;
 
-      if (status === GroupInvitationStatus.ACCEPTED) {
+      if (status === GroupInvitationStatus.ACCEPTED && group) {
         if (state.selectedGroup) {
           const isSelectedGroup = state.selectedGroup.group._id === group._id;
 
@@ -158,7 +159,7 @@ const groups = createSlice({
       }
 
       state.groupInvitations = state.groupInvitations.filter(
-        (i) => i._id !== groupInvitationId
+        (i) => i._id !== invitationId
       );
     },
     // EXPENSES
