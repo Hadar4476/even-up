@@ -1,13 +1,14 @@
 import { useMemo } from "react";
 import useResponsive from "@/hooks/useResponsive";
+import { useNavigate } from "react-router";
 
 import config from "@/config";
+import commonUtils from "@/utils/common";
 
 import { GroupWithoutExpenses, ROUTE_NAMES } from "@/types";
 
-import { ChevronRight } from "@mui/icons-material";
 import { Avatar, Box, Paper, Stack, Typography, useTheme } from "@mui/material";
-import { useNavigate } from "react-router";
+import { ChevronRight } from "@mui/icons-material";
 
 const GroupItem = ({ _id, title, img, users }: GroupWithoutExpenses) => {
   const navigate = useNavigate();
@@ -16,15 +17,10 @@ const GroupItem = ({ _id, title, img, users }: GroupWithoutExpenses) => {
 
   const imgUrl = img ? `${config.uploadsUrl}/${img}` : "";
 
-  const avatarColor = useMemo(() => {
-    const hash = _id.split("").reduce((acc, char) => {
-      return char.charCodeAt(0) + ((acc << 5) - acc);
-    }, 0);
-
-    return theme.palette.avatar?.[
-      Math.abs(hash) % theme.palette.avatar?.length
-    ];
-  }, [_id, theme.palette.avatar]);
+  const avatarColor = useMemo(
+    () => commonUtils.generateAvatarColor(_id),
+    [_id]
+  );
 
   const handleClick = () => {
     navigate(`/${ROUTE_NAMES.GROUPS}/${_id}`);

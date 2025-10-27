@@ -15,15 +15,34 @@ const getInvitations = async (
   try {
     const userId = req.user?.id;
 
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 12;
+    const skip = (page - 1) * limit;
+
+    const total = await GroupInvitation.countDocuments({
+      to: userId,
+      status: GroupInvitationStatus.PENDING,
+    });
+
     const invitations = await GroupInvitation.find({
       to: userId,
       status: GroupInvitationStatus.PENDING,
     })
       .populate("group", "title")
       .populate("from", "name")
-      .sort({ updatedAt: -1, _id: -1 });
+      .sort({ updatedAt: -1, _id: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json({ success: true, data: invitations });
+    const hasMore = skip + invitations.length < total;
+
+    const pagination = {
+      page,
+      limit,
+      hasMore,
+    };
+
+    res.status(200).json({ success: true, data: { invitations, pagination } });
   } catch (error) {
     next(error);
   }

@@ -3,7 +3,7 @@ import { api } from "./ApiService";
 
 import {
   IGroup,
-  IGroupWithPagination,
+  IGroupData,
   IGroupWithSettlement,
   ISettlementResult,
 } from "@/types/group";
@@ -13,18 +13,16 @@ const route = "/group";
 export const getAllGroups = async (
   page: number,
   limit: number
-): Promise<IGroupWithPagination> => {
-  return api.get<IGroupWithPagination>(
-    `${route}/getAll?page=${page}&limit=${limit}`
-  );
+): Promise<IGroupData> => {
+  return api.get<IGroupData>(`${route}/getAll?page=${page}&limit=${limit}`);
 };
 
 export const searchGroups = async (
   query: string,
   page: number,
   limit: number
-): Promise<IGroupWithPagination> => {
-  return api.get<IGroupWithPagination>(
+): Promise<IGroupData> => {
+  return api.get<IGroupData>(
     `${route}/searchGroups?query=${query}&page=${page}&limit=${limit}`
   );
 };

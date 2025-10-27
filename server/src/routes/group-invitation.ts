@@ -4,6 +4,7 @@ import checkAuthentication from "../middleware/auth";
 
 import { validate } from "../middleware/validate";
 import {
+  getAllGroupInvitationsValidation,
   sentInvitationsValidation,
   updatedInvitationValidation,
 } from "../validators/group-invitation";
@@ -15,6 +16,8 @@ const router = express.Router();
 router.get(
   "/getAll",
   checkAuthentication,
+  getAllGroupInvitationsValidation,
+  validate,
   groupInvitationController.getInvitations
 );
 

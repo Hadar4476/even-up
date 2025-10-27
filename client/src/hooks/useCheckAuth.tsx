@@ -1,11 +1,9 @@
 import { useRef } from "react";
-import config from "@/config";
-
+import { useDispatch } from "react-redux";
 import useLogout from "./useLogout";
 
+import config from "@/config";
 import { fetchUser } from "@/services/user";
-
-import { useDispatch } from "react-redux";
 import { authActions } from "@/store/reducers/auth";
 
 const useCheckAuth = () => {

@@ -80,8 +80,6 @@ const useChangePassword = () => {
           showToast(toast);
         }
       } catch (error: any) {
-        console.log({ error });
-
         const toast: Omit<IToast, "id"> = {
           type: "error",
           message: error.message,

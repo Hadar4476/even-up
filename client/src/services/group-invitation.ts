@@ -4,6 +4,7 @@ import { api } from "./ApiService";
 import {
   IGroupInvitation,
   IGroupInvitationPopulated,
+  IGroupInvitationsData,
 } from "@/types/group-invitation";
 import {
   SendInvitationRequest,
@@ -12,10 +13,13 @@ import {
 
 const route = "/group-invitation";
 
-export const getInvitations = async (): Promise<
-  IGroupInvitationPopulated[]
-> => {
-  return api.get<IGroupInvitationPopulated[]>(`${route}/getAll`);
+export const getInvitations = async (
+  page: number,
+  limit: number
+): Promise<IGroupInvitationsData> => {
+  return api.get<IGroupInvitationsData>(
+    `${route}/getAll?page=${page}&limit=${limit}`
+  );
 };
 
 export const sendInvitation = async ({

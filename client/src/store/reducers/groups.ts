@@ -4,9 +4,9 @@ import {
   IExpenseWithSettlement,
   IGroup,
   IGroupInvitation,
-  IGroupInvitationPopulated,
+  IGroupInvitationsData,
   IGroupState,
-  IGroupWithPagination,
+  IGroupData,
   IGroupWithSettlement,
   IPagination,
   IRootState,
@@ -27,7 +27,10 @@ const defaultGroupsState: IGroupState = {
     pagination: initialPagination,
   },
   searchQuery: "",
-  groupInvitations: [],
+  groupInvitationsData: {
+    invitations: [],
+    pagination: initialPagination,
+  },
   isLoading: false,
   isInitialized: false,
   error: null,
@@ -94,7 +97,7 @@ const groups = createSlice({
       }
     },
     // GROUPS
-    setGroupsData: (state, action: PayloadAction<IGroupWithPagination>) => {
+    setGroupsData: (state, action: PayloadAction<IGroupData>) => {
       const { groups, pagination } = action.payload;
 
       state.groupsData = {
@@ -102,7 +105,7 @@ const groups = createSlice({
         pagination,
       };
     },
-    appendGroupsData: (state, action: PayloadAction<IGroupWithPagination>) => {
+    appendGroupsData: (state, action: PayloadAction<IGroupData>) => {
       const { groups, pagination } = action.payload;
 
       state.groupsData = {
@@ -114,14 +117,30 @@ const groups = createSlice({
       state.groupsData.groups.unshift(action.payload);
     },
     // GROUP INVITATIONS
-    initGroupInvitations: (
+    setGroupInvitationsData: (
       state,
-      action: PayloadAction<IGroupInvitationPopulated[]>
+      action: PayloadAction<IGroupInvitationsData>
     ) => {
-      state.groupInvitations = [...action.payload];
+      const { invitations, pagination } = action.payload;
+
+      state.groupInvitationsData = {
+        invitations,
+        pagination,
+      };
     },
-    addGroupInvitation: (state, action: PayloadAction<IGroupInvitation>) => {
-      // state.groupInvitations.push(action.payload);
+    appendGroupInvitationData: (
+      state,
+      action: PayloadAction<IGroupInvitationsData>
+    ) => {
+      const { invitations, pagination } = action.payload;
+
+      state.groupInvitationsData = {
+        invitations: [
+          ...state.groupInvitationsData.invitations,
+          ...invitations,
+        ],
+        pagination,
+      };
     },
     updateGroupInvitation: (
       state,
@@ -158,9 +177,10 @@ const groups = createSlice({
         }
       }
 
-      state.groupInvitations = state.groupInvitations.filter(
-        (i) => i._id !== invitationId
-      );
+      state.groupInvitationsData.invitations =
+        state.groupInvitationsData.invitations.filter(
+          (i) => i._id !== invitationId
+        );
     },
     // EXPENSES
     addExpense: (state, action: PayloadAction<IExpenseWithSettlement>) => {

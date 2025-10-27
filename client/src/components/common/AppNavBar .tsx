@@ -128,6 +128,9 @@ const AppNavBar = ({ onHeightChange }: AppNavBarProps) => {
         centered={!isMobile}
         sx={{
           ...(!isMobile && {
+            "& .MuiTabs-indicator": {
+              display: "none",
+            },
             "& .MuiTabs-flexContainer": {
               display: "grid",
               gridTemplateColumns: "1fr auto auto auto auto",

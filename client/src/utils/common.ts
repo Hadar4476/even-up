@@ -1,3 +1,5 @@
+import colors from "@/theme/colors";
+
 const commonUtils = {
   sleep: (seconds: number) => {
     return new Promise((r) => setTimeout(r, seconds * 1000));
@@ -64,6 +66,13 @@ const commonUtils = {
       console.error("Error converting URL to File:", error);
       return null;
     }
+  },
+  generateAvatarColor: (id: string) => {
+    const hash = id.split("").reduce((acc, char) => {
+      return char.charCodeAt(0) + ((acc << 5) - acc);
+    }, 0);
+
+    return colors.avatar[Math.abs(hash) % colors.avatar.length];
   },
 };
 

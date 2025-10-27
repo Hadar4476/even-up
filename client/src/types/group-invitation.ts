@@ -1,4 +1,4 @@
-import { IDocument, IUser, IGroup } from "./";
+import { IDocument, IUser, IGroup, IPagination } from "./";
 
 export enum GroupInvitationStatus {
   PENDING = "pending",
@@ -18,4 +18,9 @@ export interface IGroupInvitationPopulated extends IDocument {
   status: GroupInvitationStatus;
   from: { _id: IUser["_id"]; name: string };
   to: IUser["_id"];
+}
+
+export interface IGroupInvitationsData {
+  invitations: IGroupInvitationPopulated[];
+  pagination: IPagination;
 }
