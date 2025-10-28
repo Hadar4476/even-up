@@ -1,19 +1,9 @@
 import { body, query } from "express-validator";
+import { isPage, isLimit, isSearchQuery } from "./common";
 
 import { GroupInvitationStatus } from "../types/group-invitation";
 
-export const getAllGroupInvitationsValidation = [
-  query("page")
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage("Page must be a positive integer")
-    .toInt(),
-  query("limit")
-    .optional()
-    .isInt({ min: 1, max: 100 })
-    .withMessage("Limit must be between 1 and 100")
-    .toInt(),
-];
+export const getAllGroupInvitationsValidation = [isPage(), isLimit()];
 
 export const sentInvitationsValidation = [
   body("members")

@@ -140,7 +140,11 @@ const searchUsers = async (
   try {
     const { groupId } = req.params;
     const userId = req.user?.id;
+
     const query = req.query.query as string;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 12;
+    const skip = (page - 1) * limit;
 
     const searchRegex = new RegExp(query, "i");
 
@@ -169,14 +173,27 @@ const searchUsers = async (
       ...usersWithPendingInvites,
     ];
 
-    const users = await User.find({
+    const filter = {
       _id: { $nin: excludedUserIds },
       $or: [{ name: searchRegex }, { email: searchRegex }],
-    })
-      .select("-password -phoneNumber")
-      .limit(50);
+    };
 
-    res.status(200).json({ success: true, data: users });
+    const total = await User.countDocuments(filter);
+
+    const users = await User.find(filter)
+      .select("-password -phoneNumber")
+      .skip(skip)
+      .limit(limit);
+
+    const hasMore = skip + users.length < total;
+
+    const pagination = {
+      page,
+      limit,
+      hasMore,
+    };
+
+    res.status(200).json({ success: true, data: { users, pagination } });
   } catch (error) {
     next(error);
   }

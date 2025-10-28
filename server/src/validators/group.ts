@@ -1,49 +1,11 @@
-import { body, query } from "express-validator";
+import { body } from "express-validator";
+import { isPage, isLimit, isSearchQuery } from "./common";
 
-export const getAllGroupsValidation = [
-  query("page")
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage("Page must be a positive integer")
-    .toInt(),
-  query("limit")
-    .optional()
-    .isInt({ min: 1, max: 100 })
-    .withMessage("Limit must be between 1 and 100")
-    .toInt(),
-];
+export const getAllGroupsValidation = [isPage(), isLimit()];
 
-export const searchGroupsValidation = [
-  query("query")
-    .trim()
-    .notEmpty()
-    .withMessage("Search query is required")
-    .isString()
-    .withMessage("Search query must be a string")
-    .isLength({ min: 1, max: 100 })
-    .withMessage("Search query must be between 1 and 100 characters"),
-  query("page")
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage("Page must be a positive integer")
-    .toInt(),
-  query("limit")
-    .optional()
-    .isInt({ min: 1, max: 100 })
-    .withMessage("Limit must be an integer between 1 and 50")
-    .toInt(), // Convert string to integer
-];
+export const searchGroupsValidation = [isSearchQuery(), isPage(), isLimit()];
 
-export const searchUsersValidation = [
-  query("query")
-    .trim()
-    .notEmpty()
-    .withMessage("Search query is required")
-    .isString()
-    .withMessage("Search query must be a string")
-    .isLength({ min: 1, max: 100 })
-    .withMessage("Search query must be between 1 and 100 characters"),
-];
+export const searchUsersValidation = [isSearchQuery(), isPage(), isLimit()];
 
 export const groupValidation = [
   body("title")

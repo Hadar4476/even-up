@@ -1,4 +1,4 @@
-import { IUserSearchResult } from "@/types";
+import { ISearchUsersResponse, UserSearchResult } from "@/types";
 import { api } from "./ApiService";
 
 import {
@@ -29,10 +29,12 @@ export const searchGroups = async (
 
 export const searchUsers = async (
   groupId: IGroup["_id"],
-  query: string
-): Promise<IUserSearchResult[]> => {
-  return api.get<IUserSearchResult[]>(
-    `${route}/searchUsers/${groupId}?query=${query}`
+  query: string,
+  page: number,
+  limit: number
+): Promise<ISearchUsersResponse> => {
+  return api.get<ISearchUsersResponse>(
+    `${route}/searchUsers/${groupId}?query=${query}&page=${page}&limit=${limit}`
   );
 };
 

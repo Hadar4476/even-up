@@ -10,7 +10,7 @@ import { authActions, authSelector } from "@/store/reducers/auth";
 import commonUtils from "@/utils/common";
 import { updateProfile } from "@/services/user";
 
-import { IProfileData, IToast } from "@/types";
+import { ProfileData, IToast } from "@/types";
 
 const useUpdateProfile = () => {
   const { user } = useAppSelector(authSelector);
@@ -21,7 +21,7 @@ const useUpdateProfile = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState("");
 
-  const initialValues: IProfileData = {
+  const initialValues: ProfileData = {
     name: "",
     phoneNumber: "",
     email: "",
@@ -84,7 +84,7 @@ const useUpdateProfile = () => {
   useEffect(() => {
     const loadProfileData = async () => {
       if (user) {
-        const updatedValues: IProfileData = {
+        const updatedValues: ProfileData = {
           name: user.name,
           phoneNumber: user.phoneNumber,
           email: user.email,

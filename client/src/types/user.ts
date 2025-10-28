@@ -1,4 +1,4 @@
-import { IDocument } from "./";
+import { IDocument, IPagination } from "./";
 
 export interface IUser extends IDocument {
   name: string;
@@ -6,6 +6,14 @@ export interface IUser extends IDocument {
   email: string;
 }
 
-export type IProfileData = Omit<IUser, "_id">;
+export type ProfileData = Omit<IUser, "_id">;
 
-export type IUserSearchResult = Omit<IUser, "phoneNumber">;
+export type UserSearchResult = Omit<IUser, "phoneNumber">;
+
+export interface IUsersSearchResultsState {
+  users: UserSearchResult[];
+  searchQuery: string;
+  pagination: IPagination;
+  isLoading: boolean;
+  error: string | null;
+}

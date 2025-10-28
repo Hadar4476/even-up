@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import { useAppSelector } from "@/store";
 
 import commonUtils from "@/utils/common";
 import { searchUsers } from "@/services/group";
 import { groupsSelector } from "@/store/reducers/groups";
-
-import { IUserSearchResult } from "@/types";
+import {
+  initialUsersSearchResultsState,
+  usersSearchResultsActions,
+  usersSearchResultsReducer,
+} from "@/reducers/usersSearchResultsReducer";
 
 import {
   Box,
@@ -20,14 +23,14 @@ import AppModal from "../common/AppModal";
 
 const InviteUsers = () => {
   const theme = useTheme();
+  const [state, dispatch] = useReducer(
+    usersSearchResultsReducer,
+    initialUsersSearchResultsState
+  );
   const { selectedGroup } = useAppSelector(groupsSelector);
   const { isMobile } = useResponsive();
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<IUserSearchResult[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -36,7 +39,7 @@ const InviteUsers = () => {
   };
 
   const handleClose = async () => {
-    if (isLoading) return;
+    if (state.isLoading) return;
     setIsOpen(false);
 
     await commonUtils.sleep(1);
@@ -48,39 +51,77 @@ const InviteUsers = () => {
     async (query: string) => {
       if (!selectedGroup?.group._id || !query.trim()) return;
 
-      setIsLoading(true);
+      dispatch(usersSearchResultsActions.setIsLoading(true));
       await commonUtils.sleep(1);
 
       try {
-        const response = await searchUsers(selectedGroup.group._id, query);
+        const response = await searchUsers(
+          selectedGroup.group._id,
+          query,
+          1,
+          state.pagination.limit
+        );
 
         if (response) {
-          setSearchResults(response);
+          const { users, pagination } = response;
+
+          dispatch(usersSearchResultsActions.setSearchResults(users));
+          dispatch(usersSearchResultsActions.setPagination(pagination));
         }
       } catch (error: any) {
-        setError(error.message);
+        dispatch(usersSearchResultsActions.setError(error.message));
       } finally {
-        setIsLoading(false);
+        dispatch(usersSearchResultsActions.setIsLoading(false));
       }
     },
-    [selectedGroup?.group._id]
+    [selectedGroup?.group._id, state.pagination.limit]
+  );
+
+  const loadMoreResults = useCallback(
+    async (query: string) => {
+      if (!selectedGroup?.group._id || !query.trim()) return;
+
+      dispatch(usersSearchResultsActions.setIsLoading(true));
+      await commonUtils.sleep(1);
+
+      try {
+        const response = await searchUsers(
+          selectedGroup.group._id,
+          query,
+          state.pagination.page + 1,
+          state.pagination.limit
+        );
+
+        if (response) {
+          const { users, pagination } = response;
+
+          dispatch(usersSearchResultsActions.setSearchResults(users));
+          dispatch(usersSearchResultsActions.setPagination(pagination));
+        }
+      } catch (error: any) {
+        dispatch(usersSearchResultsActions.setError(error.message));
+      } finally {
+        dispatch(usersSearchResultsActions.setIsLoading(false));
+      }
+    },
+    [selectedGroup?.group._id, state.pagination.page, state.pagination.limit]
   );
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
 
-    setSearchQuery(value);
+    dispatch(usersSearchResultsActions.setSearchQuery(value));
   };
 
   useEffect(() => {
-    if (!searchQuery.trim()) return;
+    if (!state.searchQuery.trim()) return;
 
     const timer = setTimeout(() => {
-      handleSearch(searchQuery);
+      handleSearch(state.searchQuery);
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, handleSearch]);
+  }, [state.searchQuery, handleSearch]);
 
   return (
     <>
@@ -101,14 +142,13 @@ const InviteUsers = () => {
         isOpen={isOpen}
         emitClose={handleClose}
       >
-        {/* {content} */}
         <Box className="flex flex-row p-6 pt-16 relative items-center justify-center md:justify-start md:px-8">
           {isMobile && (
             <Button
               className="!absolute top-4 left-0 !w-[40px] !h-[40px] p-2 md:!px-4 !rounded-full"
               variant="text"
               onClick={handleClose}
-              disabled={isLoading}
+              disabled={state.isLoading}
             >
               <ArrowBack sx={{ color: theme.palette.text.primary }} />
             </Button>
@@ -126,7 +166,7 @@ const InviteUsers = () => {
             fullWidth
             variant="outlined"
             placeholder="Search members to invite"
-            value={searchQuery}
+            value={state.searchQuery}
             onChange={handleQueryChange}
             slotProps={{
               input: {

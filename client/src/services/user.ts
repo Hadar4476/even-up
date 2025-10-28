@@ -1,6 +1,6 @@
 import { api } from "./ApiService";
 
-import { IUser, IProfileData } from "@/types";
+import { IUser, ProfileData } from "@/types";
 
 const route = "/user";
 
@@ -9,7 +9,7 @@ export const fetchUser = async (): Promise<IUser> => {
 };
 
 export const updateProfile = async (
-  profileData: IProfileData
+  profileData: ProfileData
 ): Promise<IUser> => {
   return api.put<IUser>(`${route}/updateProfile`, profileData);
 };
