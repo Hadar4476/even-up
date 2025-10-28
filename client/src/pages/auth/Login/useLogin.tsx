@@ -1,14 +1,13 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useToast } from "@/context/ToastContext";
 
 import { authActions } from "@/store/reducers/auth";
-
 import { login } from "@/services/auth";
+import commonUtils from "@/utils/common";
 
 import { IToast, ROUTE_NAMES } from "@/types";
 
@@ -23,7 +22,7 @@ const useLogin = () => {
 
   const { showToast } = useToast();
 
-  const [isPending, setIsPending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const initialValues: LoginFormValues = {
@@ -50,6 +49,9 @@ const useLogin = () => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      await commonUtils.sleep(1);
+
       try {
         const response = await login(values);
 
@@ -88,14 +90,14 @@ const useLogin = () => {
         showToast(toast);
         setError(error.message);
       } finally {
-        setIsPending(false);
+        setIsLoading(false);
       }
     },
   });
 
   return {
     formik,
-    isPending,
+    isLoading,
     error,
   };
 };

@@ -10,7 +10,13 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { ArrowBack, PersonAdd, Search, Send } from "@mui/icons-material";
+import {
+  ArrowBack,
+  CheckCircle,
+  PersonAdd,
+  Search,
+  Send,
+} from "@mui/icons-material";
 import AppModal from "../common/AppModal";
 import AppLoader from "../common/AppLoader";
 import UserSearchResultItem from "./UserSearchResult";
@@ -21,6 +27,7 @@ const InviteUsers = () => {
   const { isMobile } = useResponsive();
   const {
     isOpen,
+    isSuccess,
     state,
     members,
     hasSelectedAll,
@@ -29,6 +36,7 @@ const InviteUsers = () => {
     handleQueryChange,
     handleToggleInvitation,
     handleToggleSelectAll,
+    handleSendInvitations,
     loadMoreResults,
   } = useInviteUsers();
 
@@ -61,14 +69,131 @@ const InviteUsers = () => {
     };
   }, [state.isLoading]);
 
-  const searchResultsElements = state.users.map((user) => (
-    <UserSearchResultItem
-      key={user._id}
-      result={user}
-      isChecked={members.includes(user._id)}
-      emitToggleInvitation={handleToggleInvitation}
-    />
-  ));
+  const searchResultsElements = state.users.map((user) => {
+    const isChecked = members.some((member) => member._id === user._id);
+
+    return (
+      <UserSearchResultItem
+        key={user._id}
+        result={user}
+        isChecked={isChecked}
+        emitToggleInvitation={handleToggleInvitation}
+      />
+    );
+  });
+
+  let content = (
+    <>
+      <Stack className="p-4 md:p-6">
+        <TextField
+          sx={{
+            "> .MuiInputBase-root": {
+              borderRadius: 100,
+              height: isMobile ? "48px" : "56px",
+
+              "> input": {
+                height: "100%",
+                paddingY: 0,
+                paddingX: "20px",
+              },
+            },
+          }}
+          fullWidth
+          disabled={state.isLoading}
+          variant="outlined"
+          placeholder="Search members to invite"
+          value={state.searchQuery}
+          onChange={handleQueryChange}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end" sx={{ paddingX: "6px" }}>
+                  <Search />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      </Stack>
+
+      <Stack
+        className="!flex-row items-center justify-between p-4 md:p-6"
+        sx={{
+          backgroundColor: theme.palette.background.paper,
+        }}
+      >
+        {!state.isLoading && (
+          <Typography variant={isMobile ? "regular_14" : "regular_16"}>
+            {state.users.length}
+            {state.users.length === 1 ? " result " : " results "}
+            found
+          </Typography>
+        )}
+        {(state.users.length > 0 || members.length > 0) && (
+          <Stack className="!flex-row flex-1 items-center justify-end gap-2">
+            <Typography
+              color="primary.main"
+              variant={isMobile ? "regular_14" : "regular_16"}
+            >
+              {members.length} selected
+            </Typography>
+            <Button
+              className="!font-normal !h-fit !p-0"
+              sx={{ lineHeight: "1px" }}
+              variant="text"
+              size={isMobile ? "small" : "medium"}
+              onClick={handleToggleSelectAll}
+            >
+              {hasSelectedAll ? "Unselect All" : "Select All"}
+            </Button>
+          </Stack>
+        )}
+      </Stack>
+      {(state.users.length > 0 || members.length > 0) && (
+        <>
+          <Stack
+            className="w-full h-full flex-1 overflow-y-auto"
+            ref={containerRef}
+          >
+            {searchResultsElements}
+          </Stack>
+          <Box
+            className="p-4 border-t"
+            sx={{
+              borderColor: theme.palette.border?.default,
+            }}
+          >
+            <Button
+              className="gap-1"
+              fullWidth
+              size="large"
+              disabled={state.isLoading}
+              onClick={handleSendInvitations}
+            >
+              <Send />
+              Invite
+            </Button>
+          </Box>
+        </>
+      )}
+    </>
+  );
+
+  if (isSuccess) {
+    content = (
+      <Box className="w-full h-full flex flex-col items-center justify-center">
+        <Box className="flex flex-row items-center gap-2">
+          <Typography variant="b_38" color="success">
+            Success
+          </Typography>
+          <CheckCircle color="success" fontSize="large" />
+        </Box>
+        <Typography variant="medium_22">
+          Invitations sent successfully!
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -86,7 +211,7 @@ const InviteUsers = () => {
         </Button>
       </Box>
       <AppModal
-        className="w-full h-full !overflow-y-auto !rounded-none md:max-w-2xl md:max-h-[70%] md:!rounded-xl"
+        className={`w-full h-full outline-none !overflow-y-auto !rounded-none md:max-w-2xl md:max-h-[60%] md:!rounded-xl`}
         isOpen={isOpen}
         emitClose={handleClose}
       >
@@ -108,92 +233,7 @@ const InviteUsers = () => {
               </Button>
             </Stack>
           )}
-          <Stack className="p-4 md:p-6">
-            <TextField
-              sx={{
-                "> .MuiInputBase-root": {
-                  borderRadius: 100,
-                  height: isMobile ? "48px" : "56px",
-
-                  "> input": {
-                    height: "100%",
-                    paddingY: 0,
-                    paddingX: "20px",
-                  },
-                },
-              }}
-              fullWidth
-              variant="outlined"
-              placeholder="Search members to invite"
-              value={state.searchQuery}
-              onChange={handleQueryChange}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" sx={{ paddingX: "6px" }}>
-                      <Search />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </Stack>
-
-          {state.users.length > 0 && (
-            <>
-              <Stack
-                className="!flex-row items-center justify-between p-4 md:p-6"
-                sx={{
-                  backgroundColor: theme.palette.background.paper,
-                }}
-              >
-                <Typography variant={isMobile ? "regular_14" : "regular_16"}>
-                  {state.users.length} results found
-                </Typography>
-                <Stack className="!flex-row items-center gap-2">
-                  <Typography
-                    color="primary.main"
-                    variant={isMobile ? "regular_14" : "regular_16"}
-                  >
-                    {members.length} selected
-                  </Typography>
-                  <Button
-                    className="!font-normal !h-fit !p-0"
-                    sx={{ lineHeight: "1px" }}
-                    variant="text"
-                    size={isMobile ? "small" : "medium"}
-                    onClick={handleToggleSelectAll}
-                  >
-                    {hasSelectedAll ? "Unselect All" : "Select All"}
-                  </Button>
-                </Stack>
-              </Stack>
-
-              <Stack
-                className="w-full h-full flex-1 overflow-y-auto"
-                ref={containerRef}
-              >
-                {searchResultsElements}
-              </Stack>
-              <Box
-                className="p-4 border-t"
-                sx={{
-                  borderColor: theme.palette.border?.default,
-                }}
-              >
-                <Button
-                  className="gap-1"
-                  fullWidth
-                  size="large"
-                  disabled={state.isLoading}
-                >
-                  <Send />
-                  Invite
-                  {members.length > 0 ? `(${members.length})` : ""}
-                </Button>
-              </Box>
-            </>
-          )}
+          {content}
         </Stack>
       </AppModal>
     </>

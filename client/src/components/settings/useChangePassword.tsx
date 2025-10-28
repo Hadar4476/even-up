@@ -12,7 +12,7 @@ const useChangePassword = () => {
   const { showToast } = useToast();
 
   const [isEditable, setIsEditable] = useState(false);
-  const [isPending, setIsPending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const initialValues: {
@@ -60,7 +60,7 @@ const useChangePassword = () => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      setIsPending(true);
+      setIsLoading(true);
       await commonUtils.sleep(1);
 
       try {
@@ -89,7 +89,7 @@ const useChangePassword = () => {
         showToast(toast);
         setError(error.message);
       } finally {
-        setIsPending(false);
+        setIsLoading(false);
       }
     },
   });
@@ -97,7 +97,7 @@ const useChangePassword = () => {
   return {
     formik,
     isEditable,
-    isPending,
+    isLoading,
     error,
     setIsEditable,
   };

@@ -1,11 +1,17 @@
 import { useState } from "react";
 import useLogin from "./useLogin";
 
-import { Button, TextField, IconButton, InputAdornment } from "@mui/material";
+import {
+  Button,
+  TextField,
+  IconButton,
+  InputAdornment,
+  CircularProgress,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
-  const { formik, isPending } = useLogin();
+  const { formik, isLoading } = useLogin();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -60,9 +66,9 @@ const Login = () => {
         sx={{ height: "56px" }}
         fullWidth
         type="submit"
-        disabled={isPending}
+        disabled={isLoading}
       >
-        Confirm
+        {isLoading ? <CircularProgress size={20} /> : "Confirm"}
       </Button>
     </form>
   );

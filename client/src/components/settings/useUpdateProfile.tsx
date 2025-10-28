@@ -18,7 +18,7 @@ const useUpdateProfile = () => {
   const { showToast } = useToast();
 
   const [isEditable, setIsEditable] = useState(false);
-  const [isPending, setIsPending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const initialValues: ProfileData = {
@@ -49,7 +49,7 @@ const useUpdateProfile = () => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      setIsPending(true);
+      setIsLoading(true);
       setError("");
       await commonUtils.sleep(1);
 
@@ -76,7 +76,7 @@ const useUpdateProfile = () => {
         showToast(toast);
         setError(error.message);
       } finally {
-        setIsPending(false);
+        setIsLoading(false);
       }
     },
   });
@@ -100,7 +100,7 @@ const useUpdateProfile = () => {
   return {
     formik,
     isEditable,
-    isPending,
+    isLoading,
     error,
     setIsEditable,
   };

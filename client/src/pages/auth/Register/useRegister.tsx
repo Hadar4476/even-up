@@ -1,12 +1,11 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/context/ToastContext";
 
-import commonUtils from "@/utils/common";
 import { register } from "@/services/auth";
+import commonUtils from "@/utils/common";
 
 import { IRegisterFormData, IToast, ROUTE_NAMES } from "@/types";
 
@@ -15,7 +14,7 @@ const useRegister = () => {
 
   const { showToast } = useToast();
 
-  const [isPending, setIsPending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const initialValues: IRegisterFormData = {
@@ -60,7 +59,7 @@ const useRegister = () => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      setIsPending(true);
+      setIsLoading(true);
       await commonUtils.sleep(1);
 
       try {
@@ -81,14 +80,14 @@ const useRegister = () => {
         showToast(toast);
         setError(error.message);
       } finally {
-        setIsPending(false);
+        setIsLoading(false);
       }
     },
   });
 
   return {
     formik,
-    isPending,
+    isLoading,
     error,
   };
 };

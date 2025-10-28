@@ -15,7 +15,7 @@ import { Edit, Close } from "@mui/icons-material";
 const UserProfile = () => {
   const { isMobile } = useResponsive();
   const theme = useTheme();
-  const { formik, isEditable, isPending, setIsEditable } = useUpdateProfile();
+  const { formik, isEditable, isLoading, setIsEditable } = useUpdateProfile();
 
   return (
     <Stack
@@ -104,9 +104,9 @@ const UserProfile = () => {
             fullWidth
             size="large"
             type="submit"
-            disabled={isPending || !isEditable}
+            disabled={isLoading || !isEditable}
           >
-            {isPending ? <CircularProgress size={20} /> : "Save"}
+            {isLoading ? <CircularProgress size={20} /> : "Save"}
           </Button>
         </Box>
       </form>

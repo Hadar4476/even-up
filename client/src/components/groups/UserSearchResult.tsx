@@ -16,7 +16,7 @@ import {
 interface UserSearchResultProps {
   result: UserSearchResult;
   isChecked: boolean;
-  emitToggleInvitation: (id: UserSearchResult["_id"]) => void;
+  emitToggleInvitation: (user: UserSearchResult) => void;
 }
 
 const UserSearchResultItem = ({
@@ -32,7 +32,7 @@ const UserSearchResultItem = ({
   );
 
   const handleToggle = () => {
-    emitToggleInvitation(result._id);
+    emitToggleInvitation(result);
   };
 
   return (

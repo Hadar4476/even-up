@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { useAppSelector } from "@/store";
 
 import { groupsSelector } from "@/store/reducers/groups";
@@ -8,9 +15,10 @@ import {
   usersSearchResultsReducer,
 } from "@/reducers/usersSearchResultsReducer";
 import { searchUsers } from "@/services/group";
+import { sendInvitations } from "@/services/group-invitation";
 import commonUtils from "@/utils/common";
 
-import { IUser } from "@/types";
+import { UserSearchResult } from "@/types";
 
 const useInviteUsers = () => {
   const { selectedGroup } = useAppSelector(groupsSelector);
@@ -18,18 +26,18 @@ const useInviteUsers = () => {
     usersSearchResultsReducer,
     initialUsersSearchResultsState
   );
+  const stateRef = useRef(state);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [members, setMembers] = useState<IUser["_id"][]>([]);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [members, setMembers] = useState<UserSearchResult[]>([]);
 
   const hasSelectedAll = useMemo(() => {
-    const userIds = state.users.map((user) => user._id);
+    if (state.users.length !== members.length) return false;
 
-    if (userIds.length !== members.length) return false;
+    const selectedIds = new Set(state.users.map((user) => user._id));
 
-    const membersSet = new Set(members);
-
-    return userIds.every((id) => membersSet.has(id));
+    return members.every((member) => selectedIds.has(member._id));
   }, [state.users, members]);
 
   const handleOpen = () => {
@@ -45,6 +53,7 @@ const useInviteUsers = () => {
 
     await commonUtils.sleep(1);
     setMembers([]);
+    setIsSuccess(false);
     dispatch(usersSearchResultsActions.reset());
 
     document.body.style.overflow = "unset";
@@ -53,21 +62,28 @@ const useInviteUsers = () => {
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
 
+    if (!value.trim()) {
+      dispatch(usersSearchResultsActions.setSearchResults(members));
+    }
+
     dispatch(usersSearchResultsActions.setSearchQuery(value));
   };
 
   const handleSearch = useCallback(async () => {
-    if (!selectedGroup?.group._id || !state.searchQuery.trim()) return;
+    const currentState = stateRef.current;
+
+    if (!selectedGroup?.group._id || !currentState.searchQuery.trim()) return;
 
     dispatch(usersSearchResultsActions.setIsLoading(true));
+    dispatch(usersSearchResultsActions.resetResults());
     await commonUtils.sleep(1);
 
     try {
       const response = await searchUsers(
         selectedGroup.group._id,
-        state.searchQuery,
+        currentState.searchQuery,
         1,
-        state.pagination.limit
+        currentState.pagination.limit
       );
 
       if (response) {
@@ -81,14 +97,16 @@ const useInviteUsers = () => {
     } finally {
       dispatch(usersSearchResultsActions.setIsLoading(false));
     }
-  }, [selectedGroup?.group._id, state.searchQuery, state.pagination.limit]);
+  }, [selectedGroup?.group._id]);
 
   const loadMoreResults = useCallback(async () => {
+    const currentState = stateRef.current;
+
     if (
       !selectedGroup?.group._id ||
-      !state.searchQuery.trim() ||
-      state.isLoading ||
-      !state.pagination.hasMore
+      !currentState.searchQuery.trim() ||
+      currentState.isLoading ||
+      !currentState.pagination.hasMore
     ) {
       return;
     }
@@ -99,14 +117,13 @@ const useInviteUsers = () => {
     try {
       const response = await searchUsers(
         selectedGroup.group._id,
-        state.searchQuery,
-        state.pagination.page + 1,
-        state.pagination.limit
+        currentState.searchQuery,
+        currentState.pagination.page + 1,
+        currentState.pagination.limit
       );
 
       if (response) {
         const { users, pagination } = response;
-
         dispatch(usersSearchResultsActions.setLoadMoreSearchResults(users));
         dispatch(usersSearchResultsActions.setPagination(pagination));
       }
@@ -115,31 +132,48 @@ const useInviteUsers = () => {
     } finally {
       dispatch(usersSearchResultsActions.setIsLoading(false));
     }
-  }, [
-    selectedGroup?.group._id,
-    state.isLoading,
-    state.searchQuery,
-    state.pagination.page,
-    state.pagination.limit,
-    state.pagination.hasMore,
-  ]);
+  }, [selectedGroup?.group._id]);
 
-  const handleToggleInvitation = (id: IUser["_id"]) => {
+  const handleSendInvitations = async () => {
+    if (!selectedGroup?.group._id) {
+      return;
+    }
+
+    dispatch(usersSearchResultsActions.setIsLoading(true));
+    await commonUtils.sleep(1);
+
+    try {
+      const membersIds = members.map((member) => member._id);
+
+      const response = await sendInvitations({
+        groupId: selectedGroup.group._id,
+        members: membersIds,
+      });
+
+      if (response) {
+        setIsSuccess(true);
+      }
+    } catch (error: any) {
+      dispatch(usersSearchResultsActions.setError(error.message));
+    } finally {
+      dispatch(usersSearchResultsActions.setIsLoading(false));
+    }
+  };
+
+  const handleToggleInvitation = (user: UserSearchResult) => {
     setMembers((prevState) => {
-      const hasAdded = prevState.includes(id);
+      const isChecked = prevState.some((member) => member._id === user._id);
 
-      if (hasAdded) {
-        return prevState.filter((memberId) => memberId !== id);
+      if (isChecked) {
+        return prevState.filter((member) => member._id !== user._id);
       }
 
-      return [...prevState, id];
+      return [...prevState, user];
     });
   };
 
   const handleToggleSelectAll = useCallback(() => {
-    const usersIds = state.users.map((user) => user._id);
-
-    setMembers(hasSelectedAll ? [] : [...usersIds]);
+    setMembers(hasSelectedAll ? [] : [...state.users]);
   }, [state.users, hasSelectedAll]);
 
   useEffect(() => {
@@ -152,8 +186,13 @@ const useInviteUsers = () => {
     return () => clearTimeout(timer);
   }, [state.searchQuery, handleSearch]);
 
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
   return {
     isOpen,
+    isSuccess,
     state,
     members,
     hasSelectedAll,
@@ -163,6 +202,7 @@ const useInviteUsers = () => {
     handleSearch,
     handleToggleInvitation,
     handleToggleSelectAll,
+    handleSendInvitations,
     loadMoreResults,
   };
 };

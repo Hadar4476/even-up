@@ -1,9 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import { useGroupEditor } from "./useGroupEditor";
 import { useThemeContext } from "@/context/ThemeContext";
 
-import config from "@/config";
 import { zIndex } from "@/common";
 
 import { IGroup } from "@/types";
@@ -27,7 +26,6 @@ import {
   Delete,
   CheckCircle,
 } from "@mui/icons-material";
-import commonUtils from "@/utils/common";
 
 interface GroupEditorProps {
   group?: IGroup;
@@ -39,66 +37,22 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
   const { isMobile } = useResponsive();
   const {
     formik,
-    isPending,
+    isOpen,
+    isLoading,
+    isLoadingImage,
     isSuccess,
     imagePreview,
-    isLoadingImage,
-    reset,
-    setImagePreview,
+    handleOpen,
+    handleClose,
+    handleImageChange,
+    handleImageRemove,
   } = useGroupEditor(group);
 
-  const [isOpen, setIsOpen] = useState(false);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleOpen = () => {
-    setIsOpen(true);
-
-    document.body.style.overflow = "hidden";
-  };
-
-  const handleClose = async () => {
-    if (isPending) return;
-
-    setIsOpen(false);
-
-    await commonUtils.sleep(1);
-    await reset();
-
-    document.body.style.overflow = "unset";
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-
-    if (file) {
-      formik.setFieldValue("img", file);
-
-      // Create preview URL
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleImageRemove = () => {
-    formik.setFieldValue("img", null);
-    setImagePreview(null);
-  };
 
   const handleBrowseClick = () => {
     fileInputRef.current?.click();
   };
-
-  useEffect(() => {
-    if (group?.img) {
-      const imgUrl = `${config.uploadsUrl}/${group.img}`;
-
-      setImagePreview(imgUrl);
-    }
-  }, [group?.img]);
 
   let buttonText = "";
 
@@ -258,7 +212,7 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
           sx={{ height: "56px" }}
           fullWidth
           type="submit"
-          disabled={isPending}
+          disabled={isLoading}
         >
           Confirm
         </Button>
@@ -266,7 +220,7 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
     </>
   );
 
-  if (isPending || isSuccess) {
+  if (isLoading || isSuccess) {
     content = (
       <Box
         className="w-full h-full flex flex-col flex-1 md:items-center md:justify-center"
@@ -280,13 +234,13 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
             className="!absolute top-4 left-0 !w-[40px] !h-[40px] p-2 md:!px-4 !rounded-full"
             variant="text"
             onClick={handleClose}
-            disabled={isPending}
+            disabled={isLoading}
           >
             <ArrowBack sx={{ color: theme.palette.text.primary }} />
           </Button>
         )}
         <Box className="w-full h-full flex flex-col items-center justify-center">
-          {isPending && <CircularProgress size={60} />}
+          {isLoading && <CircularProgress size={60} />}
           {isSuccess && (
             <>
               <Box className="flex flex-row items-center gap-2">

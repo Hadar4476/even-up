@@ -11,7 +11,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Register = () => {
-  const { formik, isPending } = useRegister();
+  const { formik, isLoading } = useRegister();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -137,9 +137,9 @@ const Register = () => {
         sx={{ height: "56px" }}
         fullWidth
         type="submit"
-        disabled={isPending}
+        disabled={isLoading}
       >
-        {isPending ? <CircularProgress size={20} /> : "Confirm"}
+        {isLoading ? <CircularProgress size={20} /> : "Confirm"}
       </Button>
     </form>
   );

@@ -18,7 +18,7 @@ import { Edit, Close, VisibilityOff, Visibility } from "@mui/icons-material";
 const AccountSettings = () => {
   const { isMobile } = useResponsive();
   const theme = useTheme();
-  const { formik, isEditable, isPending, setIsEditable } = useChangePassword();
+  const { formik, isEditable, isLoading, setIsEditable } = useChangePassword();
 
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setNewShowPassword] = useState(false);
@@ -177,9 +177,9 @@ const AccountSettings = () => {
             fullWidth
             size="large"
             type="submit"
-            disabled={isPending || !isEditable}
+            disabled={isLoading || !isEditable}
           >
-            {isPending ? <CircularProgress size={20} /> : "Save"}
+            {isLoading ? <CircularProgress size={20} /> : "Save"}
           </Button>
         </Box>
       </form>

@@ -16,12 +16,50 @@ export const useGroupEditor = (group?: IGroup) => {
   const { showToast } = useToast();
   const dispatch = useDispatch();
 
+  const [isOpen, setIsOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
-  const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleOpen = () => {
+    setIsOpen(true);
+
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleClose = async () => {
+    if (isLoading) return;
+
+    setIsOpen(false);
+
+    await commonUtils.sleep(1);
+    await reset();
+
+    document.body.style.overflow = "unset";
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+
+    if (file) {
+      formik.setFieldValue("img", file);
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageRemove = () => {
+    formik.setFieldValue("img", null);
+    setImagePreview(null);
+  };
 
   const reset = async () => {
     setIsSuccess(false);
@@ -86,7 +124,7 @@ export const useGroupEditor = (group?: IGroup) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      setIsPending(true);
+      setIsLoading(true);
       setError("");
       await commonUtils.sleep(1);
 
@@ -128,7 +166,7 @@ export const useGroupEditor = (group?: IGroup) => {
         showToast(toast);
         setError(error.message);
       } finally {
-        setIsPending(false);
+        setIsLoading(false);
       }
     },
   });
@@ -162,14 +200,25 @@ export const useGroupEditor = (group?: IGroup) => {
     loadGroupData();
   }, [group?._id]);
 
+  useEffect(() => {
+    if (group?.img) {
+      const imgUrl = `${config.uploadsUrl}/${group.img}`;
+
+      setImagePreview(imgUrl);
+    }
+  }, [group?.img]);
+
   return {
     formik,
-    isPending,
+    isOpen,
+    isLoading,
+    isLoadingImage,
     isSuccess,
     imagePreview,
-    isLoadingImage,
     error,
-    reset,
-    setImagePreview,
+    handleOpen,
+    handleClose,
+    handleImageChange,
+    handleImageRemove,
   };
 };

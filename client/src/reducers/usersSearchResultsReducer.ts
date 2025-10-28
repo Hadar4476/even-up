@@ -20,6 +20,7 @@ export type UsersSearchResultsAction =
   | { type: "SET_SEARCH_QUERY"; payload: string }
   | { type: "SET_IS_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string | null }
+  | { type: "RESET_RESULTS" }
   | { type: "RESET" };
 
 const initialPagination: IPagination = {
@@ -57,6 +58,13 @@ export const usersSearchResultsReducer = (
       return { ...state, isLoading: action.payload };
     case "SET_ERROR":
       return { ...state, error: action.payload, isLoading: false };
+    case "RESET_RESULTS":
+      return {
+        ...state,
+        users: [],
+        pagination: initialPagination,
+        error: null,
+      };
     case "RESET":
       return { ...initialUsersSearchResultsState };
     default:
@@ -92,6 +100,9 @@ export const usersSearchResultsActions = {
   setError: (payload: string | null): UsersSearchResultsAction => ({
     type: "SET_ERROR",
     payload,
+  }),
+  resetResults: (): UsersSearchResultsAction => ({
+    type: "RESET_RESULTS",
   }),
   reset: (): UsersSearchResultsAction => ({
     type: "RESET",
