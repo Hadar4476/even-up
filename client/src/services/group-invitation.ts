@@ -22,10 +22,10 @@ export const getInvitations = async (
   );
 };
 
-export const sendInvitation = async ({
+export const sendInvitations = async ({
   groupId,
   members,
-}: SendInvitationRequest): Promise<IGroupInvitation> => {
+}: SendInvitationRequest): Promise<IGroupInvitation[]> => {
   return api.post(`${route}/send/${groupId}`, { members });
 };
 

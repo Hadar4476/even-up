@@ -144,8 +144,11 @@ const Groups = () => {
         sx={{
           "> .MuiInputBase-root": {
             borderRadius: 100,
+            height: isMobile ? "48px" : "56px",
 
             "> input": {
+              height: "100%",
+              paddingY: 0,
               paddingX: "20px",
             },
           },

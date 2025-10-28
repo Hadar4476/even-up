@@ -138,7 +138,7 @@ const Invitations = () => {
         <Stack className="flex-1 w-full gap-4">
           <Box className="flex flex-wrap items-center gap-1">
             <Typography variant="b_16">{from.name}</Typography>
-            <Typography>invited you to join</Typography>
+            <Typography variant="regular_16">invited you to join</Typography>
             <Typography className="capitalize" color="primary.main">
               {group.title}
             </Typography>

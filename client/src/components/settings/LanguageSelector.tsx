@@ -6,6 +6,7 @@ import { useAppSelector } from "@/store";
 
 import { languages } from "@/common";
 import { systemActions, systemSelector } from "@/store/reducers/system";
+import commonUtils from "@/utils/common";
 
 import { TranslationKeys } from "@/locales/i18n";
 import { ISelectOption } from "@/types";
@@ -34,7 +35,10 @@ const LanguageSelector = () => {
 
   const onChangeLanguage = (language: string) => {
     i18n.changeLanguage(language);
+
     dispatch(systemActions.setLanguage(language));
+    dispatch(systemActions.setIsRtl(commonUtils.isRTL(language)));
+
     localStorage.setItem("language", language);
   };
 

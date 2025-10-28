@@ -25,6 +25,7 @@ export interface IDocument {
 export interface ISystemState {
   isAppLoaded: boolean;
   language: string;
+  isRTL: boolean;
 }
 
 export interface IRootState {

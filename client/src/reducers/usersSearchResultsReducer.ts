@@ -10,13 +10,17 @@ export type UsersSearchResultsAction =
       payload: UserSearchResult[];
     }
   | {
+      type: "SET_LOAD_MORE_RESULTS";
+      payload: UserSearchResult[];
+    }
+  | {
       type: "SET_PAGINATION";
       payload: IPagination;
     }
   | { type: "SET_SEARCH_QUERY"; payload: string }
   | { type: "SET_IS_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string | null }
-  | { type: "RESET_SEARCH" };
+  | { type: "RESET" };
 
 const initialPagination: IPagination = {
   page: 0,
@@ -39,6 +43,12 @@ export const usersSearchResultsReducer = (
   switch (action.type) {
     case "SET_SEARCH_RESULTS":
       return { ...state, users: action.payload, isLoading: false };
+    case "SET_LOAD_MORE_RESULTS":
+      return {
+        ...state,
+        users: [...state.users, ...action.payload],
+        isLoading: false,
+      };
     case "SET_PAGINATION":
       return { ...state, pagination: action.payload };
     case "SET_SEARCH_QUERY":
@@ -47,8 +57,8 @@ export const usersSearchResultsReducer = (
       return { ...state, isLoading: action.payload };
     case "SET_ERROR":
       return { ...state, error: action.payload, isLoading: false };
-    case "RESET_SEARCH":
-      return { ...state, searchQuery: "" };
+    case "RESET":
+      return { ...initialUsersSearchResultsState };
     default:
       return state;
   }
@@ -59,6 +69,12 @@ export const usersSearchResultsActions = {
     payload: UserSearchResult[]
   ): UsersSearchResultsAction => ({
     type: "SET_SEARCH_RESULTS",
+    payload,
+  }),
+  setLoadMoreSearchResults: (
+    payload: UserSearchResult[]
+  ): UsersSearchResultsAction => ({
+    type: "SET_LOAD_MORE_RESULTS",
     payload,
   }),
   setPagination: (payload: IPagination): UsersSearchResultsAction => ({
@@ -77,7 +93,7 @@ export const usersSearchResultsActions = {
     type: "SET_ERROR",
     payload,
   }),
-  resetSearch: (): UsersSearchResultsAction => ({
-    type: "RESET_SEARCH",
+  reset: (): UsersSearchResultsAction => ({
+    type: "RESET",
   }),
 };

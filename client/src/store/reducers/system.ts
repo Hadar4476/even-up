@@ -7,6 +7,7 @@ import commonUtils from "@/utils/common";
 const defaultSystemState: ISystemState = {
   isAppLoaded: false,
   language: "en",
+  isRTL: false,
 };
 
 const system = createSlice({
@@ -17,13 +18,14 @@ const system = createSlice({
       state.isAppLoaded = action.payload;
     },
     setLanguage: (state, action: PayloadAction<string>) => {
-      const language = action.payload;
-
-      const isRTL = commonUtils.isRTL(language);
+      state.language = action.payload;
+    },
+    setIsRtl: (state, action: PayloadAction<boolean>) => {
+      const isRTL = action.payload;
 
       document.body.setAttribute("dir", isRTL ? "rtl" : "ltr");
 
-      state.language = action.payload;
+      state.isRTL = isRTL;
     },
   },
 });

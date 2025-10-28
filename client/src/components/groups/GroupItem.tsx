@@ -28,7 +28,7 @@ const GroupItem = ({ _id, title, img, users }: GroupWithoutExpenses) => {
 
   return (
     <Paper
-      className="cursor-pointer !rounded-xl flex items-center justify-between md:items-start md:p-0 overflow-hidden h-[56px] md:h-60"
+      className="cursor-pointer !rounded-xl flex items-center justify-between md:items-start md:p-0 overflow-hidden h-[72px] md:h-60"
       onClick={handleClick}
       sx={{
         backgroundColor: theme.palette.background.paper,
@@ -40,10 +40,9 @@ const GroupItem = ({ _id, title, img, users }: GroupWithoutExpenses) => {
     >
       <Box className="flex items-center gap-4 p-2 md:p-0 md:flex-col md:items-start md:justify-between md:gap-0 md:w-full md:h-full">
         <Avatar
-          className="!rounded-xl !w-[40px] !h-[40px] md:!rounded-none md:!w-full md:flex-1"
+          className="!rounded-xl !w-[50px] !h-[50px] object-contain md:!rounded-none md:!w-full md:flex-1"
           src={imgUrl}
           alt={title}
-          variant="rounded"
         >
           {!img && (
             <Box

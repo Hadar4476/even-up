@@ -1,130 +1,78 @@
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useEffect, useRef } from "react";
 import useResponsive from "@/hooks/useResponsive";
-import { useAppSelector } from "@/store";
-
-import commonUtils from "@/utils/common";
-import { searchUsers } from "@/services/group";
-import { groupsSelector } from "@/store/reducers/groups";
-import {
-  initialUsersSearchResultsState,
-  usersSearchResultsActions,
-  usersSearchResultsReducer,
-} from "@/reducers/usersSearchResultsReducer";
 
 import {
   Box,
   Button,
   InputAdornment,
+  Stack,
   TextField,
+  Typography,
   useTheme,
 } from "@mui/material";
-import { ArrowBack, PersonAdd, Search } from "@mui/icons-material";
+import { ArrowBack, PersonAdd, Search, Send } from "@mui/icons-material";
 import AppModal from "../common/AppModal";
+import AppLoader from "../common/AppLoader";
+import UserSearchResultItem from "./UserSearchResult";
+import useInviteUsers from "./useInviteUsers";
 
 const InviteUsers = () => {
   const theme = useTheme();
-  const [state, dispatch] = useReducer(
-    usersSearchResultsReducer,
-    initialUsersSearchResultsState
-  );
-  const { selectedGroup } = useAppSelector(groupsSelector);
   const { isMobile } = useResponsive();
+  const {
+    isOpen,
+    state,
+    members,
+    hasSelectedAll,
+    handleOpen,
+    handleClose,
+    handleQueryChange,
+    handleToggleInvitation,
+    handleToggleSelectAll,
+    loadMoreResults,
+  } = useInviteUsers();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleOpen = () => {
-    setIsOpen(true);
+  const handleScroll = () => {
+    if (containerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
 
-    document.body.style.overflow = "hidden";
-  };
+      const scrollThreshold = 5;
+      const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
 
-  const handleClose = async () => {
-    if (state.isLoading) return;
-    setIsOpen(false);
-
-    await commonUtils.sleep(1);
-
-    document.body.style.overflow = "unset";
-  };
-
-  const handleSearch = useCallback(
-    async (query: string) => {
-      if (!selectedGroup?.group._id || !query.trim()) return;
-
-      dispatch(usersSearchResultsActions.setIsLoading(true));
-      await commonUtils.sleep(1);
-
-      try {
-        const response = await searchUsers(
-          selectedGroup.group._id,
-          query,
-          1,
-          state.pagination.limit
-        );
-
-        if (response) {
-          const { users, pagination } = response;
-
-          dispatch(usersSearchResultsActions.setSearchResults(users));
-          dispatch(usersSearchResultsActions.setPagination(pagination));
-        }
-      } catch (error: any) {
-        dispatch(usersSearchResultsActions.setError(error.message));
-      } finally {
-        dispatch(usersSearchResultsActions.setIsLoading(false));
+      if (distanceFromBottom <= scrollThreshold && !state.isLoading) {
+        loadMoreResults();
       }
-    },
-    [selectedGroup?.group._id, state.pagination.limit]
-  );
-
-  const loadMoreResults = useCallback(
-    async (query: string) => {
-      if (!selectedGroup?.group._id || !query.trim()) return;
-
-      dispatch(usersSearchResultsActions.setIsLoading(true));
-      await commonUtils.sleep(1);
-
-      try {
-        const response = await searchUsers(
-          selectedGroup.group._id,
-          query,
-          state.pagination.page + 1,
-          state.pagination.limit
-        );
-
-        if (response) {
-          const { users, pagination } = response;
-
-          dispatch(usersSearchResultsActions.setSearchResults(users));
-          dispatch(usersSearchResultsActions.setPagination(pagination));
-        }
-      } catch (error: any) {
-        dispatch(usersSearchResultsActions.setError(error.message));
-      } finally {
-        dispatch(usersSearchResultsActions.setIsLoading(false));
-      }
-    },
-    [selectedGroup?.group._id, state.pagination.page, state.pagination.limit]
-  );
-
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.currentTarget.value;
-
-    dispatch(usersSearchResultsActions.setSearchQuery(value));
+    }
   };
 
   useEffect(() => {
-    if (!state.searchQuery.trim()) return;
+    const container = containerRef.current;
 
-    const timer = setTimeout(() => {
-      handleSearch(state.searchQuery);
-    }, 500);
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+    }
 
-    return () => clearTimeout(timer);
-  }, [state.searchQuery, handleSearch]);
+    return () => {
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [state.isLoading]);
+
+  const searchResultsElements = state.users.map((user) => (
+    <UserSearchResultItem
+      key={user._id}
+      result={user}
+      isChecked={members.includes(user._id)}
+      emitToggleInvitation={handleToggleInvitation}
+    />
+  ));
 
   return (
     <>
+      {state.isLoading && <AppLoader />}
       <Box className="flex items-end justify-end">
         <Button
           className="!w-[40px] !p-0 md:!w-fit md:flex md:gap-1 md:!px-4 !rounded-full"
@@ -138,47 +86,115 @@ const InviteUsers = () => {
         </Button>
       </Box>
       <AppModal
-        className="w-full h-full !overflow-y-auto !rounded-none md:max-w-xl md:h-auto md:min-h-96 md:!rounded-xl"
+        className="w-full h-full !overflow-y-auto !rounded-none md:max-w-2xl md:max-h-[70%] md:!rounded-xl"
         isOpen={isOpen}
         emitClose={handleClose}
       >
-        <Box className="flex flex-row p-6 pt-16 relative items-center justify-center md:justify-start md:px-8">
+        <Stack className="w-full h-full">
           {isMobile && (
-            <Button
-              className="!absolute top-4 left-0 !w-[40px] !h-[40px] p-2 md:!px-4 !rounded-full"
-              variant="text"
-              onClick={handleClose}
-              disabled={state.isLoading}
+            <Stack
+              className="py-4 px-0 border-b"
+              sx={{
+                borderColor: theme.palette.border?.default,
+              }}
             >
-              <ArrowBack sx={{ color: theme.palette.text.primary }} />
-            </Button>
+              <Button
+                className="!w-[40px] !h-[40px] md:!px-4 !rounded-full"
+                variant="text"
+                onClick={handleClose}
+                disabled={state.isLoading}
+              >
+                <ArrowBack sx={{ color: theme.palette.text.primary }} />
+              </Button>
+            </Stack>
           )}
-          <TextField
-            sx={{
-              "> .MuiInputBase-root": {
-                borderRadius: 100,
+          <Stack className="p-4 md:p-6">
+            <TextField
+              sx={{
+                "> .MuiInputBase-root": {
+                  borderRadius: 100,
+                  height: isMobile ? "48px" : "56px",
 
-                "> input": {
-                  paddingX: "20px",
+                  "> input": {
+                    height: "100%",
+                    paddingY: 0,
+                    paddingX: "20px",
+                  },
                 },
-              },
-            }}
-            fullWidth
-            variant="outlined"
-            placeholder="Search members to invite"
-            value={state.searchQuery}
-            onChange={handleQueryChange}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end" sx={{ paddingX: "6px" }}>
-                    <Search />
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-        </Box>
+              }}
+              fullWidth
+              variant="outlined"
+              placeholder="Search members to invite"
+              value={state.searchQuery}
+              onChange={handleQueryChange}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end" sx={{ paddingX: "6px" }}>
+                      <Search />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          </Stack>
+
+          {state.users.length > 0 && (
+            <>
+              <Stack
+                className="!flex-row items-center justify-between p-4 md:p-6"
+                sx={{
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
+                <Typography variant={isMobile ? "regular_14" : "regular_16"}>
+                  {state.users.length} results found
+                </Typography>
+                <Stack className="!flex-row items-center gap-2">
+                  <Typography
+                    color="primary.main"
+                    variant={isMobile ? "regular_14" : "regular_16"}
+                  >
+                    {members.length} selected
+                  </Typography>
+                  <Button
+                    className="!font-normal !h-fit !p-0"
+                    sx={{ lineHeight: "1px" }}
+                    variant="text"
+                    size={isMobile ? "small" : "medium"}
+                    onClick={handleToggleSelectAll}
+                  >
+                    {hasSelectedAll ? "Unselect All" : "Select All"}
+                  </Button>
+                </Stack>
+              </Stack>
+
+              <Stack
+                className="w-full h-full flex-1 overflow-y-auto"
+                ref={containerRef}
+              >
+                {searchResultsElements}
+              </Stack>
+              <Box
+                className="p-4 border-t"
+                sx={{
+                  borderColor: theme.palette.border?.default,
+                }}
+              >
+                <Button
+                  className="gap-1"
+                  fullWidth
+                  size="large"
+                  disabled={state.isLoading}
+                >
+                  <Send />
+                  Invite
+                  {members.length > 0 ? `(${members.length})` : ""}
+                </Button>
+              </Box>
+            </>
+          )}
+        </Stack>
       </AppModal>
     </>
   );

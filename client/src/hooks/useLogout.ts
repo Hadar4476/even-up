@@ -1,10 +1,11 @@
-import { IAuthState } from "@/types";
-
+import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
+
+import commonUtils from "@/utils/common";
 import { authActions } from "@/store/reducers/auth";
 import { systemActions } from "@/store/reducers/system";
 
-import { useTranslation } from "react-i18next";
+import { IAuthState } from "@/types";
 
 const useLogout = () => {
   const dispatch = useDispatch();
@@ -28,7 +29,9 @@ const useLogout = () => {
     dispatch(authActions.setLoggedInUser(authState));
 
     i18n.changeLanguage(defaultLanguage);
+
     dispatch(systemActions.setLanguage(defaultLanguage));
+    dispatch(systemActions.setIsRtl(commonUtils.isRTL(defaultLanguage)));
   };
 
   return logout;

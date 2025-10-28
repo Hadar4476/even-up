@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
-
 import { useTranslation } from "react-i18next";
+
+import commonUtils from "@/utils/common";
 import { systemActions } from "@/store/reducers/system";
 
 const useCheckLanguage = () => {
@@ -12,7 +13,9 @@ const useCheckLanguage = () => {
 
     if (language) {
       i18n.changeLanguage(language);
+
       dispatch(systemActions.setLanguage(language));
+      dispatch(systemActions.setIsRtl(commonUtils.isRTL(language)));
     }
   };
 
