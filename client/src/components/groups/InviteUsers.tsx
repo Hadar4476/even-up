@@ -35,6 +35,7 @@ const InviteUsers = () => {
     handleClose,
     handleQueryChange,
     handleToggleInvitation,
+    handleShowAllSelected,
     handleToggleSelectAll,
     handleSendInvitations,
     loadMoreResults,
@@ -116,39 +117,46 @@ const InviteUsers = () => {
         />
       </Stack>
 
-      <Stack
-        className="!flex-row items-center justify-between p-4 md:p-6"
-        sx={{
-          backgroundColor: theme.palette.background.paper,
-        }}
-      >
-        {!state.isLoading && (
-          <Typography variant={isMobile ? "regular_14" : "regular_16"}>
-            {state.users.length}
-            {state.users.length === 1 ? " result " : " results "}
-            found
-          </Typography>
-        )}
-        {(state.users.length > 0 || members.length > 0) && (
-          <Stack className="!flex-row flex-1 items-center justify-end gap-2">
-            <Typography
-              color="primary.main"
-              variant={isMobile ? "regular_14" : "regular_16"}
-            >
-              {members.length} selected
+      {state.searchQuery.trim() && (
+        <Stack
+          className="!flex-row items-center justify-between p-4 md:p-6"
+          sx={{
+            backgroundColor: theme.palette.background.paper,
+          }}
+        >
+          {!state.isLoading && (
+            <Typography variant={isMobile ? "regular_14" : "regular_16"}>
+              {state.users.length}
+              {state.users.length === 1 ? " result " : " results "}
+              found
             </Typography>
-            <Button
-              className="!font-normal !h-fit !p-0"
-              sx={{ lineHeight: "1px" }}
-              variant="text"
-              size={isMobile ? "small" : "medium"}
-              onClick={handleToggleSelectAll}
-            >
-              {hasSelectedAll ? "Unselect All" : "Select All"}
-            </Button>
-          </Stack>
-        )}
-      </Stack>
+          )}
+          {state.users.length > 0 && (
+            <Stack className="!flex-row flex-1 items-center justify-end gap-2">
+              {members.length > 0 && (
+                <Button
+                  className="!font-normal !h-fit !p-0"
+                  sx={{ lineHeight: "1px" }}
+                  variant="text"
+                  size={isMobile ? "small" : "medium"}
+                  onClick={handleShowAllSelected}
+                >
+                  {members.length} selected
+                </Button>
+              )}
+              <Button
+                className="!font-normal !h-fit !p-0"
+                sx={{ lineHeight: "1px" }}
+                variant="text"
+                size={isMobile ? "small" : "medium"}
+                onClick={handleToggleSelectAll}
+              >
+                {hasSelectedAll ? "Unselect All" : "Select All"}
+              </Button>
+            </Stack>
+          )}
+        </Stack>
+      )}
       {(state.users.length > 0 || members.length > 0) && (
         <>
           <Stack

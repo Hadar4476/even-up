@@ -170,6 +170,11 @@ const useInviteUsers = () => {
     });
   };
 
+  const handleShowAllSelected = () => {
+    dispatch(usersSearchResultsActions.setSearchQuery(""));
+    dispatch(usersSearchResultsActions.setSearchResults(members));
+  };
+
   const handleToggleSelectAll = useCallback(() => {
     setMembers((prevState) => {
       // Filter out users that are already in members
@@ -213,6 +218,7 @@ const useInviteUsers = () => {
     handleQueryChange,
     handleSearch,
     handleToggleInvitation,
+    handleShowAllSelected,
     handleToggleSelectAll,
     handleSendInvitations,
     loadMoreResults,
