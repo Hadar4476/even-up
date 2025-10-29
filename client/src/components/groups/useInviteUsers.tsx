@@ -33,11 +33,9 @@ const useInviteUsers = () => {
   const [members, setMembers] = useState<UserSearchResult[]>([]);
 
   const hasSelectedAll = useMemo(() => {
-    if (state.users.length !== members.length) return false;
+    const memberIds = new Set(members.map((member) => member._id));
 
-    const selectedIds = new Set(state.users.map((user) => user._id));
-
-    return members.every((member) => selectedIds.has(member._id));
+    return state.users.every((user) => memberIds.has(user._id));
   }, [state.users, members]);
 
   const handleOpen = () => {
@@ -173,7 +171,21 @@ const useInviteUsers = () => {
   };
 
   const handleToggleSelectAll = useCallback(() => {
-    setMembers(hasSelectedAll ? [] : [...state.users]);
+    setMembers((prevState) => {
+      // Filter out users that are already in members
+      if (hasSelectedAll) {
+        return prevState.filter(
+          (member) => !state.users.some((user) => user._id === member._id)
+        );
+      }
+
+      // Add all users that aren't already in members
+      const newUsers = state.users.filter(
+        (user) => !prevState.some((member) => member._id === user._id)
+      );
+
+      return [...prevState, ...newUsers];
+    });
   }, [state.users, hasSelectedAll]);
 
   useEffect(() => {
