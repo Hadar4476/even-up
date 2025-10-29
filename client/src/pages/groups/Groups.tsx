@@ -157,6 +157,7 @@ const Groups = () => {
         variant="outlined"
         placeholder="Search your groups"
         value={searchQuery}
+        disabled={isLoading}
         onChange={handleQueryChange}
         slotProps={{
           input: {

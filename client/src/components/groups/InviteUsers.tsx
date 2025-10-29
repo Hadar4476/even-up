@@ -117,14 +117,14 @@ const InviteUsers = () => {
         />
       </Stack>
 
-      {state.searchQuery.trim() && (
+      {(state.users.length > 0 || state.searchQuery.trim().length > 0) && (
         <Stack
-          className="!flex-row items-center justify-between p-4 md:p-6"
+          className="!flex-row items-center justify-between p-4 h-[50px] md:p-6 md:h-[70px]"
           sx={{
             backgroundColor: theme.palette.background.paper,
           }}
         >
-          {!state.isLoading && (
+          {!state.isLoading && state.searchQuery.trim().length > 0 && (
             <Typography variant={isMobile ? "regular_14" : "regular_16"}>
               {state.users.length}
               {state.users.length === 1 ? " result " : " results "}
@@ -219,7 +219,7 @@ const InviteUsers = () => {
         </Button>
       </Box>
       <AppModal
-        className={`w-full h-full outline-none !overflow-y-auto !rounded-none md:max-w-2xl md:max-h-[60%] md:!rounded-xl`}
+        className={`w-full h-full outline-none !overflow-y-auto !rounded-none md:max-w-2xl md:max-h-[65%] md:!rounded-xl`}
         isOpen={isOpen}
         emitClose={handleClose}
       >

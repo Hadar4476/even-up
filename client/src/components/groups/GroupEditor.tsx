@@ -65,9 +65,9 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
       <Box
         className="flex flex-row p-6 relative items-center justify-center md:justify-start md:px-8"
         sx={{
-          backgroundColor: isMobile
-            ? theme.palette.background.paper
-            : theme.palette.background.default,
+          ...(isMobile && {
+            backgroundColor: theme.palette.background.paper,
+          }),
           ...(!isDarkMode && {
             borderBottom: "1px solid",
             borderColor: theme.palette.border?.default,
@@ -90,9 +90,9 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
 
       <form
         className="w-full flex-1 flex flex-col gap-6 p-6 md:p-8"
-        style={{
-          backgroundColor: theme.palette.background.default,
-        }}
+        // style={{
+        //   backgroundColor: theme.palette.background.default,
+        // }}
         onSubmit={formik.handleSubmit}
       >
         <Stack className="gap-4">
