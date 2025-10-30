@@ -26,11 +26,11 @@ const defaultGroupsState: IGroupState = {
     groups: [],
     pagination: initialPagination,
   },
-  searchQuery: "",
   groupInvitationsData: {
     invitations: [],
     pagination: initialPagination,
   },
+  searchQuery: "",
   isLoading: false,
   isInitialized: false,
   error: null,

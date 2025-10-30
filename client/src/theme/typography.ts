@@ -47,47 +47,47 @@ const typography = {
   },
 
   // MEDIUM
-  medium_10: {
+  md_10: {
     fontSize: "10px",
     fontWeight: 500,
     lineHeight: "12px",
   },
-  medium_12: {
+  md_12: {
     fontSize: "12px",
     fontWeight: 500,
     lineHeight: "15px",
   },
-  medium_14: {
+  md_14: {
     fontSize: "14px",
     fontWeight: 500,
     lineHeight: "18px",
   },
-  medium_16: {
+  md_16: {
     fontSize: "16px",
     fontWeight: 500,
     lineHeight: "20px",
   },
-  medium_18: {
+  md_18: {
     fontSize: "18px",
     fontWeight: 500,
     lineHeight: "24px",
   },
-  medium_20: {
+  md_20: {
     fontSize: "20px",
     fontWeight: 500,
     lineHeight: "26px",
   },
-  medium_22: {
+  md_22: {
     fontSize: "22px",
     fontWeight: 500,
     lineHeight: "30px",
   },
-  medium_24: {
+  md_24: {
     fontSize: "24px",
     fontWeight: 500,
     lineHeight: "32px",
   },
-  medium_38: {
+  md_38: {
     fontSize: "38px",
     fontWeight: 500,
     lineHeight: "50px",

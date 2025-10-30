@@ -50,6 +50,11 @@ const commonUtils = {
 
     return num.toString();
   },
+  formatDate: (dateString: string) => {
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  },
   randomNumberBetween: (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   },

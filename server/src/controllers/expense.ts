@@ -36,6 +36,8 @@ const addExpense = async (
 
     const savedExpense = await newExpense.save();
 
+    await savedExpense.populate("user", "name email");
+
     group.expenses = [...group.expenses, savedExpense.id];
 
     await group.save();
@@ -95,6 +97,8 @@ const updateExpense = async (
     expense.amount = amount ?? expense.amount;
 
     const updatedExpense = await expense.save();
+
+    await updatedExpense.populate("user", "name email");
 
     // Fetch updated group with populated data to calculate settlements
     const updatedGroup = (await Group.findById(expense.group)

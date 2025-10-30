@@ -26,10 +26,7 @@ const UserSearchResultItem = ({
 }: UserSearchResultProps) => {
   const theme = useTheme();
 
-  const avatarColor = useMemo(
-    () => commonUtils.generateAvatarColor(result._id),
-    [result._id]
-  );
+  const avatarColor = commonUtils.generateAvatarColor(result._id);
 
   const handleToggle = () => {
     emitToggleInvitation(result);
@@ -76,7 +73,7 @@ const UserSearchResultItem = ({
       </Box>
       <Stack className="px-3 items-start">
         <Typography variant="b_16">{result.name}</Typography>
-        <Typography variant="regular_16" color="textDisabled">
+        <Typography variant="regular_16" color="textSecondary">
           {result.email}
         </Typography>
       </Stack>

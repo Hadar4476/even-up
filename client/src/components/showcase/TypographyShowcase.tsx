@@ -56,15 +56,15 @@ const TypographyShowcase = () => {
           {t("showcase.typography.medium")}
         </Typography>
         <Stack gap="12px">
-          <Typography variant="medium_10">{text_size_10}</Typography>
-          <Typography variant="medium_12">{text_size_12}</Typography>
-          <Typography variant="medium_14">{text_size_14}</Typography>
-          <Typography variant="medium_16">{text_size_16}</Typography>
-          <Typography variant="medium_18">{text_size_18}</Typography>
-          <Typography variant="medium_20">{text_size_20}</Typography>
-          <Typography variant="medium_22">{text_size_22}</Typography>
-          <Typography variant="medium_24">{text_size_24}</Typography>
-          <Typography variant="medium_38">{text_size_38}</Typography>
+          <Typography variant="md_10">{text_size_10}</Typography>
+          <Typography variant="md_12">{text_size_12}</Typography>
+          <Typography variant="md_14">{text_size_14}</Typography>
+          <Typography variant="md_16">{text_size_16}</Typography>
+          <Typography variant="md_18">{text_size_18}</Typography>
+          <Typography variant="md_20">{text_size_20}</Typography>
+          <Typography variant="md_22">{text_size_22}</Typography>
+          <Typography variant="md_24">{text_size_24}</Typography>
+          <Typography variant="md_38">{text_size_38}</Typography>
         </Stack>
       </Stack>
       <Divider />

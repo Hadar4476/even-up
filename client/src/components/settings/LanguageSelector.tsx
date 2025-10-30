@@ -47,10 +47,10 @@ const LanguageSelector = () => {
 
     const translatedLabel = t(`languages.${option.label}` as TranslationKeys);
 
-    let variant: TypographyProps["variant"] = isSelected ? "b_14" : "medium_14";
+    let variant: TypographyProps["variant"] = isSelected ? "b_14" : "md_14";
 
     if (isMobile) {
-      variant = isSelected ? "b_12" : "medium_12";
+      variant = isSelected ? "b_12" : "md_12";
     }
 
     return (

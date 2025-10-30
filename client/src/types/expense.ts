@@ -3,7 +3,7 @@ import { IDocument, IGroup, IUser, ISettlementResult } from "./";
 export interface IExpense extends IDocument {
   description: string;
   amount: number;
-  user: IUser["_id"];
+  user: Omit<IUser, "password phoneNumber">;
   group: IGroup["_id"];
   createdAt: Date;
   updatedAt: Date;

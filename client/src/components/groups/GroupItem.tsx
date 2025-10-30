@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import { useNavigate } from "react-router";
 
@@ -17,10 +16,7 @@ const GroupItem = ({ _id, title, img, users }: GroupWithoutExpenses) => {
 
   const imgUrl = img ? `${config.uploadsUrl}/${img}` : "";
 
-  const avatarColor = useMemo(
-    () => commonUtils.generateAvatarColor(_id),
-    [_id]
-  );
+  const avatarColor = commonUtils.generateAvatarColor(_id);
 
   const handleClick = () => {
     navigate(`/${ROUTE_NAMES.GROUPS}/${_id}`);

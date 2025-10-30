@@ -249,7 +249,7 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
                 </Typography>
                 <CheckCircle color="success" fontSize="large" />
               </Box>
-              <Typography variant="medium_22">
+              <Typography variant="md_22">
                 {group ? "Changes have been saved" : "Group created!"}
               </Typography>
             </>

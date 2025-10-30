@@ -102,7 +102,7 @@ const InviteUsers = () => {
           fullWidth
           disabled={state.isLoading}
           variant="outlined"
-          placeholder="Search members to invite"
+          placeholder="Search members by name or email..."
           value={state.searchQuery}
           onChange={handleQueryChange}
           slotProps={{
@@ -196,9 +196,7 @@ const InviteUsers = () => {
           </Typography>
           <CheckCircle color="success" fontSize="large" />
         </Box>
-        <Typography variant="medium_22">
-          Invitations sent successfully!
-        </Typography>
+        <Typography variant="md_22">Invitations sent successfully!</Typography>
       </Box>
     );
   }
@@ -208,14 +206,14 @@ const InviteUsers = () => {
       {state.isLoading && <AppLoader />}
       <Box className="flex items-end justify-end">
         <Button
-          className="!w-[40px] !p-0 md:!w-fit md:flex md:gap-1 md:!px-4 !rounded-full"
+          className="!px-4 !w-fit gap-1 !rounded-full"
           disableRipple={!isMobile}
           variant="outlined"
           size="medium"
           onClick={handleOpen}
         >
-          <PersonAdd className="md:!text-lg" />
-          {!isMobile && "Invite Users"}
+          <PersonAdd className="!text-base" />
+          Invite Users
         </Button>
       </Box>
       <AppModal

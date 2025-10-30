@@ -28,8 +28,14 @@ const getGroup = async (
       _id: groupId,
       users: userId, // Verify user is in the users array
     })
-      .populate("users", "name email") // You can add more fields if needed
-      .populate("expenses")) as IGroupPopulated | null;
+      .populate("users", "name email")
+      .populate({
+        path: "expenses",
+        populate: {
+          path: "user",
+          select: "name email",
+        },
+      })) as IGroupPopulated | null;
 
     if (!group) {
       throw new AppError("Resource not found", 404);
@@ -38,7 +44,6 @@ const getGroup = async (
     // Calculate who owes whom
     const settlementResult = calculateSettlements(group.users, group.expenses);
 
-    // Return the group data with settlement information
     res.status(200).json({
       success: true,
       data: {

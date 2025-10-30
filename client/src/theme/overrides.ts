@@ -83,15 +83,15 @@ declare module "@mui/material/Typography" {
     regular_24: true;
     regular_38: true;
 
-    medium_10: true;
-    medium_12: true;
-    medium_14: true;
-    medium_16: true;
-    medium_18: true;
-    medium_20: true;
-    medium_22: true;
-    medium_24: true;
-    medium_38: true;
+    md_10: true;
+    md_12: true;
+    md_14: true;
+    md_16: true;
+    md_18: true;
+    md_20: true;
+    md_22: true;
+    md_24: true;
+    md_38: true;
 
     sb_10: true;
     sb_12: true;
@@ -138,15 +138,15 @@ declare module "@mui/material/styles" {
     regular_24: true;
     regular_38: true;
 
-    medium_10: true;
-    medium_12: true;
-    medium_14: true;
-    medium_16: true;
-    medium_18: true;
-    medium_20: true;
-    medium_22: true;
-    medium_24: true;
-    medium_38: true;
+    md_10: true;
+    md_12: true;
+    md_14: true;
+    md_16: true;
+    md_18: true;
+    md_20: true;
+    md_22: true;
+    md_24: true;
+    md_38: true;
 
     sb_10: true;
     sb_12: true;
@@ -191,15 +191,15 @@ declare module "@mui/material/styles" {
     regular_24?: React.CSSProperties;
     regular_38?: React.CSSProperties;
 
-    medium_10?: React.CSSProperties;
-    medium_12?: React.CSSProperties;
-    medium_14?: React.CSSProperties;
-    medium_16?: React.CSSProperties;
-    medium_18?: React.CSSProperties;
-    medium_20?: React.CSSProperties;
-    medium_22?: React.CSSProperties;
-    medium_24?: React.CSSProperties;
-    medium_38?: React.CSSProperties;
+    md_10?: React.CSSProperties;
+    md_12?: React.CSSProperties;
+    md_14?: React.CSSProperties;
+    md_16?: React.CSSProperties;
+    md_18?: React.CSSProperties;
+    md_20?: React.CSSProperties;
+    md_22?: React.CSSProperties;
+    md_24?: React.CSSProperties;
+    md_38?: React.CSSProperties;
 
     sb_10?: React.CSSProperties;
     sb_12?: React.CSSProperties;
