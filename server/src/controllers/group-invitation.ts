@@ -142,7 +142,13 @@ const updateInvitationStatus = async (
         { new: true }
       )
         .populate("users", "name email")
-        .populate("expenses");
+        .populate({
+          path: "expenses",
+          populate: {
+            path: "user",
+            select: "name email",
+          },
+        });
 
       if (!group) {
         throw new AppError("Group not found", 404);

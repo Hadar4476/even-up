@@ -206,9 +206,12 @@ const InviteUsers = () => {
       {state.isLoading && <AppLoader />}
       <Box className="flex items-end justify-end">
         <Button
-          className="!px-4 !w-fit gap-1 !rounded-full"
+          className="!px-4 !w-fit gap-1 !rounded-lg"
           disableRipple={!isMobile}
-          variant="outlined"
+          // variant="outlined"
+          sx={{
+            backgroundColor: theme.palette.text.primary,
+          }}
           size="medium"
           onClick={handleOpen}
         >

@@ -30,7 +30,7 @@ const ExpenseEditor = ({
       {showButton && (
         <Box className="flex items-end justify-end">
           <Button
-            className="!px-4 !w-fit gap-1 !rounded-full"
+            className="!px-4 !w-fit gap-1 !rounded-lg"
             disableRipple={!isMobile}
             size="medium"
             onClick={handleOpen}

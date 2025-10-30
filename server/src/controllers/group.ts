@@ -273,7 +273,13 @@ const updateGroup = async (
       users: userId, // Verify user is in the users array
     })
       .populate("users", "name email")
-      .populate("expenses");
+      .populate({
+        path: "expenses",
+        populate: {
+          path: "user",
+          select: "name email",
+        },
+      });
 
     if (!group) {
       throw new AppError("Resource not found", 404);
