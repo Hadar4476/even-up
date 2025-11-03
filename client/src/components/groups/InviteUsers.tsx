@@ -196,7 +196,9 @@ const InviteUsers = () => {
           </Typography>
           <CheckCircle color="success" fontSize="large" />
         </Box>
-        <Typography variant="md_22">Invitations sent successfully!</Typography>
+        <Typography variant="md_22">{`${
+          members.length === 1 ? "Invitation" : "Invitations"
+        } sent successfully!`}</Typography>
       </Box>
     );
   }

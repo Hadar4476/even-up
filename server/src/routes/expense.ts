@@ -3,10 +3,7 @@ import express from "express";
 import checkAuthentication from "../middleware/auth";
 
 import { validate } from "../middleware/validate";
-import {
-  addExpenseValidation,
-  updateExpenseValidation,
-} from "../validators/expense";
+import { expenseValidation } from "../validators/expense";
 
 import expenseController from "../controllers/expense";
 
@@ -15,7 +12,7 @@ const router = express.Router();
 router.post(
   "/",
   checkAuthentication,
-  addExpenseValidation,
+  expenseValidation,
   validate,
   expenseController.addExpense
 );
@@ -23,7 +20,7 @@ router.post(
 router.put(
   "/:expenseId",
   checkAuthentication,
-  updateExpenseValidation,
+  expenseValidation,
   validate,
   expenseController.updateExpense
 );

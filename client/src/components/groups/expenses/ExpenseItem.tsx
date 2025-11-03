@@ -17,14 +17,14 @@ interface ExpenseItemProps {
 
 const ExpenseItem = ({ expense, emitClick }: ExpenseItemProps) => {
   const theme = useTheme();
-  const { _id, amount, description, user, updatedAt } = expense;
+  const { amount, description, user, updatedAt } = expense;
 
   const avatarColor = commonUtils.generateAvatarColor(user._id);
   const formattedUpdateAt = commonUtils.formatDate(updatedAt.toString());
 
   return (
     <Paper
-      className="cursor-pointer px-4 py-6 outline-none !rounded-xl flex items-center gap-3 overflow-hidden"
+      className="cursor-pointer p-4 outline-none !rounded-xl flex items-center gap-3 overflow-hidden"
       onClick={() => emitClick(expense)}
       sx={{
         backgroundColor: theme.palette.background.paper,

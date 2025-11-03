@@ -101,7 +101,7 @@ const SingleGroup = () => {
           </Box>
         </Stack>
       )}
-      <Stack className="absolute bottom-0 right-0 items-center justify-end p-4 gap-4">
+      <Stack className="absolute bottom-0 right-0 p-4 gap-4">
         <InviteUsers />
         <ExpenseEditor />
       </Stack>

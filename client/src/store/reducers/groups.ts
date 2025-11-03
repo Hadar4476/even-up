@@ -187,8 +187,15 @@ const groups = createSlice({
       const { expense, settlementResult } = action.payload;
 
       if (state.selectedGroup) {
-        state.selectedGroup.group.expenses?.push(expense);
-        state.selectedGroup.settlementResult = { ...settlementResult };
+        if (!state.selectedGroup.group.expenses) {
+          state.selectedGroup.group.expenses = [];
+        }
+
+        state.selectedGroup.group.expenses = [
+          expense,
+          ...state.selectedGroup.group.expenses,
+        ];
+        state.selectedGroup.settlementResult = settlementResult;
       }
     },
     updateExpense: (state, action: PayloadAction<IExpenseWithSettlement>) => {
@@ -208,7 +215,7 @@ const groups = createSlice({
           };
         }
 
-        state.selectedGroup.settlementResult = { ...settlementResult };
+        state.selectedGroup.settlementResult = settlementResult;
       }
     },
     deleteExpense: (
@@ -232,12 +239,13 @@ const groups = createSlice({
             );
         }
 
-        state.selectedGroup.settlementResult = { ...settlementResult };
+        state.selectedGroup.settlementResult = settlementResult;
       }
     },
     // SETTLE UP
     settleUp: (state) => {
       if (state.selectedGroup) {
+        state.selectedGroup.group.expenses = null;
         state.selectedGroup.settlementResult = null;
       }
     },

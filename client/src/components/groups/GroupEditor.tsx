@@ -15,7 +15,6 @@ import {
   TextField,
   Typography,
   useTheme,
-  CircularProgress,
 } from "@mui/material";
 import {
   Add,
@@ -26,6 +25,7 @@ import {
   Delete,
   CheckCircle,
 } from "@mui/icons-material";
+import AppLoader from "../common/AppLoader";
 
 interface GroupEditorProps {
   group?: IGroup;
@@ -220,7 +220,7 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
     </>
   );
 
-  if (isLoading || isSuccess) {
+  if (isSuccess) {
     content = (
       <Box
         className="w-full h-full flex flex-col flex-1 md:items-center md:justify-center"
@@ -240,20 +240,17 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
           </Button>
         )}
         <Box className="w-full h-full flex flex-col items-center justify-center">
-          {isLoading && <CircularProgress size={60} />}
-          {isSuccess && (
-            <>
-              <Box className="flex flex-row items-center gap-2">
-                <Typography variant="b_38" color="success">
-                  Success
-                </Typography>
-                <CheckCircle color="success" fontSize="large" />
-              </Box>
-              <Typography variant="md_22">
-                {group ? "Changes have been saved" : "Group created!"}
+          <>
+            <Box className="flex flex-row items-center gap-2">
+              <Typography variant="b_38" color="success">
+                Success
               </Typography>
-            </>
-          )}
+              <CheckCircle color="success" fontSize="large" />
+            </Box>
+            <Typography variant="md_22">
+              {group ? "Changes have been saved!" : "Group created!"}
+            </Typography>
+          </>
         </Box>
       </Box>
     );
@@ -261,6 +258,7 @@ const GroupEditor = ({ group }: GroupEditorProps) => {
 
   return (
     <>
+      {isLoading && <AppLoader />}
       <Box className="flex items-end justify-end">
         <Button
           className="!w-[40px] !p-0 md:!w-fit md:flex md:gap-1 md:!px-4 !rounded-full"

@@ -16,7 +16,7 @@ const addExpense = async (
 ) => {
   try {
     const userId = req.user?.id;
-    const { groupId, description, amount } = req.body;
+    const { group: groupId, description, amount } = req.body;
 
     const group = await Group.findOne({
       _id: groupId,
@@ -76,7 +76,7 @@ const updateExpense = async (
   try {
     const userId = req.user?.id;
     const { expenseId } = req.params;
-    const { description, amount } = req.body;
+    const { group: groupId, description, amount } = req.body;
 
     const expense = await Expense.findById(expenseId);
 
@@ -85,7 +85,7 @@ const updateExpense = async (
     }
 
     const group = await Group.findOne({
-      _id: expense.group,
+      _id: groupId,
       users: userId, // Verify user is in the users array
     });
 
