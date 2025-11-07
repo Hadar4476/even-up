@@ -60,7 +60,7 @@ export const darkTheme = createTheme({
       },
     },
     app_bar: {
-      backgroundColor: colors.brand.dark.default,
+      backgroundColor: colors.black.regular,
     },
     modal: {
       backgroundColor: "#262422",

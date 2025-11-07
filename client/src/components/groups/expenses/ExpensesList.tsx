@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import commonUtils from "@/utils/common";
+
 import { IExpense } from "@/types";
 
 import { Stack, Typography } from "@mui/material";
@@ -20,14 +22,17 @@ const ExpensesList = ({ expenses }: ExpensesListProps) => {
     setSelectedExpense(expense);
   };
 
-  const handleClose = () => {
+  const handleClose = async () => {
     setIsInitiallyOpen(false);
+
+    await commonUtils.sleep(0.5);
     setSelectedExpense(null);
   };
 
   const expenseElements = expenses.map((expense) => (
     <ExpenseItem
       key={expense._id}
+      disabled={selectedExpense !== null}
       expense={expense}
       emitClick={handleSelectExpense}
     />
@@ -40,12 +45,14 @@ const ExpensesList = ({ expenses }: ExpensesListProps) => {
         <Typography variant="b_20">Recent Expenses</Typography>
       </Stack>
       <Stack className="gap-4">{expenseElements}</Stack>
-      <ExpenseEditor
-        showButton={false}
-        isInitiallyOpen={isInitiallyOpen}
-        expense={selectedExpense}
-        emitClose={handleClose}
-      />
+      {selectedExpense && (
+        <ExpenseEditor
+          showButton={false}
+          isInitiallyOpen={isInitiallyOpen}
+          expense={selectedExpense}
+          emitClose={handleClose}
+        />
+      )}
     </>
   );
 };

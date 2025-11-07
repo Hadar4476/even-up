@@ -35,6 +35,7 @@ const UserSearchResultItem = ({
   return (
     <ButtonBase
       className="!w-full !flex !flex-row !items-center !justify-start !px-2 !py-4 md:!px-4"
+      disableRipple
       onClick={handleToggle}
       sx={{
         borderBottom: "1px solid",

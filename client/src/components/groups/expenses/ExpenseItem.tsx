@@ -1,21 +1,21 @@
+import { useThemeContext } from "@/context/ThemeContext";
 import { IExpense } from "@/types";
 import commonUtils from "@/utils/common";
 import { Circle } from "@mui/icons-material";
-import {
-  Box,
-  ButtonBase,
-  Paper,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, ButtonBase, Stack, Typography, useTheme } from "@mui/material";
 
 interface ExpenseItemProps {
   expense: IExpense;
+  disabled: boolean;
   emitClick: (expense: IExpense) => void;
 }
 
-const ExpenseItem = ({ expense, emitClick }: ExpenseItemProps) => {
+const ExpenseItem = ({
+  expense,
+  disabled = false,
+  emitClick,
+}: ExpenseItemProps) => {
+  const { isDarkMode } = useThemeContext();
   const theme = useTheme();
   const { amount, description, user, updatedAt } = expense;
 
@@ -23,10 +23,16 @@ const ExpenseItem = ({ expense, emitClick }: ExpenseItemProps) => {
   const formattedUpdateAt = commonUtils.formatDate(updatedAt.toString());
 
   return (
-    <Paper
-      className="cursor-pointer p-4 outline-none !rounded-xl flex items-center gap-3 overflow-hidden"
+    <ButtonBase
+      className="cursor-pointer !p-4 outline-none !rounded-xl flex items-center gap-3 overflow-hidden"
+      disableRipple
+      disabled={disabled}
       onClick={() => emitClick(expense)}
       sx={{
+        ...(!isDarkMode && {
+          borderBottom: "1px solid",
+          borderColor: theme.palette.border?.default,
+        }),
         backgroundColor: theme.palette.background.paper,
         transition: "all 0.2s ease-in-out",
         "&:hover": {
@@ -51,9 +57,9 @@ const ExpenseItem = ({ expense, emitClick }: ExpenseItemProps) => {
           {user.name[0]}
         </Typography>
       </Box>
-      <Stack className="flex-1">
+      <Stack className="flex-1 items-start">
         <Typography>{description}</Typography>
-        <Stack className="!flex-row gap-1 items-center">
+        <Stack className="!flex-row gap-1 items-center justify-start">
           <Typography variant="regular_14" color="textSecondary">
             {formattedUpdateAt}
           </Typography>
@@ -66,7 +72,7 @@ const ExpenseItem = ({ expense, emitClick }: ExpenseItemProps) => {
         </Stack>
       </Stack>
       <Typography variant="md_18">{amount} ILS</Typography>
-    </Paper>
+    </ButtonBase>
   );
 };
 

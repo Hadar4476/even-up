@@ -47,6 +47,7 @@ const useExpenseEdtior = (
     setIsOpen(false);
 
     await commonUtils.sleep(1);
+    setIsSuccess(false);
     formik.resetForm();
 
     document.body.style.overflow = "unset";
